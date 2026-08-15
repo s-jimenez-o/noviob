@@ -424,7 +424,8 @@ const FONT = {
   '.':'00000000000C0C',',':'000000000C0C08','!':'04040404040004','?':'0E110102040004',
   '¿':'0400040810110E','¡':'04000404040404','-':'0000001F000000',"'":'04040000000000',
   ':':'000C0C000C0C00','/':'01020204080810','(':'02040808080402',')':'08040202020408',
-  '+':'0004041F040400','*':'000A041F040A00','&':'0C12120C15120D','"':'0A0A0000000000'
+  '+':'0004041F040400','*':'000A041F040A00','&':'0C12120C15120D','"':'0A0A0000000000',
+  '=':'00001F001F0000'
 };
 const GCACHE = {};
 function glyph(ch) {
@@ -1237,6 +1238,11 @@ const MSG_CHAT = [
   { mio:false, t:'SÍ. ¿A QUÉ HORA?' },
   { mio:false, t:'YO PASO POR TI' }
 ];
+/* Lo que ve Roberto en su cel: los mensajes de Santiago le llegan del otro lado */
+const MSG_TARDE = [
+  { mio:false, t:'VOY TARDÍSIMO. PERDÓN' },
+  { mio:false, t:'PERO TE JURO QUE VALGO LA PENA' }
+];
 const MSG_WA = [
   { mio:true,  foto:true },
   { mio:true,  t:'PLAN IDEAL? GOING OUT AND BLACKING OUT' },
@@ -1247,12 +1253,12 @@ const MSG_WA = [
   { mio:true,  t:'PERO SIENTO QUE ALGO IMPORTANTE VA A PASAR CON ÉL' }
 ];
 
-function appChat(sx, sy, sw, sh, n, t) {
+function appChat(sx, sy, sw, sh, n, t, quien, msgs) {
   R(sx, sy, sw, sh, '#f5f0fa');
   R(sx, sy, sw, 12, '#e8355c'); R(sx, sy, sw, 1, '#f4708c');
-  drawText(sx + 14, sy + 3, 'ROBERTO', '#ffffff');
+  drawText(sx + 14, sy + 3, quien || 'ROBERTO', '#ffffff');
   corazon(sx + 3, sy + 3, false);
-  pilaChat(sx, sy, sw, sh, MSG_CHAT, n, PAL_MATCH, 13, t);
+  pilaChat(sx, sy, sw, sh, msgs || MSG_CHAT, n, PAL_MATCH, 13, t);
 }
 function appWA(sx, sy, sw, sh, n, t) {
   R(sx, sy, sw, sh, '#ded3c2');
@@ -1265,10 +1271,11 @@ function appWA(sx, sy, sw, sh, n, t) {
 
 
 /* =========================================================================
-   INTRO: CÓMO NOS CONOCIMOS
-   Una lista de pasos. Los que traen "dur" se pasan solos (son animación);
-   los que traen "t" esperan a que aprietes A. "hacer" corre una sola vez
-   al entrar al paso.
+   GUIONES
+   Un guion es una lista de pasos. Los que traen "dur" se pasan solos (son
+   animación); los que traen "t" esperan a que aprietes A. "hacer" corre una
+   sola vez al entrar al paso. El mismo motor mueve la intro y la espera de
+   Roberto en el club.
    ========================================================================= */
 const CUADROS = {
   perfil: (tt, a) => {
@@ -1287,7 +1294,7 @@ const CUADROS = {
   },
   chat: (tt, a) => {
     bgCuarto(tt); velo();
-    telefono((sx, sy, sw, sh) => appChat(sx, sy, sw, sh, a.n, tt), tt);
+    telefono((sx, sy, sw, sh) => appChat(sx, sy, sw, sh, a.n, tt, 'ROBERTO', MSG_CHAT), tt);
   },
   wa: (tt, a) => {
     bgCuarto(tt); velo();
@@ -1304,21 +1311,35 @@ const CUADROS = {
     persona('santiago', 46, GROUND - 30, false, false, tt);
     frCuarto(tt);
   },
-  cangurera: (tt) => {
-    bgCuarto(tt);
-    persona('santiago', 46, GROUND - 30, false, false, tt);
-    for (let i = 0; i < 8; i++) {
-      const a = (tt / 4 + i * 3) % 18;
-      if (a < 9) P(44 + ((i * 7) % 20), GROUND - 12 - a, i % 2 ? '#b6ff9e' : '#ffffff');
-    }
-    frCuarto(tt);
+
+  /* --- Roberto esperando en el club --- */
+  esperaPatio: (tt) => {
+    bgPatio(tt);
+    persona('roberto', 92, GROUND - 30, false, false, tt);
+    frPatio(tt);
   },
-  salir: (tt) => {
-    bgCuarto(tt);
-    const x = Math.min(46 + tt * 0.95, 118);
-    persona('santiago', x, GROUND - 30, false, x < 118, tt);
-    frCuarto(tt);
-    if (x >= 118 && (tt / 10 | 0) % 2) drawTextS(112, 26, 'A LA CITA', '#ffe9a8', 'rgba(20,10,40,.8)');
+  esperaReloj: (tt) => {
+    bgPatio(tt);
+    persona('roberto', 92, GROUND - 30, false, false, tt);
+    if ((tt / 16 | 0) % 2) {
+      R(86, GROUND - 44, 15, 11, '#f6efdc');
+      R(86, GROUND - 44, 15, 1, '#241a3c'); R(86, GROUND - 34, 15, 1, '#241a3c');
+      R(86, GROUND - 44, 1, 11, '#241a3c'); R(100, GROUND - 44, 1, 11, '#241a3c');
+      drawText(88, GROUND - 42, '...', '#2a2035');
+    }
+    frPatio(tt);
+  },
+  esperaBuzz: (tt) => {
+    bgPatio(tt);
+    const s = (tt / 3 | 0) % 2;
+    persona('roberto', 92 + s, GROUND - 30, false, false, tt);
+    for (let i = 0; i < 3; i++)
+      if ((tt / 4 | 0) % 2) destello(86 - i * 3, GROUND - 20 - i * 4, i % 2 ? '#ffe9a8' : '#ffffff');
+    frPatio(tt);
+  },
+  esperaChat: (tt, a) => {
+    bgPatio(tt); velo(.55);
+    telefono((sx, sy, sw, sh) => appChat(sx, sy, sw, sh, a.n, tt, 'SANTIAGO', MSG_TARDE), tt);
   }
 };
 
@@ -1341,10 +1362,17 @@ const INTRO = [
   { e:'wa',      a:{n:5}, q:'amigas',   t:'SOULMATES.' },
   { e:'wa',      a:{n:6}, q:'santiago', t:'ESTÁ RARO: CASI NO HEMOS HABLADO Y NI LO CONOZCO.' },
   { e:'wa',      a:{n:7}, q:'santiago', t:'PERO SIENTO QUE ALGO IMPORTANTE VA A PASAR CON ÉL.' },
-  { e:'guarda',  a:{}, dur:24 },
-  { e:'cangurera', a:{}, q:'santiago', hacer:() => { cangurera = true; },
-    t:'ME LLEVO LA CANGURERA VERDE.' },
-  { e:'salir',   a:{}, dur:96 }
+  { e:'guarda',  a:{}, dur:24 }
+];
+
+/* Roberto llegó temprano y lleva un rato ahí parado */
+const ESPERA = [
+  { e:'esperaPatio', a:{}, q:'roberto', t:'OCHO EN PUNTO. LLEGUÉ TEMPRANO COMO IDIOTA.' },
+  { e:'esperaReloj', a:{}, q:'roberto', t:'OCHO Y VEINTE.' },
+  { e:'esperaBuzz',  a:{}, dur:26 },
+  { e:'esperaChat',  a:{n:1}, q:'santiago', t:'VOY TARDÍSIMO. PERDÓN.' },
+  { e:'esperaChat',  a:{n:2}, q:'santiago', t:'PERO TE JURO QUE VALGO LA PENA.' },
+  { e:'esperaPatio', a:{}, q:'roberto', t:'...' }
 ];
 
 
@@ -1504,8 +1532,9 @@ let mes = 0, t = 0, bootT = 0;
 let jug = { x: 16, mirando: 1 };
 let corazonTomado = false;
 let pages = [], page = 0, revealed = 0, textTimer = 0, hablante = 'santiago';
-let charla = [], charlaIdx = 0;
-let intPaso = 0, intT = 0;
+let charla = [], charlaIdx = 0, volverA = 'juego';
+let guion = null, gPaso = 0, gT = 0, gFin = null;
+let elec = 0, pianoT = 0;
 let fade = 0, fadeDir = 0, pendiente = null;
 
 /* Una "charla" es una lista de {q:quién, t:qué dice}. Así una misma escena
@@ -1515,8 +1544,9 @@ function cargarLinea() {
   pages = wrap(l.t); page = 0; revealed = 0; textTimer = 0; hablante = l.q;
   chime();
 }
-function abrirCharla(lineas, tipo) {
+function abrirCharla(lineas, tipo, volver) {
   charla = lineas; charlaIdx = 0;
+  volverA = volver || 'juego';
   cargarLinea();
   estado = tipo || 'dialogo';
 }
@@ -1545,7 +1575,8 @@ function avanzarTexto() {
 /* Deja todo como recién encendido. Lo usa el botón REINICIAR. */
 function reiniciar() {
   estado = 'boot'; bootT = 0;
-  intPaso = 0; intT = 0;
+  guion = null; gPaso = 0; gT = 0; gFin = null;
+  elec = 0; pianoT = 0; volverA = 'juego';
   mes = 0; jug.x = 6; jug.mirando = 1;
   corazonTomado = false; cangurera = false;
   charla = []; charlaIdx = 0; pages = []; page = 0; revealed = 0; textTimer = 0;
@@ -1676,18 +1707,137 @@ function pantallaCreditos(t) {
 }
 
 
+/* ---------- Elegir, y las consecuencias de elegir mal ---------- */
+const OPCIONES = ['ME ESPERO', 'ME VOY'];
+function cajaBase(quien) {
+  const p = PERSONAJES[quien];
+  R(5, BOX_Y + 2, 152, BOX_H, 'rgba(12,6,28,.40)');
+  R(4, BOX_Y, 152, BOX_H, '#f6efdc');
+  R(4, BOX_Y, 152, 10, p.color.c);
+  R(4, BOX_Y, 152, 1, 'rgba(255,255,255,.55)');
+  R(4, BOX_Y + 9, 152, 1, 'rgba(0,0,0,.35)');
+  R(4, BOX_Y, 152, 1, '#241a3c'); R(4, BOX_Y + BOX_H - 1, 152, 1, '#241a3c');
+  R(4, BOX_Y, 1, BOX_H, '#241a3c'); R(155, BOX_Y, 1, BOX_H, '#241a3c');
+  R(5, BOX_Y + 10, 150, 1, 'rgba(255,255,255,.85)');
+  const claro = (p.tinta === '#2a2438');
+  drawTextS(10, BOX_Y + 2, p.nombre, p.tinta, claro ? 'rgba(255,255,255,.45)' : 'rgba(0,0,0,.45)');
+}
+function pantallaEleccion(t) {
+  bgPatio(t);
+  persona('roberto', 92, GROUND - 30, false, false, t);
+  frPatio(t);
+  cajaBase('roberto');
+  drawTextS(10, BOX_Y + 14, '¿LO ESPERAS?', '#2a2035', 'rgba(190,176,148,.75)');
+  for (let i = 0; i < 2; i++) {
+    const ox = 22 + i * 74, oy = BOX_Y + 29;
+    if (elec === i) {
+      R(ox - 11, oy - 3, 66, 13, '#e8d9b8');
+      corazon(ox - 10, oy - 2, (t / 12 | 0) % 2);
+    }
+    drawText(ox, oy, OPCIONES[i], elec === i ? '#8a2f78' : '#9a8a68');
+  }
+}
+
+function piano(x, y) {
+  R(x, y, 36, 15, '#241c26'); R(x, y, 36, 2, '#4c3e4a');
+  R(x + 2, y + 3, 32, 6, '#3a2f3c');
+  R(x + 1, y + 15, 34, 6, '#f6efdc'); R(x + 1, y + 15, 34, 1, '#ffffff');
+  for (let i = 0; i < 9; i++) R(x + 4 + i * 3.6, y + 15, 2, 4, '#171018');
+  R(x, y + 21, 36, 2, '#241c26');
+  R(x + 3, y + 23, 3, 4, '#171018'); R(x + 30, y + 23, 3, 4, '#171018');
+}
+function golpePiano() {
+  if (!AC) return;
+  [130.81, 138.59, 146.83, 155.56, 164.81].forEach((f, i) =>
+    setTimeout(() => tone(f, .8, .045, 'sawtooth'), i * 14));
+}
+function pantallaPiano(t) {
+  const cayo = pianoT > 36;
+  const sac = (pianoT > 36 && pianoT < 50) ? ((pianoT % 2) ? 2 : -2) : 0;
+  ctx.save(); ctx.translate(sac, 0);
+  bgPatio(t);
+  const rx = 92 - Math.min(pianoT * 1.2, 44);
+  if (!cayo) persona('roberto', rx, GROUND - 30, true, true, t);
+  else {
+    sombraPiso(Math.round(rx) + 8, GROUND);
+    R(Math.round(rx) + 4, GROUND - 5, 4, 5, PERSONAJES.roberto.color.p);
+    R(Math.round(rx) + 11, GROUND - 5, 4, 5, PERSONAJES.roberto.color.p);
+    R(Math.round(rx) + 4, GROUND - 1, 4, 2, PERSONAJES.roberto.color.o);
+    R(Math.round(rx) + 11, GROUND - 1, 4, 2, PERSONAJES.roberto.color.o);
+  }
+  if (pianoT > 14) {
+    const q = Math.min(1, (pianoT - 14) / 22);
+    const py = Math.min(-30 + q * q * 132, GROUND - 27);
+    piano(Math.round(rx) - 10, Math.round(py));
+  }
+  if (cayo && pianoT < 56)
+    for (let i = 0; i < 10; i++) {
+      const a = (pianoT - 36) + i;
+      if (a < 18) P(rx - 6 + i * 5, GROUND - 2 - (a % 9), 'rgba(220,214,200,.7)');
+    }
+  frPatio(t);
+  ctx.restore();
+  if (pianoT === 37) golpePiano();
+}
+
+function pantallaGameOver(t) {
+  vgrad(0, 0, 160, 144, ['#150e22','#24122e','#331636','#43193a']);
+  for (let i = 0; i < 20; i++) {
+    const sx = (i * 71) % 158, sy = (i * 43) % 144;
+    if ((t / 20 + i) % 6 > 3) P(sx, sy, 'rgba(255,255,255,.30)');
+  }
+  centerText(26, 'SE FUE.', '#ffe9a8', 'rgba(20,6,24,.85)');
+  piano(62, 62);
+  R(70, 85, 4, 6, PERSONAJES.roberto.color.p);
+  R(80, 85, 4, 6, PERSONAJES.roberto.color.p);
+  R(70, 91, 4, 2, PERSONAJES.roberto.color.o);
+  R(80, 91, 4, 2, PERSONAJES.roberto.color.o);
+  centerText(104, 'FINAL MALO', '#e8355c', 'rgba(20,6,24,.85)');
+  if ((t / 30 | 0) % 2) centerText(124, 'A = OTRA VEZ', '#ffffff', 'rgba(20,6,24,.85)');
+}
+
+/* La cangurera tirada en la cama, esperando a que la levanten */
+const CANG_X = 22, CANG_Y = 60;
+function cangureraSuelo(x, y, t) {
+  const b = (Math.sin(t / 14) * 2) | 0;
+  R(x, y + b, 13, 5, '#5cff3a');
+  R(x, y + b, 13, 1, '#b6ff9e'); R(x, y + b + 4, 13, 1, '#27bf14');
+  R(x + 4, y + b - 1, 5, 7, '#2fd41a'); R(x + 4, y + b - 1, 5, 1, '#b6ff9e');
+  R(x + 5, y + b + 1, 3, 1, '#0d3d06');
+  for (let i = 0; i < 4; i++) {
+    const a = ((t / 4 | 0) + i * 3) % 14;
+    if (a < 7) destello(x - 1 + i * 5, y + b - 4 - (a >> 1), i % 2 ? '#b6ff9e' : '#ffffff');
+  }
+}
+function flechaSalida(x, y) {
+  for (let i = 0; i < 6; i++) R(x, y + i, 6 - i, 1, '#fff3ae');
+  R(x, y + 6, 9, 1, '#fff3ae');
+  for (let i = 0; i < 6; i++) R(x + 1, y + 1 + i, 5 - i, 1, '#e8a94c');
+}
+
+
 /* ---------- Bucle principal ---------- */
-function pasoIntro() {
-  if (intPaso >= INTRO.length - 1) {
-    transicionar(() => {
-      estado = 'juego'; mes = 0; jug.x = 6; jug.mirando = 1; corazonTomado = false;
-    });
-  } else { intPaso++; intT = 0; }
+function correrGuion(lista, alTerminar) {
+  guion = lista; gPaso = 0; gT = 0; gFin = alTerminar; estado = 'guion';
+}
+function pasoGuion() {
+  if (gPaso >= guion.length - 1) { const f = gFin; transicionar(() => { if (f) f(); }); }
+  else { gPaso++; gT = 0; }
+}
+function empezarEspera() {
+  correrGuion(ESPERA, () => { estado = 'eleccion'; elec = 0; });
+}
+/* Dibuja la caja y devuelve true si el jugador acaba de cerrar la charla */
+function charlaEnPantalla() {
+  correrTexto();
+  drawBox(pages, page, revealed, (t / 22 | 0) % 2, hablante);
+  return (consumed('a') || consumed('b')) && avanzarTexto();
 }
 
 function loop() {
   t++;
   ctx.clearRect(0, 0, 160, 144);
+  const hablando = (estado === 'dialogo' || estado === 'dialogoFinal');
 
   if (estado === 'boot') {
     bootT++;
@@ -1705,30 +1855,86 @@ function loop() {
       ensureAudio();
       if (!musicOn) muteBtn.click();
       transicionar(() => {
-        estado = 'intro'; intPaso = 0; intT = 0;
-        mes = 0; jug.x = 6; jug.mirando = 1; corazonTomado = false; cangurera = false;
+        mes = 0; corazonTomado = false; cangurera = false;
+        correrGuion(INTRO, () => { estado = 'cuarto'; jug.x = 46; jug.mirando = -1; });
       });
     }
     pasoFade();
     requestAnimationFrame(loop); return;
   }
 
-  /* --- Cómo nos conocimos --- */
-  if (estado === 'intro') {
-    const p = INTRO[intPaso];
-    intT++;
-    if (intT === 1) {
+  /* --- Guiones (la intro y la espera de Roberto) --- */
+  if (estado === 'guion') {
+    const p = guion[gPaso];
+    gT++;
+    if (gT === 1) {
       if (p.hacer) p.hacer();
       if (p.t) { charla = [{ q: p.q, t: p.t }]; charlaIdx = 0; cargarLinea(); }
     }
-    (CUADROS[p.e] || bgCuarto)(intT, p.a || {});
-    if (p.dur) {
-      if (intT >= p.dur) pasoIntro();
-    } else {
-      correrTexto();
-      drawBox(pages, page, revealed, (t / 22 | 0) % 2, hablante);
-      if (consumed('a') || consumed('b')) { if (avanzarTexto()) pasoIntro(); }
+    (CUADROS[p.e] || bgCuarto)(gT, p.a || {});
+    if (p.dur) { if (gT >= p.dur) pasoGuion(); }
+    else if (charlaEnPantalla()) pasoGuion();
+    pasoFade();
+    requestAnimationFrame(loop); return;
+  }
+
+  /* --- El cuarto, ya jugable: sin cangurera no hay salida --- */
+  if (estado === 'cuarto' || (hablando && volverA === 'cuarto')) {
+    bgCuarto(t);
+    if (!cangurera) cangureraSuelo(CANG_X, CANG_Y, t);
+    const anda = (estado === 'cuarto') && (keys.left || keys.right);
+    persona('santiago', jug.x, GROUND - 30, jug.mirando < 0, anda, t);
+    frCuarto(t);
+    if (cangurera && (t / 20 | 0) % 2) flechaSalida(112, GROUND - 44);
+
+    if (estado === 'cuarto') {
+      if (keys.left)  { jug.x -= 0.9; jug.mirando = -1; }
+      if (keys.right) { jug.x += 0.9; jug.mirando = 1; }
+      jug.x = Math.max(2, Math.min(106, jug.x));
+
+      if (!cangurera && Math.abs(jug.x - CANG_X) < 13) {
+        cangurera = true;
+        abrirCharla([{ q:'santiago', t:'LA CANGURERA VERDE. AHORA SÍ.' }], 'dialogo', 'cuarto');
+      } else if (jug.x >= 105) {
+        if (cangurera) transicionar(empezarEspera);
+        else {
+          jug.x = 96;
+          abrirCharla([{ q:'santiago', t:'ESPERA. NO ME VOY SIN LA CANGURERA.' }], 'dialogo', 'cuarto');
+        }
+      }
     }
+    if (hablando && charlaEnPantalla()) estado = volverA;
+    pasoFade();
+    requestAnimationFrame(loop); return;
+  }
+
+  /* --- ¿Se espera o se va? --- */
+  if (estado === 'eleccion') {
+    pantallaEleccion(t);
+    if (consumed('left'))  elec = 0;
+    if (consumed('right')) elec = 1;
+    if (consumed('a') || consumed('start')) {
+      if (elec === 1) { pianoT = 0; estado = 'piano'; }
+      else transicionar(() => {
+        estado = 'juego'; mes = 0; jug.x = 6; jug.mirando = 1; corazonTomado = false;
+      });
+    }
+    pasoFade();
+    requestAnimationFrame(loop); return;
+  }
+
+  if (estado === 'piano') {
+    pianoT++;
+    pantallaPiano(t);
+    if (pianoT > 88) transicionar(() => { estado = 'gameover'; });
+    pasoFade();
+    requestAnimationFrame(loop); return;
+  }
+
+  if (estado === 'gameover') {
+    pantallaGameOver(t);
+    if (consumed('a') || consumed('start'))
+      transicionar(() => { estado = 'eleccion'; elec = 0; });
     pasoFade();
     requestAnimationFrame(loop); return;
   }
@@ -1764,11 +1970,7 @@ function loop() {
       const hy = GROUND - 52 + (Math.sin(t / 16) * 3 | 0);
       corazon(122, hy, (t / 14 | 0) % 2);
     }
-    if (corazonTomado && (t / 20 | 0) % 2) {
-      for (let i = 0; i < 6; i++) R(146, GROUND - 40 + i, 6 - i, 1, '#fff3ae');
-      R(146, GROUND - 34, 9, 1, '#fff3ae');
-      for (let i = 0; i < 6; i++) R(147, GROUND - 39 + i, 5 - i, 1, '#e8a94c');
-    }
+    if (corazonTomado && (t / 20 | 0) % 2) flechaSalida(146, GROUND - 40);
   }
 
   persona(HISTORIA.jugador, jug.x, yPie, jug.mirando < 0, caminando, t);
@@ -1797,15 +1999,9 @@ function loop() {
     }
   }
 
-  if (estado === 'dialogo' || estado === 'dialogoFinal') {
-    correrTexto();
-    drawBox(pages, page, revealed, (t / 22 | 0) % 2, hablante);
-    if (consumed('a') || consumed('b')) {
-      if (avanzarTexto()) {
-        if (estado === 'dialogoFinal') transicionar(() => { estado = 'creditos'; });
-        else estado = 'juego';
-      }
-    }
+  if (hablando && charlaEnPantalla()) {
+    if (estado === 'dialogoFinal') transicionar(() => { estado = 'creditos'; });
+    else estado = volverA;
   }
 
   pasoFade();
