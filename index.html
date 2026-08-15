@@ -756,10 +756,36 @@ const PAL_COR2 = { k:'#5c0d24', R:'#ff6f8d', H:'#ffd0dc' };
 function corazon(x, y, brillo) { drawSprite(CORAZON, x, y, false, brillo ? PAL_COR2 : PAL_COR); }
 
 /* Los perfiles que aparecen antes de Roberto en la app */
+const CAB_GORDO = [
+  "....kkkkkkkk....",
+  "..kk11111111kk..",
+  ".k112222222211k.",
+  "k11111111111111k",
+  "k11ssssssssss11k",
+  "k1sskksssskkss1k",
+  "k1sseesssseess1k",
+  "k1sssssSSsssss1k",
+  "k1ssssssssssss1k",
+  "k1sssmmmmmmsss1k",
+  "k1ssssssssssss1k",
+  ".kssssssssssssk.",
+  "..kssssssssssk..",
+  "...kssssssssk..."
+];
+const TOR_GORDO = [
+  "kcccccccccccccck",
+  "kccccttttttcccck",
+  "kCcccttttttcccCk",
+  "kCccccccccccccCk",
+  "kCccccccccccccCk",
+  "kCsccccccccccsCk",
+  "kcccccccccccccck"
+];
+
 const PERFILES = [
   { nombre:'ALEX, 26', km:'3 KM', fondo:'#ffe0ea',
-    bio: ['PLAN IDEAL?', 'UN VINO Y', 'NETFLIX'],
-    busto: busto(CAB_ROBERTO, TOR_ROBERTO),
+    bio: ['A VER TUS UBRES'],
+    busto: busto(CAB_GORDO, TOR_GORDO),
     color: { k:'#1b1226','1':'#8a6a2a','2':'#d4ad55', s:'#f8d3ac', S:'#d5a179',
              e:'#231624', b:'#f8d3ac', m:'#a8635a', c:'#2f7b8a', C:'#215d68', t:'#a8dce4' } },
   { nombre:'JUAN P, 31', km:'8 KM', fondo:'#e0eeff',
@@ -1381,7 +1407,8 @@ function appMatch(sx, sy, sw, sh, perfil, desliz, sello, t) {
   drawText(cx + 3, cy + 33, perfil.nombre, '#3a2a48');
   drawText(cx + cw - 26, cy + 33, perfil.km, '#8a7898');
   for (let i = 0; i < perfil.bio.length; i++)
-    drawText(cx + 3, cy + 41 + i * 8, perfil.bio[i], i ? '#5a4a6c' : '#a08eb0');
+    drawText(cx + 3, cy + 41 + i * 8, perfil.bio[i],
+              (i || perfil.bio.length === 1) ? '#5a4a6c' : '#a08eb0');
 
   if (sello) {
     const bueno = sello > 0;
@@ -1474,8 +1501,9 @@ const PAL_WA    = { mio:'#c9e8a8', mioL:'#e0f4c9', otro:'#ffffff', otroL:'#eae2d
 
 const MSG_CHAT = [
   { mio:true,  t:'HOLA. ¿SALIMOS EL SÁBADO?' },
+  { mio:true,  t:'TENGO UN PLAN LOQUÍSIMO. ¿QUIERES IR A LANZAR HACHAS?' },
   { mio:false, t:'SÍ. ¿A QUÉ HORA?' },
-  { mio:false, t:'YO PASO POR TI' }
+  { mio:false, t:'4 PM' }
 ];
 /* Lo que ve Roberto en su cel: los mensajes de Santiago le llegan del otro lado */
 const MSG_TARDE = [
@@ -1486,7 +1514,6 @@ const MSG_WA = [
   { mio:true,  foto:true },
   { mio:true,  t:'PLAN IDEAL? GOING OUT AND BLACKING OUT' },
   { mio:true,  t:'TENGO DATE CON ÉL EL SÁBADO' },
-  { mio:false, t:'ESTÁ GUAPÍSIMO' },
   { mio:false, t:'* SOULMATES *', chispas:true },
   { mio:true,  t:'ESTÁ RARO. CASI NO HEMOS HABLADO' },
   { mio:true,  t:'PERO SIENTO QUE ALGO IMPORTANTE VA A PASAR CON ÉL' }
@@ -1545,7 +1572,7 @@ const CUADROS = {
     velo(.5 * (1 - p));
     const guardado = CEL.y;
     CEL.y = guardado + Math.round(p * p * 150);
-    telefono((sx, sy, sw, sh) => appWA(sx, sy, sw, sh, 7, tt), tt);
+    telefono((sx, sy, sw, sh) => appWA(sx, sy, sw, sh, 6, tt), tt);
     CEL.y = guardado;
     persona('santiago', 46, GROUND - 30, false, false, tt);
     frCuarto(tt);
@@ -1583,31 +1610,31 @@ const CUADROS = {
 };
 
 const INTRO = [
-  { e:'perfil',  a:{i:0}, q:'santiago', t:'SÁBADO, ONCE DE LA NOCHE. A VER QUÉ HAY.' },
+  { e:'perfil',  a:{i:0}, q:'santiago', t:'PS A VER QUÉ HAY.' },
   { e:'desliza', a:{i:0, d:-1}, dur:22 },
   { e:'perfil',  a:{i:1}, q:'santiago', t:'NO.' },
   { e:'desliza', a:{i:1, d:-1}, dur:22 },
   { e:'perfil',  a:{i:2}, q:'santiago', t:'QUÉ GUAPO.' },
-  { e:'perfil',  a:{i:2}, q:'santiago', t:'PLAN IDEAL: GOING OUT AND BLACKING OUT. VEINTIDÓS AÑOS. TENÍA QUE SER.' },
+  { e:'perfil',  a:{i:2}, q:'santiago', t:'PLAN IDEAL: GOING OUT AND BLACKING OUT. VEINTIDÓS AÑOS.' },
   { e:'desliza', a:{i:2, d:1},  dur:24 },
   { e:'match',   a:{}, q:'santiago', t:'MATCH.' },
-  { e:'chat',    a:{n:0}, q:'santiago', t:'LE ESCRIBO ANTES DE PENSARLO DEMASIADO.' },
-  { e:'chat',    a:{n:1}, q:'santiago', t:'LISTO. ENVIADO.' },
-  { e:'chat',    a:{n:3}, q:'roberto',  t:'SÍ. ¿A QUÉ HORA? YO PASO POR TI.' },
+  { e:'chat',    a:{n:1}, q:'santiago', t:'LE VOY A ESCRIBIR:' },
+  { e:'chat',    a:{n:2}, q:'santiago', t:'TENGO UN PLAN LOQUÍSIMO. ¿QUIERES IR A LANZAR HACHAS?' },
+  { e:'chat',    a:{n:2}, q:'santiago', t:'LISTO. ENVIADO.' },
+  { e:'chat',    a:{n:4}, q:'roberto',  t:'SÍ. ¿A QUÉ HORA?' },
   { e:'wa',      a:{n:1}, q:'santiago', t:'LE MANDO LA CAPTURA A LAS AMIGAS.' },
   { e:'wa',      a:{n:2}, q:'santiago', t:'MIREN LO QUE TIENE EN LA DESCRIPCIÓN.' },
   { e:'wa',      a:{n:3}, q:'santiago', t:'TENGO DATE CON ÉL EL SÁBADO.' },
-  { e:'wa',      a:{n:4}, q:'amigas',   t:'ESTÁ GUAPÍSIMO.' },
-  { e:'wa',      a:{n:5}, q:'amigas',   t:'SOULMATES.' },
-  { e:'wa',      a:{n:6}, q:'santiago', t:'ESTÁ RARO: CASI NO HEMOS HABLADO Y NI LO CONOZCO.' },
-  { e:'wa',      a:{n:7}, q:'santiago', t:'PERO SIENTO QUE ALGO IMPORTANTE VA A PASAR CON ÉL.' },
+  { e:'wa',      a:{n:4}, q:'amigas',   t:'SOULMATES.' },
+  { e:'wa',      a:{n:5}, q:'santiago', t:'ESTÁ RARO: CASI NO HEMOS HABLADO Y NI LO CONOZCO.' },
+  { e:'wa',      a:{n:6}, q:'santiago', t:'PERO SIENTO QUE ALGO IMPORTANTE VA A PASAR CON ÉL.' },
   { e:'guarda',  a:{}, dur:24 }
 ];
 
 /* Roberto llegó temprano y lleva un rato ahí parado */
 const ESPERA = [
-  { e:'esperaPatio', a:{}, q:'roberto', t:'OCHO EN PUNTO. LLEGUÉ TEMPRANO COMO IDIOTA.' },
-  { e:'esperaReloj', a:{}, q:'roberto', t:'OCHO Y VEINTE.' },
+  { e:'esperaPatio', a:{}, q:'roberto', t:'TRES EN PUNTO. LLEGUÉ TEMPRANO.' },
+  { e:'esperaReloj', a:{}, q:'roberto', t:'TRES Y VEINTE.' },
   { e:'esperaBuzz',  a:{}, dur:26 },
   { e:'esperaChat',  a:{n:1}, q:'santiago', t:'VOY TARDÍSIMO. PERDÓN.' },
   { e:'esperaChat',  a:{n:2}, q:'santiago', t:'PERO TE JURO QUE VALGO LA PENA.' },
