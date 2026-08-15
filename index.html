@@ -222,7 +222,7 @@
                0 calc(.8*var(--u)) 0 rgba(255,255,255,.20);
   }
 
-  .mute {
+  .mute, .reset {
     position:fixed; z-index:5;
     top:  calc(env(safe-area-inset-top,   0px) + 8px);
     right:calc(env(safe-area-inset-right, 0px) + 10px);
@@ -233,10 +233,18 @@
     letter-spacing:.5px;
     backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
   }
+  .reset {
+    right:auto;
+    left:calc(env(safe-area-inset-left, 0px) + 10px);
+    background:rgba(232,53,92,.16); color:#ffbfd0;
+    border-color:rgba(255,191,208,.35);
+  }
+  .reset:active { background:rgba(232,53,92,.34); }
 </style>
 </head>
 <body>
 
+<button class="reset" id="reset">REINICIAR</button>
 <button class="mute" id="mute">SONIDO: OFF</button>
 
 <div id="stage">
@@ -305,18 +313,18 @@ const HISTORIA = {
   meses: [
     { escena:"patio", pareja:104, charla:[
       { q:"roberto",  t:"HOLA. OYE... QUÉ HORROR LA CANGURERA." },
-      { q:"santiago", t:"¿PERDÓN? ES VERDE NEÓN. ES UNA DECLARACIÓN DE PRINCIPIOS." },
-      { q:"roberto",  t:"JAJAJA. OK. ME CAES BIEN. ¿ENTRAMOS?" },
-      { q:"santiago", t:"MES 1. CLUB DEL PATIO ROMA. NUESTRA PRIMERA CITA Y YA NO ME QUERÍA IR." }
+      { q:"santiago", t:"ES VERDE NEÓN. FUE A PROPÓSITO." },
+      { q:"roberto",  t:"PEOR." },
+      { q:"santiago", t:"MES 1. PRIMERA CITA EN EL CLUB DEL PATIO ROMA. NOS QUEDAMOS HASTA QUE CERRARON." }
     ]},
-    { escena:"cine",   texto:"MES 2. NUESTRA PRIMERA PELÍCULA. NO ME ACUERDO DE LA TRAMA, SOLO DE TU MANO." },
-    { escena:"lluvia", texto:"MES 3. NOS AGARRÓ EL AGUA Y NOS REÍMOS TODO EL CAMINO A CASA." },
-    { escena:"noche",  texto:"MES 4. CONTAMOS ESTRELLAS EN LA AZOTEA Y ME CONTASTE TUS PLANES." },
-    { escena:"casa",   texto:"MES 5. UN DOMINGO CUALQUIERA, EN EL SILLÓN. MI LUGAR FAVORITO." },
-    { escena:"cabana", texto:"MES 6. HOY. Y TODAVÍA ME LATE IGUAL DE FUERTE QUE EL PRIMER DÍA." }
+    { escena:"cine",   texto:"MES 2. FUIMOS AL CINE. NO ME ACUERDO DE LA PELÍCULA." },
+    { escena:"lluvia", texto:"MES 3. NOS AGARRÓ LA LLUVIA SIN PARAGUAS Y NOS FUIMOS CAMINANDO." },
+    { escena:"noche",  texto:"MES 4. AZOTEA, DOS DE LA MAÑANA. ME CONTASTE TUS PLANES." },
+    { escena:"casa",   texto:"MES 5. DOMINGO ENTERO EN EL SILLÓN SIN HACER NADA." },
+    { escena:"cabana", texto:"MES 6. HOY. SEGUIMOS AQUÍ." }
   ],
 
-  final: "SEIS MESES CONTIGO Y APENAS VAMOS EMPEZANDO. GRACIAS POR CADA UNO. TE AMO.",
+  final: "SEIS MESES. NADA MAL PARA ALGUIEN CUYO PLAN IDEAL ERA GOING OUT AND BLACKING OUT.",
 
   // Quién camina y quién espera. Si los sprites salieran al revés,
   // intercambia estos dos valores y ya.
@@ -607,7 +615,7 @@ function persona(quien, x, y, flip, caminando, t) {
   drawSprite(spr, Math.round(x), y, flip, p.color);
   if (cangurera && quien === 'santiago') pintaCangurera(Math.round(x), y, flip);
 }
-function busto(cab, tor) { return cab.concat(tor.slice(0, 3)); }
+function busto(cab, tor) { return cab.concat(tor.slice(0, 1)); }
 
 const CORAZON = [
   ".kk..kk.",
@@ -624,15 +632,18 @@ function corazon(x, y, brillo) { drawSprite(CORAZON, x, y, false, brillo ? PAL_C
 
 /* Los perfiles que aparecen antes de Roberto en la app */
 const PERFILES = [
-  { nombre:'ALEX, 26', linea:'A 3 KM DE TI', fondo:'#ffe0ea',
+  { nombre:'ALEX, 26', km:'3 KM', fondo:'#ffe0ea',
+    bio: ['PLAN IDEAL?', 'UN VINO Y', 'NETFLIX'],
     busto: busto(CAB_ROBERTO, TOR_ROBERTO),
     color: { k:'#1b1226','1':'#8a6a2a','2':'#d4ad55', s:'#f8d3ac', S:'#d5a179',
              e:'#231624', b:'#f8d3ac', m:'#a8635a', c:'#2f7b8a', C:'#215d68', t:'#a8dce4' } },
-  { nombre:'JUAN P, 31', linea:'A 8 KM DE TI', fondo:'#e0eeff',
+  { nombre:'JUAN P, 31', km:'8 KM', fondo:'#e0eeff',
+    bio: ['PLAN IDEAL?', 'NO SÉ, TÚ DIME'],
     busto: busto(CAB_SANTIAGO, TOR_SANTIAGO),
     color: { k:'#1b1226','1':'#181820','2':'#3c3c4c', s:'#c98a5e', S:'#a06840',
              e:'#231624', b:'#2a2a34', m:'#6b3a34', c:'#b5354a', C:'#8a2436', t:'#f2c9d0' } },
-  { nombre:'ROBERTO, 30', linea:'A 2 KM DE TI', fondo:'#ffe7d4',
+  { nombre:'ROBERTO, 22', km:'2 KM', fondo:'#ffe7d4',
+    bio: ['PLAN IDEAL?', 'GOING OUT AND', 'BLACKING OUT'],
     busto: busto(CAB_ROBERTO, TOR_ROBERTO), color: PERSONAJES.roberto.color }
 ];
 
@@ -1121,14 +1132,16 @@ function appMatch(sx, sy, sw, sh, perfil, desliz, sello, t) {
   drawText(sx + 26, sy + 2, 'MATCH', '#ffffff');
   corazon(sx + 6, sy + 2, (t / 20 | 0) % 2);
 
-  const cw = sw - 8, chh = 52, cx = sx + 4 + desliz, cy = sy + 13;
+  const cw = sw - 8, chh = 66, cx = sx + 4 + desliz, cy = sy + 12;
   R(cx + 1, cy + 2, cw, chh, 'rgba(120,40,70,.18)');
   R(cx, cy, cw, chh, '#ffffff');
-  R(cx + 1, cy + 1, cw - 2, 34, perfil.fondo);
+  R(cx + 1, cy + 1, cw - 2, 30, perfil.fondo);
   drawSpriteEsc(perfil.busto, cx + (cw >> 1) - 16, cy + 1, false, perfil.color, 2);
   R(cx, cy, cw, 1, '#e8355c'); R(cx, cy + chh - 1, cw, 1, '#e4d2da');
-  drawText(cx + 3, cy + 37, perfil.nombre, '#3a2a48');
-  drawText(cx + 3, cy + 45, perfil.linea, '#8a7898');
+  drawText(cx + 3, cy + 33, perfil.nombre, '#3a2a48');
+  drawText(cx + cw - 26, cy + 33, perfil.km, '#8a7898');
+  for (let i = 0; i < perfil.bio.length; i++)
+    drawText(cx + 3, cy + 41 + i * 8, perfil.bio[i], i ? '#5a4a6c' : '#a08eb0');
 
   if (sello) {
     const bueno = sello > 0;
@@ -1138,11 +1151,12 @@ function appMatch(sx, sy, sw, sh, perfil, desliz, sello, t) {
     drawText(bx + 3, cy + 5, bueno ? 'LIKE' : 'NOPE', bueno ? '#1f9c62' : '#e8355c');
   }
 
-  const by = sy + sh - 12;
-  disco(sx + 27, by + 5, 7, '#f6dde5'); disco(sx + 27, by + 5, 6, '#ffffff');
-  drawText(sx + 25, by + 2, 'X', '#e8355c');
-  disco(sx + 53, by + 5, 7, '#f6dde5'); disco(sx + 53, by + 5, 6, '#ffffff');
-  corazon(sx + 49, by + 2, (t / 12 | 0) % 2);
+  /* Los botones van encima de la foto, así la ficha cabe completa */
+  const by = cy + 22;
+  disco(cx + 13, by, 7, 'rgba(30,10,30,.35)'); disco(cx + 13, by, 6, '#ffffff');
+  drawText(cx + 11, by - 3, 'X', '#e8355c');
+  disco(cx + cw - 14, by, 7, 'rgba(30,10,30,.35)'); disco(cx + cw - 14, by, 6, '#ffffff');
+  corazon(cx + cw - 18, by - 3, (t / 12 | 0) % 2);
 }
 
 function appEsMatch(sx, sy, sw, sh, t) {
@@ -1159,29 +1173,58 @@ function appEsMatch(sx, sy, sw, sh, t) {
 }
 
 /* ---- Burbujas de chat ---- */
-function altoBurbuja(sw, texto) { return cortar(texto, Math.floor((sw - 16) / 6)).length * 9 + 5; }
-function burbuja(sx, y, sw, texto, mio, pal) {
-  const ls = cortar(texto, Math.floor((sw - 16) / 6));
+const FOTO_W = 104, FOTO_H = 33;
+function destello(x, y, c) {
+  P(x, y, c); P(x - 1, y, c); P(x + 1, y, c); P(x, y - 1, c); P(x, y + 1, c);
+}
+function altoBurbuja(sw, m) {
+  if (m.foto) return FOTO_H;
+  return cortar(m.t, Math.floor((sw - 16) / 6)).length * 9 + 5;
+}
+/* La captura que le mandó a las amigas: la ficha de Roberto en chiquito */
+function burbujaFoto(sx, y, sw, mio) {
+  const bw = FOTO_W, bh = FOTO_H, bx = mio ? sx + sw - bw - 4 : sx + 4;
+  R(bx + 1, y + 1, bw, bh, 'rgba(60,40,90,.22)');
+  R(bx, y, bw, bh, '#ffffff');
+  R(bx, y, bw, 9, '#e8355c');
+  drawText(bx + 3, y + 1, 'MATCH', '#ffffff');
+  R(bx + 2, y + 10, 32, 22, PERFILES[2].fondo);
+  drawSpriteEsc(PERFILES[2].busto.slice(0, 11), bx + 2, y + 10, false, PERFILES[2].color, 2);
+  drawText(bx + 36, y + 12, 'ROBERTO, 22', '#3a2a48');
+  drawText(bx + 36, y + 22, 'A 2 KM', '#8a7898');
+  R(bx, y + bh - 1, bw, 1, '#e4d2da');
+}
+function burbuja(sx, y, sw, m, pal, t) {
+  if (m.foto) { burbujaFoto(sx, y, sw, m.mio); return; }
+  const ls = cortar(m.t, Math.floor((sw - 16) / 6));
   let w = 0; for (const l of ls) w = Math.max(w, textW(l));
   const bw = w + 7, bh = ls.length * 9 + 5;
-  const bx = mio ? sx + sw - bw - 4 : sx + 4;
+  const bx = m.mio ? sx + sw - bw - 4 : sx + 4;
   R(bx + 1, y + 1, bw, bh, 'rgba(60,40,90,.20)');
-  R(bx, y, bw, bh, mio ? pal.mio : pal.otro);
-  R(bx, y, bw, 1, mio ? pal.mioL : pal.otroL);
+  R(bx, y, bw, bh, m.mio ? pal.mio : pal.otro);
+  R(bx, y, bw, 1, m.mio ? pal.mioL : pal.otroL);
   for (let i = 0; i < ls.length; i++)
-    drawText(bx + 4, y + 3 + i * 9, ls[i], mio ? pal.tMio : pal.tOtro);
+    drawText(bx + 4, y + 3 + i * 9, ls[i], m.mio ? pal.tMio : pal.tOtro);
+  if (m.chispas) {
+    const px = [-4, bw + 2, -3, bw + 1, 3, bw - 5, bw >> 1];
+    const py = [-3, -2, bh, bh - 2, -4, bh + 2, -4];
+    for (let i = 0; i < 7; i++) {
+      if (((t / 5 | 0) + i * 3) % 12 > 6) continue;
+      destello(bx + px[i], y + py[i], i % 2 ? '#ffe06b' : '#ffffff');
+    }
+  }
 }
 /* Se apilan desde abajo: si no caben, los viejos simplemente no se pintan */
-function pilaChat(sx, sy, sw, sh, msgs, n, pal, topY) {
+function pilaChat(sx, sy, sw, sh, msgs, n, pal, topY, t) {
   let y0 = sy + sh - 4;
   const vis = [];
   for (let i = Math.min(n, msgs.length) - 1; i >= 0; i--) {
-    const h = altoBurbuja(sw, msgs[i].t);
+    const h = altoBurbuja(sw, msgs[i]);
     if (y0 - h < sy + topY) break;
     y0 -= h + 3;
     vis.unshift({ m: msgs[i], y: y0 });
   }
-  for (const v of vis) burbuja(sx, v.y, sw, v.m.t, v.m.mio, pal);
+  for (const v of vis) burbuja(sx, v.y, sw, v.m, pal, t);
 }
 
 const PAL_MATCH = { mio:'#e8355c', mioL:'#f4708c', otro:'#ffffff', otroL:'#e4dcee',
@@ -1190,16 +1233,18 @@ const PAL_WA    = { mio:'#c9e8a8', mioL:'#e0f4c9', otro:'#ffffff', otroL:'#eae2d
                     tMio:'#20402a', tOtro:'#2a2438' };
 
 const MSG_CHAT = [
-  { mio:true,  t:'HOLA! ¿SALIMOS EL SÁBADO?' },
-  { mio:false, t:'SÍ! ¿A QUÉ HORA?' },
+  { mio:true,  t:'HOLA. ¿SALIMOS EL SÁBADO?' },
+  { mio:false, t:'SÍ. ¿A QUÉ HORA?' },
   { mio:false, t:'YO PASO POR TI' }
 ];
 const MSG_WA = [
-  { mio:true,  t:'AMIGAS, TENGO MATCH' },
+  { mio:true,  foto:true },
+  { mio:true,  t:'PLAN IDEAL? GOING OUT AND BLACKING OUT' },
+  { mio:true,  t:'TENGO DATE CON ÉL EL SÁBADO' },
+  { mio:false, t:'ESTÁ GUAPÍSIMO' },
+  { mio:false, t:'* SOULMATES *', chispas:true },
   { mio:true,  t:'ESTÁ RARO. CASI NO HEMOS HABLADO' },
-  { mio:true,  t:'PERO SIENTO QUE ALGO IMPORTANTE VA A PASAR' },
-  { mio:false, t:'AAAAY YA CÁSATE' },
-  { mio:false, t:'QUEREMOS FOTOS Y NOMBRE COMPLETO' }
+  { mio:true,  t:'PERO SIENTO QUE ALGO IMPORTANTE VA A PASAR CON ÉL' }
 ];
 
 function appChat(sx, sy, sw, sh, n, t) {
@@ -1207,7 +1252,7 @@ function appChat(sx, sy, sw, sh, n, t) {
   R(sx, sy, sw, 12, '#e8355c'); R(sx, sy, sw, 1, '#f4708c');
   drawText(sx + 14, sy + 3, 'ROBERTO', '#ffffff');
   corazon(sx + 3, sy + 3, false);
-  pilaChat(sx, sy, sw, sh, MSG_CHAT, n, PAL_MATCH, 15);
+  pilaChat(sx, sy, sw, sh, MSG_CHAT, n, PAL_MATCH, 13, t);
 }
 function appWA(sx, sy, sw, sh, n, t) {
   R(sx, sy, sw, sh, '#ded3c2');
@@ -1215,7 +1260,7 @@ function appWA(sx, sy, sw, sh, n, t) {
   R(sx, sy, sw, 12, '#0f766a'); R(sx, sy, sw, 1, '#2a9c8c');
   drawText(sx + 14, sy + 3, 'LAS AMIGAS', '#ffffff');
   corazon(sx + 3, sy + 3, false);
-  pilaChat(sx, sy, sw, sh, MSG_WA, n, PAL_WA, 15);
+  pilaChat(sx, sy, sw, sh, MSG_WA, n, PAL_WA, 13, t);
 }
 
 
@@ -1254,7 +1299,7 @@ const CUADROS = {
     velo(.5 * (1 - p));
     const guardado = CEL.y;
     CEL.y = guardado + Math.round(p * p * 150);
-    telefono((sx, sy, sw, sh) => appWA(sx, sy, sw, sh, 5, tt), tt);
+    telefono((sx, sy, sw, sh) => appWA(sx, sy, sw, sh, 7, tt), tt);
     CEL.y = guardado;
     persona('santiago', 46, GROUND - 30, false, false, tt);
     frCuarto(tt);
@@ -1278,24 +1323,27 @@ const CUADROS = {
 };
 
 const INTRO = [
-  { e:'perfil',  a:{i:0}, q:'santiago', t:'SÁBADO EN LA NOCHE, SOLO EN MI CUARTO. A VER QUIÉN HAY POR AQUÍ.' },
+  { e:'perfil',  a:{i:0}, q:'santiago', t:'SÁBADO, ONCE DE LA NOCHE. A VER QUÉ HAY.' },
   { e:'desliza', a:{i:0, d:-1}, dur:22 },
-  { e:'perfil',  a:{i:1}, q:'santiago', t:'MMM. NO. SIGUIENTE.' },
+  { e:'perfil',  a:{i:1}, q:'santiago', t:'NO.' },
   { e:'desliza', a:{i:1, d:-1}, dur:22 },
   { e:'perfil',  a:{i:2}, q:'santiago', t:'QUÉ GUAPO.' },
+  { e:'perfil',  a:{i:2}, q:'santiago', t:'PLAN IDEAL: GOING OUT AND BLACKING OUT. VEINTIDÓS AÑOS. TENÍA QUE SER.' },
   { e:'desliza', a:{i:2, d:1},  dur:24 },
-  { e:'match',   a:{}, q:'santiago', t:'¡ES MATCH! OK. CALMA. RESPIRA.' },
-  { e:'chat',    a:{n:0}, q:'santiago', t:'LE ESCRIBO YA. SI LO PIENSO MÁS, NO LO HAGO.' },
-  { e:'chat',    a:{n:1}, q:'santiago', t:'"HOLA. ¿SALIMOS EL SÁBADO?" ... ENVIADO. AY.' },
+  { e:'match',   a:{}, q:'santiago', t:'MATCH.' },
+  { e:'chat',    a:{n:0}, q:'santiago', t:'LE ESCRIBO ANTES DE PENSARLO DEMASIADO.' },
+  { e:'chat',    a:{n:1}, q:'santiago', t:'LISTO. ENVIADO.' },
   { e:'chat',    a:{n:3}, q:'roberto',  t:'SÍ. ¿A QUÉ HORA? YO PASO POR TI.' },
-  { e:'chat',    a:{n:3}, q:'santiago', t:'DIJO QUE SÍ. DIJO QUE SÍ.' },
-  { e:'wa',      a:{n:1}, q:'santiago', t:'AMIGAS. TENGO QUE CONTARLES ALGO.' },
-  { e:'wa',      a:{n:2}, q:'santiago', t:'ESTÁ RARO: CASI NO HEMOS HABLADO Y NI LO CONOZCO...' },
-  { e:'wa',      a:{n:3}, q:'santiago', t:'...PERO SIENTO QUE ALGO IMPORTANTE VA A PASAR CON ÉL.' },
-  { e:'wa',      a:{n:5}, q:'amigas',   t:'AAAAY YA CÁSATE. QUEREMOS FOTOS. SUERTE MI AMOR.' },
+  { e:'wa',      a:{n:1}, q:'santiago', t:'LE MANDO LA CAPTURA A LAS AMIGAS.' },
+  { e:'wa',      a:{n:2}, q:'santiago', t:'MIREN LO QUE TIENE EN LA DESCRIPCIÓN.' },
+  { e:'wa',      a:{n:3}, q:'santiago', t:'TENGO DATE CON ÉL EL SÁBADO.' },
+  { e:'wa',      a:{n:4}, q:'amigas',   t:'ESTÁ GUAPÍSIMO.' },
+  { e:'wa',      a:{n:5}, q:'amigas',   t:'SOULMATES.' },
+  { e:'wa',      a:{n:6}, q:'santiago', t:'ESTÁ RARO: CASI NO HEMOS HABLADO Y NI LO CONOZCO.' },
+  { e:'wa',      a:{n:7}, q:'santiago', t:'PERO SIENTO QUE ALGO IMPORTANTE VA A PASAR CON ÉL.' },
   { e:'guarda',  a:{}, dur:24 },
   { e:'cangurera', a:{}, q:'santiago', hacer:() => { cangurera = true; },
-    t:'LA CANGURERA VERDE NEÓN. OBVIO ME LA LLEVO. ES MI FIRMA.' },
+    t:'ME LLEVO LA CANGURERA VERDE.' },
   { e:'salir',   a:{}, dur:96 }
 ];
 
@@ -1409,6 +1457,8 @@ function ensureAudio() {
   } catch (e) {}
 }
 
+document.getElementById('reset').onclick = () => { ensureAudio(); reiniciar(); };
+
 muteBtn.onclick = () => {
   ensureAudio();
   musicOn = !musicOn;
@@ -1449,8 +1499,8 @@ function consumed(k) { if (pressed[k]) { pressed[k] = false; return true; } retu
 
 
 /* ---------- Estado ---------- */
-let estado = 'titulo';
-let mes = 0, t = 0;
+let estado = 'boot';
+let mes = 0, t = 0, bootT = 0;
 let jug = { x: 16, mirando: 1 };
 let corazonTomado = false;
 let pages = [], page = 0, revealed = 0, textTimer = 0, hablante = 'santiago';
@@ -1490,6 +1540,18 @@ function avanzarTexto() {
   if (page < pages.length - 1) { page++; revealed = 0; return false; }
   if (charlaIdx < charla.length - 1) { charlaIdx++; cargarLinea(); return false; }
   return true;
+}
+
+/* Deja todo como recién encendido. Lo usa el botón REINICIAR. */
+function reiniciar() {
+  estado = 'boot'; bootT = 0;
+  intPaso = 0; intT = 0;
+  mes = 0; jug.x = 6; jug.mirando = 1;
+  corazonTomado = false; cangurera = false;
+  charla = []; charlaIdx = 0; pages = []; page = 0; revealed = 0; textTimer = 0;
+  fade = 0; fadeDir = 0; pendiente = null;
+  for (const k in keys) keys[k] = false;
+  for (const k in pressed) pressed[k] = false;
 }
 
 /* Si ya hay un barrido corriendo se ignora: si no, la condición de salida
@@ -1536,6 +1598,26 @@ function panel(x, y, w, h) {
   R(x, y, 1, h, '#241a3c'); R(x + w - 1, y, 1, h, '#241a3c');
   R(x + 1, y + 1, w - 2, 1, '#ffffff');
   R(x + 1, y + h - 2, w - 2, 1, '#cbbfa4');
+}
+
+/* Arranque a la vieja usanza: pantalla verde de Game Boy, la pregunta baja
+   desde arriba, suena el "ding" y de ahí el juego ya sale a color. */
+const PAL_COR_DMG = { k:'#0f380f', R:'#306230', H:'#8bac0f' };
+function pantallaBoot() {
+  R(0, 0, 160, 144, '#9bbc0f');
+  for (let y = 0; y < 144; y += 2) dith(0, y, 160, '#8fb00d', (y >> 1) & 1);
+  const p = Math.min(1, bootT / 50);
+  const y = Math.round(-12 + p * 72);
+  centerText(y, 'WHAT IS LOVE?', '#0f380f');
+  if (bootT > 54) {
+    drawSprite(CORAZON, 76, y + 18, false, PAL_COR_DMG);
+    if (bootT > 74 && (bootT / 22 | 0) % 2)
+      centerText(y + 34, 'PRESIONA A', '#306230');
+  }
+  if (bootT === 52 && AC) {
+    tone(N.C5, .10, .05, 'square');
+    setTimeout(() => tone(N.C6, .24, .05, 'square'), 110);
+  }
 }
 
 function pantallaTitulo(t) {
@@ -1606,6 +1688,16 @@ function pasoIntro() {
 function loop() {
   t++;
   ctx.clearRect(0, 0, 160, 144);
+
+  if (estado === 'boot') {
+    bootT++;
+    pantallaBoot();
+    const salta = consumed('a') || consumed('start');
+    if (salta) ensureAudio();
+    if (bootT >= 130 || (salta && bootT > 6)) transicionar(() => { estado = 'titulo'; });
+    pasoFade();
+    requestAnimationFrame(loop); return;
+  }
 
   if (estado === 'titulo') {
     pantallaTitulo(t);
