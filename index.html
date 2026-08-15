@@ -291,7 +291,11 @@
    Acentos permitidos: Á É Í Ó Ú Ñ ¿ ¡
    Máximo ~23 letras por renglón; el juego corta las líneas solo.
 
-   escena: "parque" | "cine" | "lluvia" | "noche" | "casa" | "cabana" | "ciudad"
+   escena: "patio" | "parque" | "cine" | "lluvia" | "noche" | "casa" |
+           "cabana" | "ciudad" | "cuarto"
+   Un mes puede traer "texto" (una sola frase tuya) O "charla", que es
+   ida y vuelta: [{q:"roberto", t:"..."}, {q:"santiago", t:"..."}]
+   Si trae "pareja: X", Roberto te está esperando parado en la x = X.
    ========================================================================= */
 const HISTORIA = {
   titulo:    "6 MESES",
@@ -299,7 +303,12 @@ const HISTORIA = {
   fecha:     "12.08.2026",
 
   meses: [
-    { escena:"parque", texto:"MES 1. AQUÍ TE VI POR PRIMERA VEZ. NO SABÍA QUE ESE DÍA CAMBIABA TODO." },
+    { escena:"patio", pareja:104, charla:[
+      { q:"roberto",  t:"HOLA. OYE... QUÉ HORROR LA CANGURERA." },
+      { q:"santiago", t:"¿PERDÓN? ES VERDE NEÓN. ES UNA DECLARACIÓN DE PRINCIPIOS." },
+      { q:"roberto",  t:"JAJAJA. OK. ME CAES BIEN. ¿ENTRAMOS?" },
+      { q:"santiago", t:"MES 1. CLUB DEL PATIO ROMA. NUESTRA PRIMERA CITA Y YA NO ME QUERÍA IR." }
+    ]},
     { escena:"cine",   texto:"MES 2. NUESTRA PRIMERA PELÍCULA. NO ME ACUERDO DE LA TRAMA, SOLO DE TU MANO." },
     { escena:"lluvia", texto:"MES 3. NOS AGARRÓ EL AGUA Y NOS REÍMOS TODO EL CAMINO A CASA." },
     { escena:"noche",  texto:"MES 4. CONTAMOS ESTRELLAS EN LA AZOTEA Y ME CONTASTE TUS PLANES." },
@@ -438,98 +447,117 @@ function centerText(y, s, c, sombra) { drawTextS(Math.round((160 - textW(s)) / 2
 
 /* =========================================================================
    PERSONAJES
-   Sprites de 14x22 con clave de color. Cada quien tiene su paleta, así que
-   siempre se sabe quién está en pantalla:
-     ROBERTO  -> pelo oscuro más corto, chamarra negra/gris, jeans azules
+   Sprites de 16x30: cabeza más chica respecto al cuerpo y piernas largas,
+   así se ven más altos que los muñequitos cabezones de antes.
+   Cada quien tiene su paleta, así siempre se sabe quién está en pantalla:
+     ROBERTO  -> pelo oscuro más corto, chamarra abierta, jeans
      SANTIAGO -> rizos más altos, fleece crema con cuello negro, arete,
-                 pantalón verde olivo
+                 pantalón olivo
    Claves: k borde  1/2 pelo  s/S piel  e ojo  b barba  m boca
            c/C ropa  t detalle de ropa  p/Q pantalón  o zapato  g arete
    ========================================================================= */
 const CUERPO_QUIETO = [
-  "..kppQ..ppQk..",
-  "..kppQ..ppQk..",
-  "..kooo..oook.."
+  "...kppQ..kppQ...",
+  "...kppQ..kppQ...",
+  "...kppQ..kppQ...",
+  "...kppQ..kppQ...",
+  "...kppQ..kppQ...",
+  "...kppQ..kppQ...",
+  "...kppQ..kppQ...",
+  "..koooQ..koooQ..",
+  "..kkkkk..kkkkk.."
 ];
 const CUERPO_PASO = [
-  "..kppppppQk...",
-  ".kppQ...ppQk..",
-  ".kooo...oook.."
+  "...kppQ..kppQ...",
+  "...kppQ..kppQ...",
+  "...kppQ..kppQ...",
+  "..kppQ....kppQ..",
+  ".kppQ......kppQ.",
+  ".kppQ......kppQ.",
+  ".kppQ......kppQ.",
+  "koooQ......koooQ",
+  "kkkkk......kkkkk"
 ];
 
 function armar(cabeza, torso, piernas) { return cabeza.concat(torso, piernas); }
 
 const CAB_ROBERTO = [
-  "....kkkkkk....",
-  "..kk222222kk..",
-  ".k1222222221k.",
-  ".k1122222211k.",
-  "k111111111111k",
-  "k11ssssssss11k",
-  "k1skksssskks1k",
-  "k1seessssees1k",
-  "k1ssssSSssss1k",
-  "k1bbsbbbbsbb1k",
-  "k1bbbmmmmbbb1k",
-  ".kbbbbbbbbbbk.",
-  "...kksssskk..."
+  ".....kkkkkk.....",
+  "...kk222222kk...",
+  "..k1222222221k..",
+  "..k1122222211k..",
+  "..k1111111111k..",
+  "..k11ssssss11k..",
+  "..k1skksskks1k..",
+  "..k1seessees1k..",
+  "..k1sssSSsss1k..",
+  "..k1bbssssbb1k..",
+  "..k1bbbmmbbb1k..",
+  "...kbbbbbbbbk...",
+  "....kbbbbbbk....",
+  ".....kssssk....."
 ];
 const TOR_ROBERTO = [
-  ".kcccccccccck.",
-  "kccccCttCcccck",
-  "kCcccCttCcccCk",
-  "kCcccCttCcccCk",
-  "kCsccCttCccsCk",
-  ".kcccccccccck."
+  ".kcccccccccccck.",
+  "kccccCttttCcccck",
+  "kCcccCttttCcccCk",
+  "kCcccCttttCcccCk",
+  "kCcccCttttCcccCk",
+  "kCsccCttttCccsCk",
+  ".kcccccccccccck."
 ];
 
 const CAB_SANTIAGO = [
-  "...kkkkkkkk...",
-  ".kk22222222kk.",
-  "k122222222221k",
-  "k112222222211k",
-  "k111111111111k",
-  "k11ssssssss11k",
-  "k1skksssskks1k",
-  "k1seessssees1k",
-  "k1ssssSSssssgk",
-  "k1bbsbbbbsbb1k",
-  "k1bbbmmmmbbb1k",
-  ".kbbbbbbbbbbk.",
-  "...kksssskk..."
+  "....kkkkkkkk....",
+  "..kk22222222kk..",
+  ".k122222222221k.",
+  ".k112222222211k.",
+  "..k1111111111k..",
+  "..k11ssssss11k..",
+  "..k1skksskks1k..",
+  "..k1seessees1k..",
+  "..k1sssSSsssgk..",
+  "..k1bbssssbb1k..",
+  "..k1bbbmmbbb1k..",
+  "...kbbbbbbbbk...",
+  "....kbbbbbbk....",
+  ".....kssssk....."
 ];
 const TOR_SANTIAGO = [
-  ".kttttttttttk.",
-  "kcccttttttccck",
-  "kCcccttttcccCk",
-  "kCccccccccccCk",
-  "kCsccccccccsCk",
-  ".kcccccccccck."
+  ".kttttttttttttk.",
+  "kccccttttttcccck",
+  "kCccccttttccccCk",
+  "kCccccccccccccCk",
+  "kCccccccccccccCk",
+  "kCsccccccccccsCk",
+  ".kcccccccccccck."
 ];
 
 const PERSONAJES = {
   roberto: {
-    nombre: 'ROBERTO',
+    nombre: 'ROBERTO', tinta: '#f4eeff',
     quieto: armar(CAB_ROBERTO, TOR_ROBERTO, CUERPO_QUIETO),
     paso:   armar(CAB_ROBERTO, TOR_ROBERTO, CUERPO_PASO),
     color: {
-      k:'#1b1226', '1':'#2c1a12', '2':'#4d3020',
-      s:'#f0bf92', S:'#c98a5e', e:'#241726', b:'#4a3527', m:'#241726',
-      c:'#3a3f4e', C:'#242833', t:'#98a3b0',
-      p:'#3b4c78', Q:'#2b385c', o:'#241d2b'
+      k:'#1b1226', '1':'#2a1810', '2':'#503322',
+      s:'#f2c496', S:'#cd8f60', e:'#231624', b:'#402d1f', m:'#6b3a34',
+      c:'#333a4a', C:'#212635', t:'#aab6c6',
+      p:'#3f5386', Q:'#2c3b63', o:'#241d2b'
     }
   },
   santiago: {
-    nombre: 'SANTIAGO',
+    nombre: 'SANTIAGO', tinta: '#2a2438',
     quieto: armar(CAB_SANTIAGO, TOR_SANTIAGO, CUERPO_QUIETO),
     paso:   armar(CAB_SANTIAGO, TOR_SANTIAGO, CUERPO_PASO),
     color: {
-      k:'#1b1226', '1':'#402715', '2':'#6f472a',
-      s:'#f4c79b', S:'#cd9166', e:'#241726', b:'#5a4030', m:'#241726',
-      c:'#e2d7c0', C:'#b7a98d', t:'#23222e',
-      p:'#5c6238', Q:'#454a29', o:'#2b2320', g:'#f2d35a'
+      k:'#1b1226', '1':'#3d2413', '2':'#74492b',
+      s:'#f6cb9e', S:'#d0946a', e:'#231624', b:'#503725', m:'#6b3a34',
+      c:'#e8ddc6', C:'#bdb094', t:'#22212c',
+      p:'#5f6640', Q:'#454b2d', o:'#2b2320', g:'#f2d35a'
     }
-  }
+  },
+  /* No camina: solo existe para pintar su barra en la caja de diálogo */
+  amigas: { nombre: 'LAS AMIGAS', tinta: '#eafff8', color: { c:'#0f766a' } }
 };
 
 function drawSprite(spr, x, y, flip, map) {
@@ -544,13 +572,42 @@ function drawSprite(spr, x, y, flip, map) {
     }
   }
 }
+/* Igual pero cada píxel es un cuadro de e*e: sirve para las "fotos" del cel */
+function drawSpriteEsc(spr, x, y, flip, map, e) {
+  for (let r = 0; r < spr.length; r++) {
+    const row = spr[r];
+    for (let c = 0; c < row.length; c++) {
+      const ch = row[c];
+      if (ch === '.') continue;
+      const col = map[ch];
+      if (!col) continue;
+      R(x + (flip ? row.length - 1 - c : c) * e, y + r * e, e, e, col);
+    }
+  }
+}
+
+/* La cangurera verde neón: temporal, solo la trae en la primera cita */
+let cangurera = false;
+function pintaCangurera(x, y, flip) {
+  R(x + 1, y + 19, 14, 4, '#5cff3a');
+  R(x + 1, y + 19, 14, 1, '#b6ff9e');
+  R(x + 1, y + 22, 14, 1, '#27bf14');
+  const bx = x + (flip ? 9 : 3);
+  R(bx, y + 18, 5, 6, '#2fd41a');
+  R(bx, y + 18, 5, 1, '#b6ff9e');
+  R(bx, y + 23, 5, 1, '#14760a');
+  R(bx + 1, y + 20, 3, 1, '#0d3d06');
+}
+
 /* Dibuja a un personaje con su sombra en el piso */
 function persona(quien, x, y, flip, caminando, t) {
   const p = PERSONAJES[quien] || PERSONAJES.santiago;
-  sombraPiso(Math.round(x) + 7, y + 22);
+  sombraPiso(Math.round(x) + 8, y + 30);
   const spr = (caminando && (t / 7 | 0) % 2) ? p.paso : p.quieto;
   drawSprite(spr, Math.round(x), y, flip, p.color);
+  if (cangurera && quien === 'santiago') pintaCangurera(Math.round(x), y, flip);
 }
+function busto(cab, tor) { return cab.concat(tor.slice(0, 3)); }
 
 const CORAZON = [
   ".kk..kk.",
@@ -564,6 +621,20 @@ const CORAZON = [
 const PAL_COR  = { k:'#7d1230', R:'#e8355c', H:'#ff9db4' };
 const PAL_COR2 = { k:'#5c0d24', R:'#ff6f8d', H:'#ffd0dc' };
 function corazon(x, y, brillo) { drawSprite(CORAZON, x, y, false, brillo ? PAL_COR2 : PAL_COR); }
+
+/* Los perfiles que aparecen antes de Roberto en la app */
+const PERFILES = [
+  { nombre:'ALEX, 26', linea:'A 3 KM DE TI', fondo:'#ffe0ea',
+    busto: busto(CAB_ROBERTO, TOR_ROBERTO),
+    color: { k:'#1b1226','1':'#8a6a2a','2':'#d4ad55', s:'#f8d3ac', S:'#d5a179',
+             e:'#231624', b:'#f8d3ac', m:'#a8635a', c:'#2f7b8a', C:'#215d68', t:'#a8dce4' } },
+  { nombre:'JUAN P, 31', linea:'A 8 KM DE TI', fondo:'#e0eeff',
+    busto: busto(CAB_SANTIAGO, TOR_SANTIAGO),
+    color: { k:'#1b1226','1':'#181820','2':'#3c3c4c', s:'#c98a5e', S:'#a06840',
+             e:'#231624', b:'#2a2a34', m:'#6b3a34', c:'#b5354a', C:'#8a2436', t:'#f2c9d0' } },
+  { nombre:'ROBERTO, 30', linea:'A 2 KM DE TI', fondo:'#ffe7d4',
+    busto: busto(CAB_ROBERTO, TOR_ROBERTO), color: PERSONAJES.roberto.color }
+];
 
 
 /* =========================================================================
@@ -863,10 +934,370 @@ function bgCiudad(t) {
 }
 function frCiudad(t) {}
 
-const ESCENAS = { parque:bgParque, cine:bgCine, lluvia:bgLluvia, noche:bgNoche,
-                  casa:bgCasa, cabana:bgCabana, ciudad:bgCiudad };
-const FRENTES = { parque:frParque, cine:frCine, lluvia:frLluvia, noche:frNoche,
-                  casa:frCasa, cabana:frCabana, ciudad:frCiudad };
+/* ---- 8. CUARTO DE SANTIAGO (donde arranca todo) ---- */
+function bgCuarto(t) {
+  vgrad(0, 0, 160, GROUND, ['#6a8ab8','#5d7ba6','#526b93']);
+  for (let x = 0; x < 160; x += 12) R(x, 0, 1, GROUND - 12, 'rgba(255,255,255,.07)');
+  R(0, GROUND - 12, 160, 3, '#3a4d70'); R(0, GROUND - 12, 160, 1, '#8aa6cf');
+  R(0, GROUND - 9, 160, 9, '#465d84');
+
+  /* ventana de noche */
+  R(6, 12, 40, 34, '#2e3c5c');
+  vgrad(9, 15, 34, 28, ['#101745','#1e2660','#343a78']);
+  for (let i = 0; i < 14; i++) {
+    const ex = (i * 13) % 32, ey = (i * 7) % 26;
+    if ((t / 18 + i) % 4 > 1.4) P(9 + ex, 15 + ey, i % 4 ? '#ffffff' : '#ffe9a8');
+  }
+  disco(37, 21, 4, '#fff2c0'); disco(35, 20, 3, '#1e2660');
+  R(25, 15, 2, 28, '#2e3c5c'); R(9, 28, 34, 2, '#2e3c5c');
+  R(6, 12, 40, 3, '#4d648c'); R(6, 43, 40, 3, '#222c44');
+
+  /* póster */
+  R(58, 10, 30, 27, '#1e1a2e'); R(60, 12, 26, 23, '#f2e8d8');
+  corazon(69, 15, (t / 30 | 0) % 2);
+  drawText(64, 25, 'AMOR', '#c9436a');
+
+  /* puerta */
+  R(116, 28, 38, GROUND - 28, '#8a5a38');
+  R(116, 28, 38, 2, '#ad7a52'); R(116, 28, 2, GROUND - 28, '#ad7a52');
+  R(152, 28, 2, GROUND - 28, '#5c3a20');
+  R(121, 33, 28, 24, '#7a4d2e'); R(121, 60, 28, 26, '#7a4d2e');
+  R(121, 33, 28, 1, '#5c3a20'); R(121, 60, 28, 1, '#5c3a20');
+  R(120, 57, 5, 3, '#e8c34a'); R(120, 57, 5, 1, '#fff0a8');
+
+  /* cama */
+  R(0, 54, 11, 38, '#6b4630'); R(0, 54, 11, 2, '#8f6242');
+  R(0, 66, 60, 8, '#f2e8d8'); R(0, 66, 60, 1, '#ffffff');
+  R(0, 74, 60, 14, '#c9436a'); R(0, 74, 60, 1, '#e8708c');
+  R(0, 86, 60, 2, '#9c2d4e');
+  R(3, 57, 18, 9, '#ffffff'); R(3, 57, 18, 1, '#d8d0e0');
+  R(55, 88, 4, 4, '#4a3020');
+
+  /* buró con lámpara y planta */
+  R(92, 70, 22, 22, '#8a5a38'); R(92, 70, 22, 2, '#ad7a52');
+  R(94, 76, 18, 8, '#6b4426');
+  disco(103, 62, 15, 'rgba(255,214,130,.05)');
+  disco(103, 62, 11, 'rgba(255,214,130,.06)');
+  disco(103, 62, 7,  'rgba(255,214,130,.09)');
+  R(99, 56, 9, 7, '#e8a94c'); R(99, 56, 9, 1, '#ffd47e');
+  R(102, 63, 3, 7, '#6b5540');
+  R(78, 84, 9, 8, '#b06a44'); R(77, 82, 11, 3, '#c9825a');
+  elipse(82, 78, 7, 5, '#3f8f4f'); elipse(80, 76, 3, 2, '#6cbd6b');
+
+  vgrad(0, GROUND, 160, 144 - GROUND, ['#8a6038','#7a5330','#6a4728','#5c3d22']);
+  R(0, GROUND, 160, 1, '#ac7c4c');
+  for (let y = GROUND + 10; y < 144; y += 12) R(0, y, 160, 1, 'rgba(60,36,16,.40)');
+  for (let i = 0; i < 8; i++) R(i * 21 + 8, GROUND + 1, 1, 52, 'rgba(60,36,16,.35)');
+}
+function frCuarto(t) {
+  elipse(70, 132, 56, 10, '#2f5f8a');
+  elipse(70, 132, 51, 8, '#4a86bd');
+  elipse(70, 132, 40, 6, '#2f5f8a');
+  elipse(70, 132, 35, 4, '#6aa8d8');
+  for (let i = 0; i < 7; i++) R(40 + i * 11, 130, 4, 3, '#2f5f8a');
+}
+
+/* ---- 9. CLUB DEL PATIO ROMA (la primera cita) ---- */
+function cunia(x, y, w, h, c, alReves) {
+  for (let i = 0; i < h; i++) {
+    const ww = Math.round(w * (alReves ? (h - i) / h : (i + 1) / h));
+    R(x, y + i, ww, 1, c);
+  }
+}
+function cuniaDer(x2, y, w, h, c, alReves) {
+  for (let i = 0; i < h; i++) {
+    const ww = Math.round(w * (alReves ? (h - i) / h : (i + 1) / h));
+    R(x2 - ww, y + i, ww, 1, c);
+  }
+}
+function bgPatio(t) {
+  vgrad(0, 0, 160, 14, ['#7fb4d8','#a6cfe6','#cde6ee']);
+
+  /* estructura de acero con lámina */
+  R(0, 0, 160, 7, '#1c1c24');
+  for (let x = 0; x < 160; x += 5) R(x, 0, 2, 7, '#2e2e3a');
+  R(0, 7, 160, 3, '#121218');
+
+  /* plantas colgando de la viga */
+  for (let i = 0; i < 9; i++) {
+    const px0 = 4 + i * 18;
+    R(px0, 10, 11, 6, '#5a4530'); R(px0, 10, 11, 1, '#7d6244');
+    elipse(px0 + 5, 17, 8, 5, '#2f7b45');
+    elipse(px0 + 3, 15, 4, 3, '#54ad60');
+    for (let j = 0; j < 3; j++) R(px0 + 2 + j * 4, 20, 1, 4 + ((i + j) % 3) * 4, '#3f8a4b');
+  }
+
+  /* muro pintado */
+  R(0, 24, 160, GROUND - 24, '#5f6f86');
+  R(0, 24, 160, 2, '#8598ae');
+  cunia(0, 26, 30, 30, '#e8b81e', false);
+  cunia(0, 52, 22, 26, '#2f7fd0', true);
+  R(0, 74, 14, 18, '#e8b81e');
+  cuniaDer(160, 26, 30, 30, '#2f7fd0', false);
+  cuniaDer(160, 52, 24, 26, '#e8b81e', true);
+  R(148, 74, 12, 18, '#2f7fd0');
+  R(0, 88, 46, 4, '#c93a3a'); R(114, 88, 46, 4, '#c93a3a');
+
+  /* letrero */
+  R(44, 26, 72, 22, '#2a3a54'); R(44, 26, 72, 1, '#6d8199'); R(44, 47, 72, 1, '#16202f');
+  R(46, 28, 68, 18, '#39537c');
+  drawText(56, 29, 'CLUB DEL', '#f2ead8');
+  drawText(50, 38, 'PATIO', '#f5c518');
+  drawText(86, 38, 'ROMA', '#e8433c');
+
+  /* túnel de entrada */
+  R(46, 50, 68, GROUND - 50, '#14141c');
+  vgrad(52, 56, 56, GROUND - 56, ['#2a1f18','#4a3524','#7a5636','#a87a48']);
+  for (let i = 0; i < 5; i++) {
+    R(60 + i * 10, GROUND - 22, 6, 22, 'rgba(20,14,10,.55)');
+    elipse(63 + i * 10, GROUND - 26, 4, 5, 'rgba(30,60,30,.5)');
+  }
+  R(46, 50, 68, 4, '#93a1b2'); R(46, 50, 68, 1, '#c2cddb');
+  R(46, 50, 4, GROUND - 50, '#83919f'); R(110, 50, 4, GROUND - 50, '#6d7987');
+  for (let y = 55; y < 66; y += 2) R(51, y, 58, 1, 'rgba(255,255,255,.09)');
+
+  /* piso de concreto con la luz que sale del túnel */
+  vgrad(0, GROUND, 160, 144 - GROUND, ['#8c8c95','#7a7a83','#696971','#5a5a62']);
+  R(0, GROUND, 160, 1, '#adadb6');
+  for (let i = 0; i < 14; i++)
+    R(50 - i, GROUND + i * 2, 60 + i * 2, 2, 'rgba(255,196,110,' + (0.16 - i * 0.011).toFixed(3) + ')');
+  for (let x = 0; x < 160; x += 32) R(x, GROUND + 12, 1, 40, 'rgba(40,40,48,.35)');
+  R(0, GROUND + 26, 160, 1, 'rgba(40,40,48,.30)');
+}
+function frPatio(t) {
+  R(-8, 104, 30, 40, '#a8583a'); R(-8, 101, 32, 4, '#c47a54');
+  elipse(8, 96, 15, 11, '#2f7b45'); elipse(3, 91, 7, 5, '#54ad60');
+  R(140, 108, 30, 36, '#a8583a'); R(138, 105, 32, 4, '#c47a54');
+  elipse(154, 100, 15, 11, '#2f7b45'); elipse(148, 95, 7, 5, '#54ad60');
+}
+
+const ESCENAS = { patio:bgPatio, cuarto:bgCuarto, parque:bgParque, cine:bgCine,
+                  lluvia:bgLluvia, noche:bgNoche, casa:bgCasa, cabana:bgCabana,
+                  ciudad:bgCiudad };
+const FRENTES = { patio:frPatio, cuarto:frCuarto, parque:frParque, cine:frCine,
+                  lluvia:frLluvia, noche:frNoche, casa:frCasa, cabana:frCabana,
+                  ciudad:frCiudad };
+
+
+/* =========================================================================
+   EL CELULAR
+   Todo lo del principio pasa en la pantalla del cel: se oscurece el cuarto
+   y encima se dibuja el teléfono. La "foto" de cada perfil es el mismo
+   sprite del personaje pintado a doble tamaño.
+   ========================================================================= */
+function velo(a) { R(0, 0, 160, 144, 'rgba(10,6,24,' + (a === undefined ? .5 : a) + ')'); }
+function centrarEn(x, w, y, s, c, som) { drawTextS(x + Math.round((w - textW(s)) / 2), y, s, c, som); }
+
+function cortar(str, n) {
+  const words = (str || '').toUpperCase().split(/\s+/);
+  const ls = []; let cur = '';
+  for (const w of words) {
+    if (!cur.length) cur = w;
+    else if (cur.length + 1 + w.length <= n) cur += ' ' + w;
+    else { ls.push(cur); cur = w; }
+  }
+  if (cur) ls.push(cur);
+  return ls;
+}
+
+const CEL = { x:20, y:2, w:120, h:92 };
+function telefono(dentro, t) {
+  const { x, y, w, h } = CEL;
+  R(x + 3, y + 4, w, h, 'rgba(6,3,16,.55)');
+  R(x, y, w, h, '#2a2438');
+  R(x, y, w, 1, '#635980'); R(x, y + h - 1, w, 1, '#14101e');
+  R(x, y, 1, h, '#4c4366'); R(x + w - 1, y, 1, h, '#14101e');
+  R(x + (w >> 1) - 8, y + 2, 16, 2, '#14101e');
+  R(x + (w >> 1) - 9, y + h - 4, 18, 2, '#635980');
+  const sx = x + 4, sy = y + 7, sw = w - 8, sh = h - 14;
+  R(sx - 1, sy - 1, sw + 2, sh + 2, '#0c0916');
+  dentro(sx, sy, sw, sh, t);
+}
+
+/* ---- App tipo Tinder ---- */
+function appMatch(sx, sy, sw, sh, perfil, desliz, sello, t) {
+  R(sx, sy, sw, sh, '#fdf3f6');
+  R(sx, sy, sw, 11, '#e8355c'); R(sx, sy, sw, 1, '#f4708c');
+  drawText(sx + 26, sy + 2, 'MATCH', '#ffffff');
+  corazon(sx + 6, sy + 2, (t / 20 | 0) % 2);
+
+  const cw = sw - 8, chh = 52, cx = sx + 4 + desliz, cy = sy + 13;
+  R(cx + 1, cy + 2, cw, chh, 'rgba(120,40,70,.18)');
+  R(cx, cy, cw, chh, '#ffffff');
+  R(cx + 1, cy + 1, cw - 2, 34, perfil.fondo);
+  drawSpriteEsc(perfil.busto, cx + (cw >> 1) - 16, cy + 1, false, perfil.color, 2);
+  R(cx, cy, cw, 1, '#e8355c'); R(cx, cy + chh - 1, cw, 1, '#e4d2da');
+  drawText(cx + 3, cy + 37, perfil.nombre, '#3a2a48');
+  drawText(cx + 3, cy + 45, perfil.linea, '#8a7898');
+
+  if (sello) {
+    const bueno = sello > 0;
+    const bx = bueno ? cx + 3 : cx + cw - 30;
+    R(bx, cy + 3, 27, 11, 'rgba(255,255,255,.88)');
+    R(bx, cy + 3, 27, 1, bueno ? '#3ad48a' : '#e8355c');
+    drawText(bx + 3, cy + 5, bueno ? 'LIKE' : 'NOPE', bueno ? '#1f9c62' : '#e8355c');
+  }
+
+  const by = sy + sh - 12;
+  disco(sx + 27, by + 5, 7, '#f6dde5'); disco(sx + 27, by + 5, 6, '#ffffff');
+  drawText(sx + 25, by + 2, 'X', '#e8355c');
+  disco(sx + 53, by + 5, 7, '#f6dde5'); disco(sx + 53, by + 5, 6, '#ffffff');
+  corazon(sx + 49, by + 2, (t / 12 | 0) % 2);
+}
+
+function appEsMatch(sx, sy, sw, sh, t) {
+  vgrad(sx, sy, sw, sh, ['#e8355c','#cf2b73','#a02f96','#7a2fa8']);
+  centrarEn(sx, sw, sy + 6, '¡ES MATCH!', '#ffffff', 'rgba(60,6,40,.7)');
+  drawSpriteEsc(PERFILES[2].busto, sx + 4, sy + 20, false, PERFILES[2].color, 2);
+  drawSpriteEsc(busto(CAB_SANTIAGO, TOR_SANTIAGO), sx + sw - 36, sy + 20, true, PERSONAJES.santiago.color, 2);
+  corazon(sx + (sw >> 1) - 4, sy + 34 + (Math.sin(t / 8) * 2 | 0), (t / 8 | 0) % 2);
+  for (let i = 0; i < 10; i++) {
+    const a = (t / 3 + i * 7) % 40;
+    if (a < 20) P(sx + 4 + ((i * 17) % (sw - 8)), sy + sh - 6 - a, '#ffe9a8');
+  }
+  centrarEn(sx, sw, sy + sh - 12, 'ESCRÍBELE', '#ffe9a8');
+}
+
+/* ---- Burbujas de chat ---- */
+function altoBurbuja(sw, texto) { return cortar(texto, Math.floor((sw - 16) / 6)).length * 9 + 5; }
+function burbuja(sx, y, sw, texto, mio, pal) {
+  const ls = cortar(texto, Math.floor((sw - 16) / 6));
+  let w = 0; for (const l of ls) w = Math.max(w, textW(l));
+  const bw = w + 7, bh = ls.length * 9 + 5;
+  const bx = mio ? sx + sw - bw - 4 : sx + 4;
+  R(bx + 1, y + 1, bw, bh, 'rgba(60,40,90,.20)');
+  R(bx, y, bw, bh, mio ? pal.mio : pal.otro);
+  R(bx, y, bw, 1, mio ? pal.mioL : pal.otroL);
+  for (let i = 0; i < ls.length; i++)
+    drawText(bx + 4, y + 3 + i * 9, ls[i], mio ? pal.tMio : pal.tOtro);
+}
+/* Se apilan desde abajo: si no caben, los viejos simplemente no se pintan */
+function pilaChat(sx, sy, sw, sh, msgs, n, pal, topY) {
+  let y0 = sy + sh - 4;
+  const vis = [];
+  for (let i = Math.min(n, msgs.length) - 1; i >= 0; i--) {
+    const h = altoBurbuja(sw, msgs[i].t);
+    if (y0 - h < sy + topY) break;
+    y0 -= h + 3;
+    vis.unshift({ m: msgs[i], y: y0 });
+  }
+  for (const v of vis) burbuja(sx, v.y, sw, v.m.t, v.m.mio, pal);
+}
+
+const PAL_MATCH = { mio:'#e8355c', mioL:'#f4708c', otro:'#ffffff', otroL:'#e4dcee',
+                    tMio:'#ffffff', tOtro:'#3a2a48' };
+const PAL_WA    = { mio:'#c9e8a8', mioL:'#e0f4c9', otro:'#ffffff', otroL:'#eae2d6',
+                    tMio:'#20402a', tOtro:'#2a2438' };
+
+const MSG_CHAT = [
+  { mio:true,  t:'HOLA! ¿SALIMOS EL SÁBADO?' },
+  { mio:false, t:'SÍ! ¿A QUÉ HORA?' },
+  { mio:false, t:'YO PASO POR TI' }
+];
+const MSG_WA = [
+  { mio:true,  t:'AMIGAS, TENGO MATCH' },
+  { mio:true,  t:'ESTÁ RARO. CASI NO HEMOS HABLADO' },
+  { mio:true,  t:'PERO SIENTO QUE ALGO IMPORTANTE VA A PASAR' },
+  { mio:false, t:'AAAAY YA CÁSATE' },
+  { mio:false, t:'QUEREMOS FOTOS Y NOMBRE COMPLETO' }
+];
+
+function appChat(sx, sy, sw, sh, n, t) {
+  R(sx, sy, sw, sh, '#f5f0fa');
+  R(sx, sy, sw, 12, '#e8355c'); R(sx, sy, sw, 1, '#f4708c');
+  drawText(sx + 14, sy + 3, 'ROBERTO', '#ffffff');
+  corazon(sx + 3, sy + 3, false);
+  pilaChat(sx, sy, sw, sh, MSG_CHAT, n, PAL_MATCH, 15);
+}
+function appWA(sx, sy, sw, sh, n, t) {
+  R(sx, sy, sw, sh, '#ded3c2');
+  for (let y = sy + 13; y < sy + sh; y += 5) dith(sx, y, sw, '#d2c6b3', (y >> 1) & 1);
+  R(sx, sy, sw, 12, '#0f766a'); R(sx, sy, sw, 1, '#2a9c8c');
+  drawText(sx + 14, sy + 3, 'LAS AMIGAS', '#ffffff');
+  corazon(sx + 3, sy + 3, false);
+  pilaChat(sx, sy, sw, sh, MSG_WA, n, PAL_WA, 15);
+}
+
+
+/* =========================================================================
+   INTRO: CÓMO NOS CONOCIMOS
+   Una lista de pasos. Los que traen "dur" se pasan solos (son animación);
+   los que traen "t" esperan a que aprietes A. "hacer" corre una sola vez
+   al entrar al paso.
+   ========================================================================= */
+const CUADROS = {
+  perfil: (tt, a) => {
+    bgCuarto(tt); velo();
+    telefono((sx, sy, sw, sh) => appMatch(sx, sy, sw, sh, PERFILES[a.i], 0, 0, tt), tt);
+  },
+  desliza: (tt, a) => {
+    bgCuarto(tt); velo();
+    const p = Math.min(1, tt / 20);
+    const off = Math.round(a.d * p * p * 110);
+    telefono((sx, sy, sw, sh) => appMatch(sx, sy, sw, sh, PERFILES[a.i], off, a.d, tt), tt);
+  },
+  match: (tt) => {
+    bgCuarto(tt); velo(.6);
+    telefono((sx, sy, sw, sh) => appEsMatch(sx, sy, sw, sh, tt), tt);
+  },
+  chat: (tt, a) => {
+    bgCuarto(tt); velo();
+    telefono((sx, sy, sw, sh) => appChat(sx, sy, sw, sh, a.n, tt), tt);
+  },
+  wa: (tt, a) => {
+    bgCuarto(tt); velo();
+    telefono((sx, sy, sw, sh) => appWA(sx, sy, sw, sh, a.n, tt), tt);
+  },
+  guarda: (tt) => {
+    bgCuarto(tt);
+    const p = Math.min(1, tt / 22);
+    velo(.5 * (1 - p));
+    const guardado = CEL.y;
+    CEL.y = guardado + Math.round(p * p * 150);
+    telefono((sx, sy, sw, sh) => appWA(sx, sy, sw, sh, 5, tt), tt);
+    CEL.y = guardado;
+    persona('santiago', 46, GROUND - 30, false, false, tt);
+    frCuarto(tt);
+  },
+  cangurera: (tt) => {
+    bgCuarto(tt);
+    persona('santiago', 46, GROUND - 30, false, false, tt);
+    for (let i = 0; i < 8; i++) {
+      const a = (tt / 4 + i * 3) % 18;
+      if (a < 9) P(44 + ((i * 7) % 20), GROUND - 12 - a, i % 2 ? '#b6ff9e' : '#ffffff');
+    }
+    frCuarto(tt);
+  },
+  salir: (tt) => {
+    bgCuarto(tt);
+    const x = Math.min(46 + tt * 0.95, 118);
+    persona('santiago', x, GROUND - 30, false, x < 118, tt);
+    frCuarto(tt);
+    if (x >= 118 && (tt / 10 | 0) % 2) drawTextS(112, 26, 'A LA CITA', '#ffe9a8', 'rgba(20,10,40,.8)');
+  }
+};
+
+const INTRO = [
+  { e:'perfil',  a:{i:0}, q:'santiago', t:'SÁBADO EN LA NOCHE, SOLO EN MI CUARTO. A VER QUIÉN HAY POR AQUÍ.' },
+  { e:'desliza', a:{i:0, d:-1}, dur:22 },
+  { e:'perfil',  a:{i:1}, q:'santiago', t:'MMM. NO. SIGUIENTE.' },
+  { e:'desliza', a:{i:1, d:-1}, dur:22 },
+  { e:'perfil',  a:{i:2}, q:'santiago', t:'QUÉ GUAPO.' },
+  { e:'desliza', a:{i:2, d:1},  dur:24 },
+  { e:'match',   a:{}, q:'santiago', t:'¡ES MATCH! OK. CALMA. RESPIRA.' },
+  { e:'chat',    a:{n:0}, q:'santiago', t:'LE ESCRIBO YA. SI LO PIENSO MÁS, NO LO HAGO.' },
+  { e:'chat',    a:{n:1}, q:'santiago', t:'"HOLA. ¿SALIMOS EL SÁBADO?" ... ENVIADO. AY.' },
+  { e:'chat',    a:{n:3}, q:'roberto',  t:'SÍ. ¿A QUÉ HORA? YO PASO POR TI.' },
+  { e:'chat',    a:{n:3}, q:'santiago', t:'DIJO QUE SÍ. DIJO QUE SÍ.' },
+  { e:'wa',      a:{n:1}, q:'santiago', t:'AMIGAS. TENGO QUE CONTARLES ALGO.' },
+  { e:'wa',      a:{n:2}, q:'santiago', t:'ESTÁ RARO: CASI NO HEMOS HABLADO Y NI LO CONOZCO...' },
+  { e:'wa',      a:{n:3}, q:'santiago', t:'...PERO SIENTO QUE ALGO IMPORTANTE VA A PASAR CON ÉL.' },
+  { e:'wa',      a:{n:5}, q:'amigas',   t:'AAAAY YA CÁSATE. QUEREMOS FOTOS. SUERTE MI AMOR.' },
+  { e:'guarda',  a:{}, dur:24 },
+  { e:'cangurera', a:{}, q:'santiago', hacer:() => { cangurera = true; },
+    t:'LA CANGURERA VERDE NEÓN. OBVIO ME LA LLEVO. ES MI FIRMA.' },
+  { e:'salir',   a:{}, dur:96 }
+];
 
 
 /* ---------- Caja de diálogo ---------- */
@@ -900,9 +1331,9 @@ function drawBox(pages, page, revealed, blink, quien) {
   R(5, BOX_Y + BOX_H - 2, 150, 1, '#cbbfa4');
   R(154, BOX_Y + 10, 1, BOX_H - 12, '#cbbfa4');
   if (p) {
-    const esClaro = (quien === 'santiago');
-    drawTextS(10, BOX_Y + 2, p.nombre, esClaro ? '#2a2438' : '#f4eeff',
-                             esClaro ? 'rgba(255,255,255,.4)' : 'rgba(0,0,0,.45)');
+    const claro = (p.tinta === '#2a2438');
+    drawTextS(10, BOX_Y + 2, p.nombre, p.tinta || '#f4eeff',
+                             claro ? 'rgba(255,255,255,.45)' : 'rgba(0,0,0,.45)');
     corazon(146, BOX_Y + 2, blink);
   }
 
@@ -1022,14 +1453,45 @@ let estado = 'titulo';
 let mes = 0, t = 0;
 let jug = { x: 16, mirando: 1 };
 let corazonTomado = false;
-let pages = [], page = 0, revealed = 0, textTimer = 0, hablante = HISTORIA.jugador;
+let pages = [], page = 0, revealed = 0, textTimer = 0, hablante = 'santiago';
+let charla = [], charlaIdx = 0;
+let intPaso = 0, intT = 0;
 let fade = 0, fadeDir = 0, pendiente = null;
 
-function abrirDialogo(txt, tipo, quien) {
-  pages = wrap(txt); page = 0; revealed = 0; textTimer = 0;
-  hablante = quien || HISTORIA.jugador;
-  estado = tipo || 'dialogo'; chime();
+/* Una "charla" es una lista de {q:quién, t:qué dice}. Así una misma escena
+   puede tener ida y vuelta entre los dos y no solo una frase suelta. */
+function cargarLinea() {
+  const l = charla[charlaIdx];
+  pages = wrap(l.t); page = 0; revealed = 0; textTimer = 0; hablante = l.q;
+  chime();
 }
+function abrirCharla(lineas, tipo) {
+  charla = lineas; charlaIdx = 0;
+  cargarLinea();
+  estado = tipo || 'dialogo';
+}
+function charlaDeMes(m) {
+  const d = HISTORIA.meses[m];
+  return d.charla ? d.charla : [{ q: HISTORIA.jugador, t: d.texto }];
+}
+/* Va destapando letra por letra */
+function correrTexto() {
+  const total = (pages[page] || []).join('').length;
+  if (revealed < total) {
+    textTimer++;
+    if (textTimer % 2 === 0) { revealed++; if (revealed % 3 === 0) blip(); }
+  }
+}
+/* Un toque de A: primero completa la línea, luego pasa de página, luego de
+   frase. Devuelve true solo cuando ya no queda nada que decir. */
+function avanzarTexto() {
+  const total = (pages[page] || []).join('').length;
+  if (revealed < total) { revealed = total; return false; }
+  if (page < pages.length - 1) { page++; revealed = 0; return false; }
+  if (charlaIdx < charla.length - 1) { charlaIdx++; cargarLinea(); return false; }
+  return true;
+}
+
 /* Si ya hay un barrido corriendo se ignora: si no, la condición de salida
    se cumple en cada cuadro y reinicia el fade en 0 para siempre. */
 function transicionar(fn) {
@@ -1078,22 +1540,22 @@ function panel(x, y, w, h) {
 
 function pantallaTitulo(t) {
   fondoMenu(t);
-  panel(10, 18, 140, 94);
-  centerText(26, HISTORIA.titulo, '#8a2f78', 'rgba(190,176,148,.8)');
-  corazon(34, 24, (t / 24 | 0) % 2);
-  corazon(118, 24, (t / 24 | 0) % 2);
-  centerText(42, HISTORIA.subtitulo, '#3a2a58');
-  centerText(54, HISTORIA.fecha, '#8a7a58');
+  panel(10, 16, 140, 98);
+  centerText(22, HISTORIA.titulo, '#8a2f78', 'rgba(190,176,148,.8)');
+  corazon(34, 20, (t / 24 | 0) % 2);
+  corazon(118, 20, (t / 24 | 0) % 2);
+  centerText(36, HISTORIA.subtitulo, '#3a2a58');
+  centerText(46, HISTORIA.fecha, '#8a7a58');
 
   R(20, 88, 120, 1, '#d8cdb2');
-  persona('roberto', 40, 66, false, false, t);
-  persona('santiago', 100, 66, true, false, t);
-  corazon(72, 70 + (Math.sin(t / 18) * 2 | 0), (t / 16 | 0) % 2);
+  persona('roberto', 38, 56, false, false, t);
+  persona('santiago', 102, 56, true, false, t);
+  corazon(74, 64 + (Math.sin(t / 18) * 2 | 0), (t / 16 | 0) % 2);
   drawText(26, 92, 'ROBERTO',  '#3a2a58');
-  drawText(83, 92, 'SANTIAGO', '#3a2a58');
+  drawText(87, 92, 'SANTIAGO', '#3a2a58');
 
-  if ((t / 30 | 0) % 2) centerText(118, "PRESIONA A", '#ffe9a8', 'rgba(60,10,50,.7)');
-  centerText(132, "-- LADO A --", 'rgba(255,255,255,.7)');
+  if ((t / 30 | 0) % 2) centerText(120, "PRESIONA A", '#ffe9a8', 'rgba(60,10,50,.7)');
+  centerText(133, "-- LADO A --", 'rgba(255,255,255,.7)');
 }
 
 function pantallaCreditos(t) {
@@ -1105,7 +1567,7 @@ function pantallaCreditos(t) {
   for (let f = 0; f < 3; f++) {
     const p = (t + f * 70) % 210;
     if (p < 60) {
-      const cx = 26 + f * 54, cy = 22 + (f % 2) * 12, rad = p * 0.4;
+      const cx = 26 + f * 54, cy = 20 + (f % 2) * 10, rad = p * 0.4;
       const col = FUEGO_COL[(f + 1) % FUEGO_COL.length];
       if (p < 12) disco(cx, cy, 12 - p, '#ffffff');
       for (let a = 0; a < 22; a++) {
@@ -1118,21 +1580,29 @@ function pantallaCreditos(t) {
       }
     }
   }
-  centerText(30, "FELICES", '#ffe9a8', 'rgba(40,6,40,.8)');
-  centerText(44, HISTORIA.titulo, '#ffe9a8', 'rgba(40,6,40,.8)');
+  centerText(22, "FELICES", '#ffe9a8', 'rgba(40,6,40,.8)');
+  centerText(34, HISTORIA.titulo, '#ffe9a8', 'rgba(40,6,40,.8)');
   for (let i = 0; i < 7; i++) {
-    const hx = 12 + i * 21, hy = 62 + (Math.sin(t / 22 + i) * 5 | 0);
+    const hx = 12 + i * 21, hy = 48 + (Math.sin(t / 22 + i) * 4 | 0);
     corazon(hx, hy, ((t / 14 | 0) + i) % 2);
   }
-  persona('roberto',  52, 82, false, false, t);
-  persona('santiago', 78, 82, true,  false, t);
-  corazon(70, 70 + (Math.sin(t / 15) * 2 | 0), true);
-  centerText(112, HISTORIA.subtitulo, '#ffd0dc');
-  if ((t / 30 | 0) % 2) centerText(128, "A = OTRA VEZ", '#ffffff', 'rgba(40,6,40,.8)');
+  persona('roberto',  56, 72, false, false, t);
+  persona('santiago', 84, 72, true,  false, t);
+  corazon(74, 62 + (Math.sin(t / 15) * 2 | 0), true);
+  centerText(108, HISTORIA.subtitulo, '#ffd0dc');
+  if ((t / 30 | 0) % 2) centerText(126, "A = OTRA VEZ", '#ffffff', 'rgba(40,6,40,.8)');
 }
 
 
 /* ---------- Bucle principal ---------- */
+function pasoIntro() {
+  if (intPaso >= INTRO.length - 1) {
+    transicionar(() => {
+      estado = 'juego'; mes = 0; jug.x = 6; jug.mirando = 1; corazonTomado = false;
+    });
+  } else { intPaso++; intT = 0; }
+}
+
 function loop() {
   t++;
   ctx.clearRect(0, 0, 160, 144);
@@ -1142,8 +1612,30 @@ function loop() {
     if (consumed('a') || consumed('start')) {
       ensureAudio();
       if (!musicOn) muteBtn.click();
-      mes = 0; jug.x = 16; jug.mirando = 1; corazonTomado = false;
-      transicionar(() => { estado = 'juego'; });
+      transicionar(() => {
+        estado = 'intro'; intPaso = 0; intT = 0;
+        mes = 0; jug.x = 6; jug.mirando = 1; corazonTomado = false; cangurera = false;
+      });
+    }
+    pasoFade();
+    requestAnimationFrame(loop); return;
+  }
+
+  /* --- Cómo nos conocimos --- */
+  if (estado === 'intro') {
+    const p = INTRO[intPaso];
+    intT++;
+    if (intT === 1) {
+      if (p.hacer) p.hacer();
+      if (p.t) { charla = [{ q: p.q, t: p.t }]; charlaIdx = 0; cargarLinea(); }
+    }
+    (CUADROS[p.e] || bgCuarto)(intT, p.a || {});
+    if (p.dur) {
+      if (intT >= p.dur) pasoIntro();
+    } else {
+      correrTexto();
+      drawBox(pages, page, revealed, (t / 22 | 0) % 2, hablante);
+      if (consumed('a') || consumed('b')) { if (avanzarTexto()) pasoIntro(); }
     }
     pasoFade();
     requestAnimationFrame(loop); return;
@@ -1162,24 +1654,31 @@ function loop() {
   const clave = (esFinal || !datosMes) ? 'ciudad' : datosMes.escena;
   (ESCENAS[clave] || bgParque)(t);
 
-  const yPie = GROUND - 22;
-  const juntos = esFinal && jug.x >= 88;
+  const yPie = GROUND - 30;
+  const conPareja = !esFinal && datosMes && datosMes.pareja != null;
+  const objetivo = conPareja ? datosMes.pareja - 16 : 118;
+  const caminando = (estado === 'juego' || estado === 'final') && (keys.left || keys.right);
 
   if (esFinal) {
-    persona(HISTORIA.pareja, 108, yPie, true, false, t);
-    if (juntos) for (let i = 0; i < 3; i++)
-      corazon(96 + i * 8, yPie - 12 - (((t / 3 + i * 9) % 22) | 0), (t / 10 | 0) % 2);
-  } else if (!corazonTomado) {
-    const hy = GROUND - 46 + (Math.sin(t / 16) * 3 | 0);
-    corazon(122, hy, (t / 14 | 0) % 2);
-    R(125, GROUND - 3, 2, 2, 'rgba(0,0,0,.15)');
-  } else if ((t / 20 | 0) % 2) {
-    for (let i = 0; i < 6; i++) R(146, GROUND - 34 + i, 6 - i, 1, '#fff3ae');
-    R(146, GROUND - 28, 9, 1, '#fff3ae');
-    for (let i = 0; i < 6; i++) R(147, GROUND - 33 + i, 5 - i, 1, '#e8a94c');
+    persona(HISTORIA.pareja, 104, yPie, true, false, t);
+    if (jug.x >= 88) for (let i = 0; i < 3; i++)
+      corazon(94 + i * 9, yPie - 10 - (((t / 3 + i * 9) % 24) | 0), (t / 10 | 0) % 2);
+  } else {
+    if (conPareja) {
+      /* Antes de hablar espera; ya que hablaron, se van caminando juntos */
+      const px = corazonTomado ? Math.min(jug.x + 19, 150) : datosMes.pareja;
+      persona(HISTORIA.pareja, px, yPie, !corazonTomado, corazonTomado && caminando, t);
+    } else if (!corazonTomado) {
+      const hy = GROUND - 52 + (Math.sin(t / 16) * 3 | 0);
+      corazon(122, hy, (t / 14 | 0) % 2);
+    }
+    if (corazonTomado && (t / 20 | 0) % 2) {
+      for (let i = 0; i < 6; i++) R(146, GROUND - 40 + i, 6 - i, 1, '#fff3ae');
+      R(146, GROUND - 34, 9, 1, '#fff3ae');
+      for (let i = 0; i < 6; i++) R(147, GROUND - 39 + i, 5 - i, 1, '#e8a94c');
+    }
   }
 
-  const caminando = (estado === 'juego' || estado === 'final') && (keys.left || keys.right);
   persona(HISTORIA.jugador, jug.x, yPie, jug.mirando < 0, caminando, t);
 
   (FRENTES[clave] || frParque)(t);
@@ -1189,36 +1688,28 @@ function loop() {
   if (estado === 'juego' || estado === 'final') {
     if (keys.left)  { jug.x -= 0.9; jug.mirando = -1; }
     if (keys.right) { jug.x += 0.9; jug.mirando = 1; }
-    jug.x = Math.max(4, Math.min(144, jug.x));
+    jug.x = Math.max(4, Math.min(142, jug.x));
 
-    if (estado === 'juego' && !corazonTomado && Math.abs(jug.x - 118) < 14) {
+    if (estado === 'juego' && !corazonTomado && Math.abs(jug.x - objetivo) < 14) {
       corazonTomado = true;
-      abrirDialogo(HISTORIA.meses[mes].texto, 'dialogo', HISTORIA.jugador);
+      abrirCharla(charlaDeMes(mes), 'dialogo');
     }
-    if (estado === 'juego' && corazonTomado && jug.x >= 143) {
+    if (estado === 'juego' && corazonTomado && jug.x >= 141) {
       transicionar(() => {
-        mes++; jug.x = 8; corazonTomado = false;
-        if (mes >= HISTORIA.meses.length) estado = 'final';
-        else estado = 'juego';
+        mes++; jug.x = 8; corazonTomado = false; cangurera = false;
+        estado = (mes >= HISTORIA.meses.length) ? 'final' : 'juego';
       });
     }
-    if (estado === 'final' && jug.x >= 92) {
-      abrirDialogo(HISTORIA.final, 'dialogoFinal', HISTORIA.jugador);
+    if (estado === 'final' && jug.x >= 90) {
+      abrirCharla([{ q: HISTORIA.jugador, t: HISTORIA.final }], 'dialogoFinal');
     }
   }
 
   if (estado === 'dialogo' || estado === 'dialogoFinal') {
-    const total = (pages[page] || []).join('').length;
-    if (revealed < total) {
-      textTimer++;
-      if (textTimer % 2 === 0) { revealed++; if (revealed % 3 === 0) blip(); }
-    }
+    correrTexto();
     drawBox(pages, page, revealed, (t / 22 | 0) % 2, hablante);
-
     if (consumed('a') || consumed('b')) {
-      if (revealed < total) revealed = total;
-      else if (page < pages.length - 1) { page++; revealed = 0; }
-      else {
+      if (avanzarTexto()) {
         if (estado === 'dialogoFinal') transicionar(() => { estado = 'creditos'; });
         else estado = 'juego';
       }
