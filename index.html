@@ -311,7 +311,7 @@ const HISTORIA = {
   fecha:     "12.08.2026",
 
   meses: [
-    { escena:"patio", pareja:104, charla:[
+    { escena:"patio", pareja:104, acto:true, charla:[
       { q:"roberto",  t:"HOLA. OYE... QUÉ HORROR LA CANGURERA." },
       { q:"santiago", t:"ES VERDE NEÓN. FUE A PROPÓSITO." },
       { q:"roberto",  t:"PEOR." },
@@ -568,6 +568,130 @@ const PERSONAJES = {
   /* No camina: solo existe para pintar su barra en la caja de diálogo */
   amigas: { nombre: 'LAS AMIGAS', tinta: '#eafff8', color: { c:'#0f766a' } }
 };
+
+/* ---- Personajes de una sola noche ---- */
+const TOR_MESERA = [
+  ".kcccccccccccck.",
+  "kccccttttttcccck",
+  "kCccccttttccccCk",
+  "kCccccccccccccCk",
+  "kCcctttttttttcCk",
+  "kCsctttttttttsCk",
+  ".kcttttttttttck."
+];
+const CAB_DRAG = [
+  "....kkkkkkkk....",
+  "..kk22222222kk..",
+  ".k222222222222k.",
+  "k12222222222221k",
+  "k11122222222111k",
+  "..k11ssssss11k..",
+  "..k1ekkeekke1k..",
+  "..k1seessees1k..",
+  "..k1sssSSsss1k..",
+  "..k1ssssssss1k..",
+  "..k1sslmmlss1k..",
+  "...kssssssssk...",
+  "....kssssssk....",
+  ".....kssssk....."
+];
+const TOR_DRAG = [
+  ".kcccccccccccck.",
+  "kcccttttttttcck.",
+  "kCccttttttttccCk",
+  "kCccccccccccccCk",
+  "kCccccccccccccCk",
+  "kCsccccccccccsCk",
+  ".kcccccccccccck."
+];
+const CUERPO_DRAG = [
+  "..kcccccccccck..",
+  ".kcccccccccccck.",
+  "kcccccccccccccck",
+  "...kppQ..kppQ...",
+  "...kppQ..kppQ...",
+  "...kppQ..kppQ...",
+  "...kppQ..kppQ...",
+  "..koooQ..koooQ..",
+  "..kkkkk..kkkkk.."
+];
+
+PERSONAJES.mesera = {
+  nombre: 'MESERA', tinta: '#f4eeff',
+  quieto: armar(CAB_ROBERTO, TOR_MESERA, CUERPO_QUIETO),
+  paso:   armar(CAB_ROBERTO, TOR_MESERA, CUERPO_PASO),
+  color: {
+    k:'#1b1226', '1':'#6b2418', '2':'#a8452c',
+    s:'#f2c496', S:'#cd8f60', e:'#231624', b:'#f2c496', m:'#a8524a',
+    c:'#2a2630', C:'#1a1720', t:'#f2ead8',
+    p:'#2a2630', Q:'#1a1720', o:'#241d2b'
+  }
+};
+PERSONAJES.drag = {
+  nombre: 'LA DRAG', tinta: '#2a2438',
+  quieto: armar(CAB_DRAG, TOR_DRAG, CUERPO_DRAG),
+  paso:   armar(CAB_DRAG, TOR_DRAG, CUERPO_DRAG),
+  color: {
+    k:'#1b1226', '1':'#8a2f78', '2':'#d152b8',
+    s:'#f6cb9e', S:'#d0946a', e:'#231624', l:'#e8355c', m:'#b52048',
+    c:'#f5c518', C:'#c99a12', t:'#ffe98a',
+    p:'#f6cb9e', Q:'#d0946a', o:'#e8355c'
+  }
+};
+
+/* ---- Brazos para bailar: se pintan encima, en las columnas libres ---- */
+function franjaBrazos(izq, der) {
+  const f = [];
+  for (let r = 0; r < 14; r++) {
+    const a = izq(r) ? izq(r) : '..';
+    const b = der(r) ? der(r) : '..';
+    f.push(a + '............' + b);
+  }
+  return f;
+}
+const alto = r => r < 6 ? null : (r === 6 ? 'ss' : 'cc');
+const BR_ARRIBA = franjaBrazos(alto, alto);
+const BR_IZQ = franjaBrazos(alto, () => null);
+const BR_DER = franjaBrazos(() => null, alto);
+const MANOS_CABEZA = [
+  "................",
+  "................",
+  "................",
+  "...sss....sss...",
+  "...sss....sss...",
+  "................",
+  "................",
+  "................",
+  "................",
+  "................",
+  "................",
+  "................",
+  "................",
+  "................"
+];
+const NOTAS = ['*', '+', '*'];
+function bailando(quien, x, y, t, tipo) {
+  const p = PERSONAJES[quien];
+  const f = (t / 7 | 0);
+  let dy = 0, dx = 0, capa = null, mueve = f % 2 === 1;
+  if (tipo === 'macarena') {
+    capa = [BR_ARRIBA, MANOS_CABEZA, BR_ARRIBA, null][f % 4];
+    dy = (f % 2) ? -1 : 0; mueve = false;
+  } else if (tipo === 'payaso') {
+    capa = (f % 2) ? BR_IZQ : BR_DER;
+    dy = (f % 2) ? -3 : 0;
+  } else {
+    capa = (f % 2) ? BR_DER : BR_IZQ;
+    dx = (f % 2) ? 1 : -1;
+  }
+  sombraPiso(Math.round(x) + 8, y + 30);
+  drawSprite(mueve ? p.paso : p.quieto, Math.round(x + dx), y + dy, false, p.color);
+  if (capa) drawSprite(capa, Math.round(x + dx), y + dy, false, p.color);
+  for (let i = 0; i < 3; i++) {
+    const a = ((t / 3 | 0) + i * 7) % 24;
+    if (a < 12) drawText(x - 4 + i * 11, y - 4 - a, NOTAS[i], i % 2 ? '#ffe08a' : '#7ee8fa');
+  }
+}
 
 function drawSprite(spr, x, y, flip, map) {
   for (let r = 0; r < spr.length; r++) {
@@ -1083,12 +1207,127 @@ function frPatio(t) {
   elipse(154, 100, 15, 11, '#2f7b45'); elipse(148, 95, 7, 5, '#54ad60');
 }
 
-const ESCENAS = { patio:bgPatio, cuarto:bgCuarto, parque:bgParque, cine:bgCine,
-                  lluvia:bgLluvia, noche:bgNoche, casa:bgCasa, cabana:bgCabana,
-                  ciudad:bgCiudad };
-const FRENTES = { patio:frPatio, cuarto:frCuarto, parque:frParque, cine:frCine,
-                  lluvia:frLluvia, noche:frNoche, casa:frCasa, cabana:frCabana,
-                  ciudad:frCiudad };
+
+/* ---- 10. ADENTRO DEL CLUB ---- */
+let interiorNoche = false;
+const MESAS = [28, 78, 128];
+let mesaElegida = 1;
+
+function mesaFondo(cx) {
+  R(cx - 17, GROUND - 26, 7, 16, '#5c3f28'); R(cx - 17, GROUND - 26, 7, 1, '#7d5836');
+  R(cx + 10, GROUND - 26, 7, 16, '#5c3f28'); R(cx + 10, GROUND - 26, 7, 1, '#7d5836');
+  R(cx - 3, GROUND - 14, 6, 14, '#4a3020');
+  elipse(cx, GROUND - 14, 15, 4, '#6b4426');
+  elipse(cx, GROUND - 16, 15, 4, '#a8764c');
+  elipse(cx, GROUND - 17, 13, 3, '#c49468');
+}
+function mesaFrente(cx) {
+  R(cx - 3, 86, 6, 8, '#4a3020');
+  elipse(cx, 92, 10, 3, '#3a2418');
+  elipse(cx, 84, 18, 5, '#6b4426');
+  elipse(cx, 82, 18, 5, '#a8764c');
+  elipse(cx, 81, 16, 4, '#c49468');
+}
+function carta(cx, y) {
+  R(cx - 9, y, 18, 12, '#f6efdc'); R(cx - 9, y, 18, 1, '#ffffff');
+  R(cx - 9, y, 1, 12, '#c9b89a'); R(cx + 8, y, 1, 12, '#c9b89a');
+  R(cx - 6, y + 3, 12, 1, '#a8524a'); R(cx - 6, y + 6, 9, 1, '#8a7a68');
+  R(cx - 6, y + 9, 11, 1, '#8a7a68');
+}
+function bgInterior(t) {
+  const n = interiorNoche;
+  vgrad(0, 0, 160, GROUND, n ? ['#2b1c28','#33232e','#3b2932'] : ['#6d4c3c','#614435','#553b2e']);
+  for (let y = 12; y < GROUND - 10; y += 7) {
+    R(0, y, 160, 1, n ? 'rgba(18,10,16,.55)' : 'rgba(40,24,16,.40)');
+    for (let x = ((y / 7 | 0) % 2) * 8; x < 160; x += 16)
+      R(x, y - 6, 1, 6, n ? 'rgba(18,10,16,.45)' : 'rgba(40,24,16,.32)');
+  }
+  R(0, 0, 160, 6, '#1c1c24');
+  for (let x = 0; x < 160; x += 5) R(x, 0, 2, 6, '#2e2e3a');
+  /* serie de foquitos */
+  for (let i = 0; i < 11; i++) {
+    const bx = 5 + i * 15, by = 9 + ((i % 2) ? 4 : 0);
+    R(bx, 6, 1, by - 6, '#2a2a34');
+    const on = ((t / 22 | 0) + i) % 8 !== 0;
+    if (on) { disco(bx, by + 2, 6, 'rgba(255,224,138,.10)'); disco(bx, by + 2, 3, 'rgba(255,224,138,.16)'); }
+    disco(bx, by + 2, 2, on ? '#ffe08a' : '#8a7a52');
+  }
+  /* barra */
+  R(0, 44, 40, 5, '#7a5230'); R(0, 44, 40, 1, '#a3714a');
+  R(0, 49, 40, GROUND - 49, n ? '#3a2418' : '#4a3020');
+  R(0, 28, 40, 2, '#5c3f28');
+  for (let i = 0; i < 6; i++) R(3 + i * 6, 30, 3, 14, ['#4a8a5c','#8a4a4a','#c9a44a','#4a6a9a','#7a4a8a','#3f8f6f'][i]);
+  /* planta */
+  R(146, GROUND - 22, 12, 22, '#a8583a'); R(145, GROUND - 25, 14, 3, '#c47a54');
+  elipse(152, GROUND - 32, 11, 9, '#2f7b45'); elipse(148, GROUND - 36, 5, 4, '#54ad60');
+  /* piso */
+  vgrad(0, GROUND, 160, 144 - GROUND, n ? ['#2f2632','#28202a','#221b24'] : ['#8c7c6c','#7a6c5e','#685c50']);
+  R(0, GROUND, 160, 1, n ? '#4d4150' : '#a89684');
+  for (let y = GROUND + 9; y < 144; y += 12) R(0, y, 160, 1, 'rgba(28,18,22,.35)');
+  for (let x = 0; x < 160; x += 20) R(x, GROUND, 1, 52, 'rgba(28,18,22,.30)');
+  for (let i = 0; i < MESAS.length; i++) mesaFondo(MESAS[i]);
+  if (n) R(0, 0, 160, 144, 'rgba(20,8,30,.20)');
+}
+function frInterior(t) {}
+
+/* ---- 11. EL LUGAR DE DRAGS ---- */
+const LUCES = ['rgba(255,107,138,.22)','rgba(255,209,102,.20)','rgba(126,232,250,.20)','rgba(184,146,255,.22)'];
+function bgDrags(t) {
+  vgrad(0, 0, 160, 70, ['#170a2c','#22103c','#301348','#3b1652']);
+  /* rayos de la bola de disco */
+  const bx = 80, by = 9;
+  for (let a = 0; a < 12; a++) {
+    const ang = (a * 30 + t * 1.4) * Math.PI / 180;
+    for (let r = 9; r < 74; r += 3) {
+      const x = bx + Math.cos(ang) * r, y = by + Math.abs(Math.sin(ang)) * r * .95;
+      if (y < 70 && x > 0 && x < 160) P(x, y, 'rgba(255,255,255,.09)');
+    }
+  }
+  /* escenario */
+  R(12, 17, 136, 41, '#2a1040');
+  for (let i = 0; i < 9; i++) R(13 + i * 15, 17, 9, 35, i % 2 ? '#59143e' : '#751a4e');
+  R(12, 17, 136, 3, '#a02868'); R(12, 17, 136, 1, '#d0489a');
+  for (let i = 0; i < 22; i++)
+    R(72 - i, 20 + i, 16 + i * 2, 1, 'rgba(255,232,168,' + (0.11 - i * 0.005).toFixed(3) + ')');
+  R(12, 52, 136, 6, '#3a1450'); R(12, 52, 136, 1, '#6f2a80');
+  R(0, 17, 12, 41, '#170a2c'); R(148, 17, 12, 41, '#170a2c');
+  persona('drag', 72, 22, false, false, t);
+  for (let i = 0; i < 5; i++) {
+    const a = ((t / 4 | 0) + i * 5) % 20;
+    if (a < 10) destello(66 + i * 5, 30 + ((i * 7) % 18), i % 2 ? '#ffe08a' : '#ffffff');
+  }
+  /* bola de disco */
+  R(78, 0, 4, 5, '#3a3448');
+  disco(bx, by, 6, '#8fa0c0');
+  for (let i = 0; i < 14; i++)
+    P(bx - 5 + (i * 3) % 11, by - 4 + ((i * 5) % 9), ((i + (t / 5 | 0)) % 3) ? '#ccd8f0' : '#ffffff');
+  /* pista */
+  vgrad(0, 58, 160, GROUND - 58, ['#2b1042','#33144c']);
+  vgrad(0, GROUND, 160, 144 - GROUND, ['#3c1758','#301348','#251039']);
+  R(0, GROUND, 160, 1, '#7a2f96');
+  for (let i = 0; i < 9; i++) {
+    const lx = ((i * 23 + (t * 0.7 | 0)) % 190) - 15;
+    const ly = GROUND + 8 + (i % 3) * 14;
+    elipse(lx, ly, 15, 6, 'rgba(255,255,255,.05)');
+    elipse(lx, ly, 10, 4, LUCES[i % 4]);
+  }
+}
+function frDrags(t) {
+  const pos = [-10, 20, 130, 158];
+  for (let i = 0; i < pos.length; i++) {
+    const cx = pos[i], bob = ((t / 9 + i * 3) | 0) % 2;
+    const top = 106 + (i % 2) * 7 + bob;
+    elipse(cx, top, 8, 9, '#190b28');
+    R(cx - 13, top + 7, 26, 144 - top, '#190b28');
+  }
+}
+
+const ESCENAS = { patio:bgPatio, cuarto:bgCuarto, interior:bgInterior, drags:bgDrags,
+                  parque:bgParque, cine:bgCine, lluvia:bgLluvia, noche:bgNoche,
+                  casa:bgCasa, cabana:bgCabana, ciudad:bgCiudad };
+const FRENTES = { patio:frPatio, cuarto:frCuarto, interior:frInterior, drags:frDrags,
+                  parque:frParque, cine:frCine, lluvia:frLluvia, noche:frNoche,
+                  casa:frCasa, cabana:frCabana, ciudad:frCiudad };
 
 
 /* =========================================================================
@@ -1375,6 +1614,128 @@ const ESPERA = [
   { e:'esperaPatio', a:{}, q:'roberto', t:'...' }
 ];
 
+/* ---- La noche completa: mesa, mesera, se hace de noche, y el antro ---- */
+function sentadosEn(t, cx) {
+  const s = PERSONAJES.santiago, r = PERSONAJES.roberto;
+  drawSprite(s.quieto.slice(0, 21), cx - 25, 60, false, s.color);
+  drawSprite(r.quieto.slice(0, 21), cx + 9, 60, true, r.color);
+}
+const CUADROS_NOCHE = {
+  mesa: (tt, a) => {
+    bgInterior(tt);
+    const cx = MESAS[mesaElegida];
+    sentadosEn(tt, cx);
+    mesaFrente(cx);
+    if (a.carta !== false) carta(cx, 70);
+  },
+  llegaMesera: (tt) => {
+    bgInterior(tt);
+    const cx = MESAS[mesaElegida];
+    sentadosEn(tt, cx);
+    mesaFrente(cx);
+    carta(cx, 70);
+    const mx = Math.max(Math.min(cx + 30, 138), 160 - tt * 2.4);
+    persona('mesera', mx, GROUND - 30, true, mx > cx + 27, tt);
+  },
+  conMesera: (tt) => {
+    bgInterior(tt);
+    const cx = MESAS[mesaElegida];
+    sentadosEn(tt, cx);
+    mesaFrente(cx);
+    carta(cx, 70);
+    persona('mesera', Math.min(cx + 30, 138), GROUND - 30, true, false, tt);
+  },
+  anochece: (tt) => {
+    if (tt === 1) interiorNoche = false;
+    bgInterior(tt);
+    const cx = MESAS[mesaElegida];
+    sentadosEn(tt, cx);
+    mesaFrente(cx);
+    const p = Math.min(1, tt / 40);
+    R(0, 0, 160, 144, 'rgba(14,6,26,' + (p * 0.55).toFixed(2) + ')');
+    if (tt > 40) interiorNoche = true;
+    if (tt > 46) drawTextS(46, 20, 'MÁS TARDE...', '#ffe9a8', 'rgba(10,4,20,.9)');
+  },
+  seVan: (tt) => {
+    bgInterior(tt);
+    const cx = MESAS[mesaElegida];
+    const d = Math.min(tt * 1.5, 200);
+    persona('santiago', cx - 25 + d, GROUND - 30, false, true, tt);
+    persona('roberto', cx + 9 + d, GROUND - 30, false, true, tt + 9);
+    frInterior(tt);
+  },
+  santiBaila: (tt) => {
+    bgDrags(tt);
+    bailando('santiago', 68, GROUND - 30, tt, 'salsa');
+    frDrags(tt);
+  },
+  llegaRoberto: (tt) => {
+    bgDrags(tt);
+    bailando('santiago', 68, GROUND - 30, tt, 'salsa');
+    const rx = Math.max(96, 168 - tt * 2.2);
+    persona('roberto', rx, GROUND - 30, true, rx > 97, tt);
+    frDrags(tt);
+  },
+  losDos: (tt) => {
+    bgDrags(tt);
+    bailando('santiago', 68, GROUND - 30, tt, 'salsa');
+    persona('roberto', 96, GROUND - 30, true, false, tt);
+    frDrags(tt);
+  },
+  bailePausa: (tt) => {
+    bgDrags(tt);
+    bailando('santiago', 60, GROUND - 30, tt, baileTipo);
+    bailando('roberto', 90, GROUND - 30, tt + 13, baileTipo);
+    frDrags(tt);
+  },
+  beso: (tt, a) => {
+    bgDrags(tt);
+    const ya = a && a.ya;
+    const j = ya ? 6 : Math.min(tt, 24) * 0.25;
+    const s = PERSONAJES.santiago, r = PERSONAJES.roberto;
+    sombraPiso(68 + j + 8, GROUND); sombraPiso(88 - j + 8, GROUND);
+    drawSprite(s.quieto, Math.round(68 + j), GROUND - 30, false, s.color);
+    drawSprite(r.quieto, Math.round(88 - j), GROUND - 30, true, r.color);
+    if (ya || tt > 24) {
+      corazon(76, GROUND - 44 - ((tt / 2) % 14 | 0), (tt / 6 | 0) % 2);
+      corazon(66, GROUND - 38 - ((tt / 3) % 12 | 0), (tt / 8 | 0) % 2);
+      corazon(88, GROUND - 40 - ((tt / 4) % 12 | 0), (tt / 7 | 0) % 2);
+      for (let i = 0; i < 6; i++) {
+        const a = ((tt / 3 | 0) + i * 4) % 16;
+        if (a < 8) destello(58 + i * 9, GROUND - 30 - a, i % 2 ? '#ffe08a' : '#ffffff');
+      }
+    }
+    frDrags(tt);
+  }
+};
+
+const NOCHE = [
+  { e:'mesa', a:{}, q:'santiago', t:'ESTÁ BONITO ESTE LUGAR.' },
+  { e:'mesa', a:{}, q:'roberto',  t:'A VER QUÉ HAY DE TOMAR.' },
+  { e:'llegaMesera', a:{}, dur:34 },
+  { e:'conMesera', a:{}, q:'mesera',  t:'HOLA, BUENAS NOCHES. ¿LES PUEDO TOM...' },
+  { e:'conMesera', a:{}, q:'roberto', t:'YA ÓRALE PUES NECIA, TRÁEME LA CAGUAMA.' },
+  { e:'conMesera', a:{}, q:'santiago', t:'PERDÓNALO. YO UNA IGUAL, POR FAVOR.' },
+  { e:'anochece', a:{}, dur:70 },
+  { e:'mesa', a:{carta:false}, q:'roberto', t:'YA VAN A CERRAR. ¿NOS VAMOS?' },
+  { e:'seVan', a:{}, dur:70 }
+];
+
+const ANTRO = [
+  { e:'santiBaila', a:{}, q:'santiago', t:'LA NOCHE NO SE ACABA AQUÍ. ME VOY A BAILAR.' },
+  { e:'santiBaila', a:{}, q:'santiago', t:'ESTE ES MI LUGAR FAVORITO DE LA CIUDAD.' },
+  { e:'llegaRoberto', a:{}, dur:38 },
+  { e:'losDos', a:{}, q:'roberto', t:'TE SEGUÍ HASTA ACÁ. NO ME PIENSO IR.' }
+];
+
+const BESO = [
+  { e:'bailePausa', a:{}, q:'drag',     t:"WOW. SHE'S REALLY GOOD." },
+  { e:'beso', a:{}, dur:80 },
+  { e:'beso', a:{ya:true}, q:'santiago', t:'Y ASÍ EMPEZÓ TODO.' }
+];
+
+Object.assign(CUADROS, CUADROS_NOCHE);
+
 
 /* ---------- Caja de diálogo ---------- */
 const BOX_Y = 96, BOX_H = 46, MAXCH = 23;
@@ -1534,7 +1895,8 @@ let corazonTomado = false;
 let pages = [], page = 0, revealed = 0, textTimer = 0, hablante = 'santiago';
 let charla = [], charlaIdx = 0, volverA = 'juego';
 let guion = null, gPaso = 0, gT = 0, gFin = null;
-let elec = 0, pianoT = 0;
+let menu = null, pianoT = 0;
+let baileTipo = 'salsa', baileT = 0;
 let fade = 0, fadeDir = 0, pendiente = null;
 
 /* Una "charla" es una lista de {q:quién, t:qué dice}. Así una misma escena
@@ -1576,7 +1938,8 @@ function avanzarTexto() {
 function reiniciar() {
   estado = 'boot'; bootT = 0;
   guion = null; gPaso = 0; gT = 0; gFin = null;
-  elec = 0; pianoT = 0; volverA = 'juego';
+  menu = null; pianoT = 0; volverA = 'juego';
+  baileTipo = 'salsa'; baileT = 0; interiorNoche = false; mesaElegida = 1;
   mes = 0; jug.x = 6; jug.mirando = 1;
   corazonTomado = false; cangurera = false;
   charla = []; charlaIdx = 0; pages = []; page = 0; revealed = 0; textTimer = 0;
@@ -1708,7 +2071,6 @@ function pantallaCreditos(t) {
 
 
 /* ---------- Elegir, y las consecuencias de elegir mal ---------- */
-const OPCIONES = ['ME ESPERO', 'ME VOY'];
 function cajaBase(quien) {
   const p = PERSONAJES[quien];
   R(5, BOX_Y + 2, 152, BOX_H, 'rgba(12,6,28,.40)');
@@ -1722,22 +2084,30 @@ function cajaBase(quien) {
   const claro = (p.tinta === '#2a2438');
   drawTextS(10, BOX_Y + 2, p.nombre, p.tinta, claro ? 'rgba(255,255,255,.45)' : 'rgba(0,0,0,.45)');
 }
-function pantallaEleccion(t) {
+/* ---------- Menús de decisión (sirven para cualquier pregunta) ---------- */
+function pantallaMenu(t) {
+  menu.fondo(t);
+  cajaBase(menu.quien);
+  const p = PERSONAJES[menu.quien];
+  drawTextS(62, BOX_Y + 2, menu.pregunta, p.tinta, 'rgba(0,0,0,.35)');
+  for (let i = 0; i < menu.ops.length; i++) {
+    const oy = BOX_Y + 14 + i * 10;
+    if (menu.sel === i) { R(8, oy - 2, 144, 10, '#e8d9b8'); corazon(11, oy - 1, (t / 12 | 0) % 2); }
+    drawText(23, oy, menu.ops[i], menu.sel === i ? '#8a2f78' : '#9a8a68');
+  }
+}
+function fondoEspera(t) {
   bgPatio(t);
   persona('roberto', 92, GROUND - 30, false, false, t);
   frPatio(t);
-  cajaBase('roberto');
-  drawTextS(10, BOX_Y + 14, '¿LO ESPERAS?', '#2a2035', 'rgba(190,176,148,.75)');
-  for (let i = 0; i < 2; i++) {
-    const ox = 22 + i * 74, oy = BOX_Y + 29;
-    if (elec === i) {
-      R(ox - 11, oy - 3, 66, 13, '#e8d9b8');
-      corazon(ox - 10, oy - 2, (t / 12 | 0) % 2);
-    }
-    drawText(ox, oy, OPCIONES[i], elec === i ? '#8a2f78' : '#9a8a68');
-  }
 }
-
+function fondoAntro(t) {
+  bgDrags(t);
+  bailando('santiago', 60, GROUND - 30, t, 'salsa');
+  persona('roberto', 90, GROUND - 30, true, false, t);
+  frDrags(t);
+}
+const NOMBRE_BAILE = { macarena:'LA MACARENA', payaso:'PAYASO DE RODEO', salsa:'SALSA' };
 function piano(x, y) {
   R(x, y, 36, 15, '#241c26'); R(x, y, 36, 2, '#4c3e4a');
   R(x + 2, y + 3, 32, 6, '#3a2f3c');
@@ -1824,8 +2194,33 @@ function pasoGuion() {
   if (gPaso >= guion.length - 1) { const f = gFin; transicionar(() => { if (f) f(); }); }
   else { gPaso++; gT = 0; }
 }
-function empezarEspera() {
-  correrGuion(ESPERA, () => { estado = 'eleccion'; elec = 0; });
+function abrirMenu(pregunta, ops, quien, fondo, fn) {
+  menu = { pregunta: pregunta, ops: ops, quien: quien, fondo: fondo, fn: fn, sel: 0 };
+  estado = 'menu';
+}
+function menuEspera() {
+  abrirMenu('¿LO ESPERAS?', ['ME ESPERO', 'ME VOY'], 'roberto', fondoEspera, i => {
+    if (i === 1) { pianoT = 0; estado = 'piano'; }
+    else transicionar(() => {
+      estado = 'juego'; mes = 0; jug.x = 6; jug.mirando = 1; corazonTomado = false;
+    });
+  });
+}
+function menuBaile() {
+  abrirMenu('¿CÓMO BAILAS?', ['LA MACARENA', 'PAYASO DE RODEO', 'SALSA'], 'santiago', fondoAntro, i => {
+    baileTipo = ['macarena', 'payaso', 'salsa'][i];
+    baileT = 0;
+    transicionar(() => { estado = 'baile'; });
+  });
+}
+function empezarEspera() { correrGuion(ESPERA, menuEspera); }
+/* Toda la noche: escoger mesa -> la mesera -> se hace tarde -> el antro */
+function empezarNoche() {
+  estado = 'sentarse'; jug.x = 6; jug.mirando = 1;
+}
+function finActo() {
+  mes = 1; estado = 'juego'; jug.x = 8; jug.mirando = 1;
+  corazonTomado = false; cangurera = false; interiorNoche = false;
 }
 /* Dibuja la caja y devuelve true si el jugador acaba de cerrar la charla */
 function charlaEnPantalla() {
@@ -1908,17 +2303,56 @@ function loop() {
     requestAnimationFrame(loop); return;
   }
 
-  /* --- ¿Se espera o se va? --- */
-  if (estado === 'eleccion') {
-    pantallaEleccion(t);
-    if (consumed('left'))  elec = 0;
-    if (consumed('right')) elec = 1;
-    if (consumed('a') || consumed('start')) {
-      if (elec === 1) { pianoT = 0; estado = 'piano'; }
-      else transicionar(() => {
-        estado = 'juego'; mes = 0; jug.x = 6; jug.mirando = 1; corazonTomado = false;
-      });
+  /* --- Menús: esperar o no, y cómo bailar --- */
+  if (estado === 'menu') {
+    pantallaMenu(t);
+    if (consumed('up')   || consumed('left'))  menu.sel = (menu.sel + menu.ops.length - 1) % menu.ops.length;
+    if (consumed('down') || consumed('right')) menu.sel = (menu.sel + 1) % menu.ops.length;
+    if (consumed('a') || consumed('start')) menu.fn(menu.sel);
+    pasoFade();
+    requestAnimationFrame(loop); return;
+  }
+
+  /* --- Adentro del club: Roberto escoge mesa --- */
+  if (estado === 'sentarse') {
+    bgInterior(t);
+    const cerca = MESAS.findIndex(m => Math.abs(jug.x + 8 - m) < 16);
+    for (let i = 0; i < MESAS.length; i++) {
+      const esta = (i === cerca);
+      if (esta || (t / 16 | 0) % 2)
+        drawTextS(MESAS[i] - 2, GROUND - 36 - (esta ? 2 : 0), '?',
+                  esta ? '#ffe08a' : '#d8c8a8', 'rgba(20,10,6,.7)');
     }
+    persona('roberto', jug.x, GROUND - 30, jug.mirando < 0, keys.left || keys.right, t);
+    frInterior(t);
+    const aviso = cerca >= 0 ? 'A = SENTARSE' : 'ESCOGE MESA';
+    if (cerca < 0 || (t / 20 | 0) % 2) {
+      const aw = textW(aviso) + 8, ax = Math.round((160 - aw) / 2);
+      R(ax, 16, aw, 12, 'rgba(20,10,6,.75)');
+      R(ax, 16, aw, 1, 'rgba(255,224,138,.5)'); R(ax, 27, aw, 1, 'rgba(0,0,0,.5)');
+      drawText(ax + 4, 18, aviso, cerca >= 0 ? '#ffe08a' : '#f6efdc');
+    }
+    if (keys.left)  { jug.x -= 0.9; jug.mirando = -1; }
+    if (keys.right) { jug.x += 0.9; jug.mirando = 1; }
+    jug.x = Math.max(2, Math.min(142, jug.x));
+    if (cerca >= 0 && (consumed('a') || consumed('start'))) {
+      mesaElegida = cerca;
+      transicionar(() => correrGuion(NOCHE, () => correrGuion(ANTRO, menuBaile)));
+    }
+    pasoFade();
+    requestAnimationFrame(loop); return;
+  }
+
+  /* --- El baile --- */
+  if (estado === 'baile') {
+    baileT++;
+    bgDrags(t);
+    bailando('santiago', 58, GROUND - 30, t, baileTipo);
+    bailando('roberto', 90, GROUND - 30, t + 13, baileTipo);
+    frDrags(t);
+    if ((t / 26 | 0) % 2) centerText(16, NOMBRE_BAILE[baileTipo], '#ffe08a', 'rgba(20,6,30,.85)');
+    if (baileT > 170 || (baileT > 40 && (consumed('a') || consumed('start'))))
+      transicionar(() => correrGuion(BESO, finActo));
     pasoFade();
     requestAnimationFrame(loop); return;
   }
@@ -1933,8 +2367,7 @@ function loop() {
 
   if (estado === 'gameover') {
     pantallaGameOver(t);
-    if (consumed('a') || consumed('start'))
-      transicionar(() => { estado = 'eleccion'; elec = 0; });
+    if (consumed('a') || consumed('start')) transicionar(menuEspera);
     pasoFade();
     requestAnimationFrame(loop); return;
   }
@@ -1989,7 +2422,8 @@ function loop() {
       abrirCharla(charlaDeMes(mes), 'dialogo');
     }
     if (estado === 'juego' && corazonTomado && jug.x >= 141) {
-      transicionar(() => {
+      if (datosMes && datosMes.acto) transicionar(empezarNoche);
+      else transicionar(() => {
         mes++; jug.x = 8; corazonTomado = false; cangurera = false;
         estado = (mes >= HISTORIA.meses.length) ? 'final' : 'juego';
       });

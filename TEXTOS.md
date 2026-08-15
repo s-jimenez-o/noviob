@@ -3,11 +3,11 @@
 Edita lo que quieras y mándamelo de vuelta. Reglas de la fuente:
 
 - Todo va en **MAYÚSCULAS**.
-- Acentos permitidos: `Á É Í Ó Ú Ñ ¿ ¡`. No hay Ü ni signos raros.
-- Símbolos disponibles: `. , : ! ? ¿ ¡ - ' " / ( ) + * & =`
-- Cada renglón de la caja de diálogo son ~23 letras y caben 3 renglones por página;
-  si te pasas, el juego parte el texto solo en varias páginas (no se pierde nada).
-- Los mensajes de chat son más angostos: ~16 letras por renglón.
+- Acentos permitidos: `Á É Í Ó Ú Ñ ¿ ¡`. No hay Ü.
+- Símbolos: `. , : ! ? ¿ ¡ - ' " / ( ) + * & =`
+- Caja de diálogo: ~23 letras por renglón, 3 renglones por página (si te pasas se parte solo).
+- Mensajes de chat: ~16 letras por renglón.
+- Opciones de menú: máx. ~21 letras.
 
 ---
 
@@ -16,16 +16,13 @@ Edita lo que quieras y mándamelo de vuelta. Reglas de la fuente:
 - Título: **6 MESES**
 - Subtítulo: **SANTIAGO & ROBERTO**
 - Fecha: **12.08.2026**
-- Botón: **PRESIONA A**   ·   pie: **-- LADO A --**
+- **PRESIONA A** · **-- LADO A --**
 
-## 2. Pantalla de encendido
+## 2. Encendido
 
-- **WHAT IS LOVE?**
-- **PRESIONA A**
+- **WHAT IS LOVE?** · **PRESIONA A**
 
 ## 3. Intro: cómo nos conocimos
-
-Lo que dices tú (o Roberto) en la caja de abajo, paso por paso:
 
 1. **SANTIAGO:** SÁBADO, ONCE DE LA NOCHE. A VER QUÉ HAY.
 2. **SANTIAGO:** NO.
@@ -43,15 +40,13 @@ Lo que dices tú (o Roberto) en la caja de abajo, paso por paso:
 14. **SANTIAGO:** ESTÁ RARO: CASI NO HEMOS HABLADO Y NI LO CONOZCO.
 15. **SANTIAGO:** PERO SIENTO QUE ALGO IMPORTANTE VA A PASAR CON ÉL.
 
-### Mensajes del chat de la app (los ve Santiago)
+### Chat de la app
 
 - **SANTIAGO:** HOLA. ¿SALIMOS EL SÁBADO?
 - **ROBERTO:** SÍ. ¿A QUÉ HORA?
 - **ROBERTO:** YO PASO POR TI
 
-### Grupo de WhatsApp
-
-Encabezado del grupo: **LAS AMIGAS**
+### Grupo de WhatsApp (**LAS AMIGAS**)
 
 - **[FOTO]:** (captura de la ficha de Roberto)
 - **SANTIAGO:** PLAN IDEAL? GOING OUT AND BLACKING OUT
@@ -67,16 +62,14 @@ Encabezado del grupo: **LAS AMIGAS**
 - **JUAN P, 31** · 8 KM · _PLAN IDEAL? / NO SÉ, TÚ DIME_
 - **ROBERTO, 22** · 2 KM · _PLAN IDEAL? / GOING OUT AND / BLACKING OUT_
 
-Otros textos de la app: **MATCH**, **¡ES MATCH!**, **ESCRÍBELE**
+Otros: **MATCH**, **¡ES MATCH!**, **ESCRÍBELE**
 
 ## 4. El cuarto (jugable)
-
-Tienes que caminar a la izquierda por la cangurera y luego a la puerta.
 
 - **SANTIAGO:** LA CANGURERA VERDE. AHORA SÍ.
 - **SANTIAGO:** ESPERA. NO ME VOY SIN LA CANGURERA.
 
-## 5. Roberto esperando en el club
+## 5. Roberto esperando
 
 1. **ROBERTO:** OCHO EN PUNTO. LLEGUÉ TEMPRANO COMO IDIOTA.
 2. **ROBERTO:** OCHO Y VEINTE.
@@ -84,54 +77,60 @@ Tienes que caminar a la izquierda por la cangurera y luego a la puerta.
 4. **SANTIAGO:** PERO TE JURO QUE VALGO LA PENA.
 5. **ROBERTO:** ...
 
-Los mensajes que le llegan a Roberto:
+Mensajes que le llegan:
 
 - **SANTIAGO:** VOY TARDÍSIMO. PERDÓN
 - **SANTIAGO:** PERO TE JURO QUE VALGO LA PENA
 
-## 6. La decisión (y el final malo)
+## 6. La decisión
 
-- Pregunta: **¿LO ESPERAS?**
-- Opciones: **ME ESPERO** / **ME VOY**
+- Pregunta: **¿LO ESPERAS?** · Opciones: **ME ESPERO** / **ME VOY**
 - Si se va: **SE FUE.** · **FINAL MALO** · **A = OTRA VEZ**
 
-## 7. Los seis meses
-
-
-**MES 1 — escena `patio`**
+## 7. Mes 1: la cita
 
 - **ROBERTO:** HOLA. OYE... QUÉ HORROR LA CANGURERA.
 - **SANTIAGO:** ES VERDE NEÓN. FUE A PROPÓSITO.
 - **ROBERTO:** PEOR.
 - **SANTIAGO:** MES 1. PRIMERA CITA EN EL CLUB DEL PATIO ROMA. NOS QUEDAMOS HASTA QUE CERRARON.
 
-**MES 2 — escena `cine`**
+### Adentro del club
 
-- **SANTIAGO:** MES 2. FUIMOS AL CINE. NO ME ACUERDO DE LA PELÍCULA.
+Avisos: **ESCOGE MESA** / **A = SENTARSE**
 
-**MES 3 — escena `lluvia`**
+1. **SANTIAGO:** ESTÁ BONITO ESTE LUGAR.
+2. **ROBERTO:** A VER QUÉ HAY DE TOMAR.
+3. **MESERA:** HOLA, BUENAS NOCHES. ¿LES PUEDO TOM...
+4. **ROBERTO:** YA ÓRALE PUES NECIA, TRÁEME LA CAGUAMA.
+5. **SANTIAGO:** PERDÓNALO. YO UNA IGUAL, POR FAVOR.
+6. **ROBERTO:** YA VAN A CERRAR. ¿NOS VAMOS?
 
-- **SANTIAGO:** MES 3. NOS AGARRÓ LA LLUVIA SIN PARAGUAS Y NOS FUIMOS CAMINANDO.
+Cartel del salto de tiempo: **MÁS TARDE...**
 
-**MES 4 — escena `noche`**
+### En el lugar de drags
 
-- **SANTIAGO:** MES 4. AZOTEA, DOS DE LA MAÑANA. ME CONTASTE TUS PLANES.
+1. **SANTIAGO:** LA NOCHE NO SE ACABA AQUÍ. ME VOY A BAILAR.
+2. **SANTIAGO:** ESTE ES MI LUGAR FAVORITO DE LA CIUDAD.
+3. **ROBERTO:** TE SEGUÍ HASTA ACÁ. NO ME PIENSO IR.
 
-**MES 5 — escena `casa`**
+- Pregunta: **¿CÓMO BAILAS?** · Opciones: **LA MACARENA** / **PAYASO DE RODEO** / **SALSA**
 
-- **SANTIAGO:** MES 5. DOMINGO ENTERO EN EL SILLÓN SIN HACER NADA.
+1. **LA DRAG:** WOW. SHE'S REALLY GOOD.
+2. **SANTIAGO:** Y ASÍ EMPEZÓ TODO.
 
-**MES 6 — escena `cabana`**
+## 8. Meses 2 al 6
 
-- **SANTIAGO:** MES 6. HOY. SEGUIMOS AQUÍ.
+- **MES 2** (`cine`) — MES 2. FUIMOS AL CINE. NO ME ACUERDO DE LA PELÍCULA.
+- **MES 3** (`lluvia`) — MES 3. NOS AGARRÓ LA LLUVIA SIN PARAGUAS Y NOS FUIMOS CAMINANDO.
+- **MES 4** (`noche`) — MES 4. AZOTEA, DOS DE LA MAÑANA. ME CONTASTE TUS PLANES.
+- **MES 5** (`casa`) — MES 5. DOMINGO ENTERO EN EL SILLÓN SIN HACER NADA.
+- **MES 6** (`cabana`) — MES 6. HOY. SEGUIMOS AQUÍ.
 
-## 8. Final y créditos
+## 9. Final y créditos
 
 - **SANTIAGO:** SEIS MESES. NADA MAL PARA ALGUIEN CUYO PLAN IDEAL ERA GOING OUT AND BLACKING OUT.
 - Créditos: **FELICES** · **6 MESES** · **SANTIAGO & ROBERTO** · **A = OTRA VEZ**
 
-## 9. Textos de la consola
+## 10. Consola
 
-- Botones de la pantalla: **REINICIAR**, **SONIDO: ON/OFF**
-- Marcador: **MES 1/6**
-- Carcasa: **GAME BOY COLOR**, **NOSOTROS**, **SELECT**, **START**
+- **REINICIAR**, **SONIDO: ON/OFF**, **MES 1/6**, **GAME BOY COLOR**, **NOSOTROS**
