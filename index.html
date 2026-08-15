@@ -8,7 +8,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="6 MESES">
-<meta name="theme-color" content="#1b1a17">
+<meta name="theme-color" content="#17121f">
 <link rel="apple-touch-icon" href="icon.png">
 <style>
   /* --s la fija fit() en JS: es cuántos px de pantalla mide 1 píxel de Game Boy.
@@ -19,7 +19,8 @@
       -webkit-tap-highlight-color:transparent; -webkit-touch-callout:none; }
   html, body {
     height:100%; overflow:hidden; overscroll-behavior:none;
-    background:#1b1a17;
+    background:
+      radial-gradient(120% 90% at 50% 0%, #2a1f3d 0%, #17121f 55%, #0d0a13 100%);
     font-family: ui-monospace, "SF Mono", Menlo, monospace;
     -webkit-text-size-adjust:100%;
     touch-action:none; user-select:none; -webkit-user-select:none;
@@ -35,94 +36,202 @@
     display:flex; align-items:center; justify-content:center;
   }
 
+  /* ---------- Carcasa Game Boy Color (uva translúcido) ---------- */
   .gb {
-    flex:0 0 auto;
-    background:linear-gradient(160deg,#d6d2c4 0%,#c4c0b4 45%,#adaa9e 100%);
-    border-radius:calc(6*var(--u)) calc(6*var(--u)) calc(23*var(--u)) calc(6*var(--u));
-    padding:calc(7*var(--u)) calc(7*var(--u)) calc(8*var(--u));
-    box-shadow:0 calc(6*var(--u)) calc(14*var(--u)) rgba(0,0,0,.55),
-               inset 0 calc(1*var(--u)) 0 rgba(255,255,255,.55),
-               inset 0 calc(-1.5*var(--u)) 0 rgba(0,0,0,.18);
-    display:flex; flex-direction:column; align-items:center; gap:calc(5*var(--u));
+    flex:0 0 auto; position:relative;
+    background:
+      radial-gradient(120% 70% at 18% 2%,  rgba(255,255,255,.38), rgba(255,255,255,0) 52%),
+      radial-gradient(90%  60% at 88% 96%, rgba(255,255,255,.14), rgba(255,255,255,0) 60%),
+      linear-gradient(158deg,#9463d6 0%,#7b49c0 32%,#5f34a0 62%,#41236f 100%);
+    border-radius:calc(9*var(--u)) calc(9*var(--u)) calc(12*var(--u)) calc(12*var(--u));
+    padding:calc(7*var(--u)) calc(7*var(--u)) calc(7*var(--u));
+    box-shadow:
+      0 calc(9*var(--u)) calc(22*var(--u)) rgba(0,0,0,.62),
+      0 calc(2*var(--u)) calc(5*var(--u))  rgba(0,0,0,.45),
+      inset 0 calc(1.5*var(--u)) 0 rgba(255,255,255,.55),
+      inset 0 calc(-2*var(--u)) 0 rgba(0,0,0,.32),
+      inset calc(2.5*var(--u)) 0 calc(7*var(--u)) rgba(255,255,255,.13),
+      inset calc(-2.5*var(--u)) 0 calc(7*var(--u)) rgba(0,0,0,.28);
+    display:flex; flex-direction:column; align-items:center; gap:calc(3*var(--u));
+  }
+  /* brillo de plástico que cruza la carcasa */
+  .gb::after {
+    content:""; position:absolute; inset:0; pointer-events:none; border-radius:inherit;
+    background:linear-gradient(112deg,
+      rgba(255,255,255,.20) 0%, rgba(255,255,255,.06) 18%,
+      rgba(255,255,255,0) 34%, rgba(255,255,255,0) 74%,
+      rgba(255,255,255,.07) 92%);
+    mix-blend-mode:screen;
   }
 
-  .bezel {
-    background:#57545c;
-    border-radius:calc(4*var(--u)) calc(4*var(--u)) calc(13*var(--u)) calc(4*var(--u));
-    padding:calc(7*var(--u)) calc(11*var(--u)) calc(10*var(--u)); position:relative;
-    box-shadow:inset 0 calc(1*var(--u)) calc(2.5*var(--u)) rgba(0,0,0,.6);
+  /* fila superior: interruptor de encendido */
+  .top { width:100%; display:flex; align-items:center; padding:0 calc(3*var(--u)); gap:calc(2*var(--u)); }
+  .power {
+    width:calc(17*var(--u)); height:calc(4.5*var(--u)); border-radius:calc(2.5*var(--u));
+    background:linear-gradient(180deg,#efeaf5,#b6acc6);
+    box-shadow:inset 0 calc(-1*var(--u)) 0 rgba(0,0,0,.28),
+               inset 0 calc(.8*var(--u)) 0 rgba(255,255,255,.9),
+               0 calc(.8*var(--u)) calc(1.5*var(--u)) rgba(0,0,0,.35);
+    position:relative;
   }
-  .bezel::before {
-    content:"DOT MATRIX WITH STEREO SOUND";
-    position:absolute; bottom:calc(3*var(--u)); left:0; right:0; text-align:center;
-    font-size:calc(3*var(--u)); letter-spacing:calc(.45*var(--u)); color:#8f8c96;
+  .power::after {
+    content:""; position:absolute; left:calc(2*var(--u)); top:calc(1*var(--u));
+    width:calc(6*var(--u)); height:calc(2.5*var(--u)); border-radius:calc(1.5*var(--u));
+    background:linear-gradient(180deg,#8e83a5,#6d6382);
+  }
+  .powerlbl { font-size:calc(2.6*var(--u)); letter-spacing:calc(.35*var(--u)); color:rgba(255,255,255,.55); }
+
+  /* ---------- Bisel + pantalla ---------- */
+  .bezel {
+    background:linear-gradient(168deg,#3a3648 0%,#26232f 45%,#1a1822 100%);
+    border-radius:calc(4*var(--u)) calc(4*var(--u)) calc(9*var(--u)) calc(9*var(--u));
+    padding:calc(8*var(--u)) calc(10*var(--u)) calc(7*var(--u)); position:relative;
+    box-shadow:inset 0 calc(1.2*var(--u)) calc(3*var(--u)) rgba(0,0,0,.75),
+               inset 0 calc(-1*var(--u)) 0 rgba(255,255,255,.10),
+               0 calc(1*var(--u)) 0 rgba(255,255,255,.16);
   }
   .lamp {
-    position:absolute; left:calc(4*var(--u)); top:50%;
-    width:calc(3*var(--u)); height:calc(3*var(--u)); border-radius:50%;
-    background:#e0554e; box-shadow:0 0 calc(2.5*var(--u)) #e0554e; transform:translateY(-50%);
+    position:absolute; left:calc(3.5*var(--u)); top:calc(24*var(--u));
+    width:calc(3.4*var(--u)); height:calc(3.4*var(--u)); border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,#ff9a92,#e0332c);
+    box-shadow:0 0 calc(3.5*var(--u)) rgba(255,70,60,.9), 0 0 calc(8*var(--u)) rgba(255,70,60,.45);
+    animation:latido 2.4s ease-in-out infinite;
   }
+  @keyframes latido { 0%,100%{opacity:1} 50%{opacity:.62} }
+  .lamplbl {
+    position:absolute; left:calc(1.2*var(--u)); top:calc(29*var(--u)); width:calc(8*var(--u));
+    font-size:calc(2.2*var(--u)); color:#7f7a90; text-align:center; letter-spacing:0;
+  }
+
+  .screen { position:relative; line-height:0; border-radius:calc(1*var(--u)); overflow:hidden;
+            box-shadow:0 0 calc(6*var(--u)) rgba(120,190,255,.10); }
   canvas {
     display:block; image-rendering:pixelated; image-rendering:crisp-edges;
-    background:#9bbc0f;
+    background:#101a2c;
     width:calc(160*var(--u)); height:calc(144*var(--u));
   }
-
-  .brand {
-    font-size:calc(4.5*var(--u)); letter-spacing:calc(.5*var(--u));
-    color:#3a3a55; font-weight:700; align-self:flex-start; padding-left:calc(2*var(--u));
+  /* rejilla de píxeles del LCD */
+  .screen::after {
+    content:""; position:absolute; inset:0; pointer-events:none; z-index:2;
+    background:
+      repeating-linear-gradient(to right,  rgba(0,0,0,.16) 0 1px, rgba(0,0,0,0) 1px var(--u)),
+      repeating-linear-gradient(to bottom, rgba(0,0,0,.16) 0 1px, rgba(0,0,0,0) 1px var(--u));
+    opacity:.42;
   }
-  .brand span { font-style:italic; color:#7b3f6d; }
+  /* reflejo de cristal + viñeta */
+  .screen::before {
+    content:""; position:absolute; inset:0; pointer-events:none; z-index:3;
+    background:
+      linear-gradient(118deg, rgba(255,255,255,.18) 0%, rgba(255,255,255,.05) 20%,
+                              rgba(255,255,255,0) 40%, rgba(255,255,255,0) 100%);
+    box-shadow:inset 0 0 calc(9*var(--u)) rgba(0,0,0,.45);
+  }
 
+  /* ---------- Logo GAME BOY COLOR ---------- */
+  .logo {
+    width:100%; display:flex; align-items:baseline; gap:calc(2*var(--u));
+    padding:calc(1*var(--u)) calc(4*var(--u)) 0;
+  }
+  .logo .gbtxt {
+    font-size:calc(5*var(--u)); font-weight:800; font-style:italic;
+    letter-spacing:calc(.2*var(--u)); color:#211a3a;
+    text-shadow:0 calc(.6*var(--u)) 0 rgba(255,255,255,.28);
+  }
+  .logo .color { font-size:calc(5*var(--u)); font-weight:800; font-style:italic; letter-spacing:calc(.2*var(--u)); }
+  .logo .color i { font-style:italic; }
+  .logo .color i:nth-child(1){ color:#e8443c }
+  .logo .color i:nth-child(2){ color:#f08a2a }
+  .logo .color i:nth-child(3){ color:#e8c72a }
+  .logo .color i:nth-child(4){ color:#4bb35a }
+  .logo .color i:nth-child(5){ color:#3d7fe0 }
+  .logo .nos {
+    margin-left:auto; font-size:calc(3.2*var(--u)); letter-spacing:calc(.4*var(--u));
+    color:rgba(255,255,255,.62); font-weight:700;
+  }
+
+  /* ---------- Controles ---------- */
   .pad {
     display:flex; align-items:center; justify-content:space-between;
-    width:100%; padding:calc(1*var(--u)) calc(3*var(--u)) 0;
+    width:100%; padding:calc(2*var(--u)) calc(2*var(--u)) 0;
   }
 
-  .dpad { position:relative; width:calc(56*var(--u)); height:calc(56*var(--u)); }
+  .dpad {
+    position:relative; width:calc(54*var(--u)); height:calc(54*var(--u));
+    border-radius:50%;
+    background:radial-gradient(circle at 50% 46%, #2f2b3a 62%, #241f2e 100%);
+    box-shadow:inset 0 calc(1.5*var(--u)) calc(2.5*var(--u)) rgba(0,0,0,.55),
+               0 calc(1*var(--u)) 0 rgba(255,255,255,.18);
+    display:flex; align-items:center; justify-content:center;
+  }
   .dpad button, .dpad .c {
-    position:absolute; background:#33313a; border:0; color:#8a8894;
-    font-size:calc(6*var(--u)); line-height:1;
+    position:absolute; border:0; color:#9c96ad; font-size:calc(6*var(--u)); line-height:1;
+    background:linear-gradient(160deg,#413c50,#2a2634);
   }
-  .dpad button { box-shadow:0 calc(1*var(--u)) 0 #17161b; }
-  .dpad .u { left:calc(19*var(--u)); top:0;    width:calc(18*var(--u)); height:calc(19*var(--u)); border-radius:calc(2*var(--u)) calc(2*var(--u)) 0 0; }
-  .dpad .d { left:calc(19*var(--u)); bottom:0; width:calc(18*var(--u)); height:calc(19*var(--u)); border-radius:0 0 calc(2*var(--u)) calc(2*var(--u)); }
-  .dpad .l { top:calc(19*var(--u)); left:0;    width:calc(19*var(--u)); height:calc(18*var(--u)); border-radius:calc(2*var(--u)) 0 0 calc(2*var(--u)); }
-  .dpad .r { top:calc(19*var(--u)); right:0;   width:calc(19*var(--u)); height:calc(18*var(--u)); border-radius:0 calc(2*var(--u)) calc(2*var(--u)) 0; }
-  .dpad .c { left:calc(19*var(--u)); top:calc(19*var(--u)); width:calc(18*var(--u)); height:calc(18*var(--u)); }
+  .dpad button { box-shadow:0 calc(1.4*var(--u)) 0 #171420, inset 0 calc(.8*var(--u)) 0 rgba(255,255,255,.13); }
+  .dpad .u { left:calc(18*var(--u)); top:calc(3*var(--u));    width:calc(18*var(--u)); height:calc(17*var(--u)); border-radius:calc(3*var(--u)) calc(3*var(--u)) 0 0; }
+  .dpad .d { left:calc(18*var(--u)); bottom:calc(3*var(--u)); width:calc(18*var(--u)); height:calc(17*var(--u)); border-radius:0 0 calc(3*var(--u)) calc(3*var(--u)); }
+  .dpad .l { top:calc(18*var(--u)); left:calc(3*var(--u));    width:calc(17*var(--u)); height:calc(18*var(--u)); border-radius:calc(3*var(--u)) 0 0 calc(3*var(--u)); }
+  .dpad .r { top:calc(18*var(--u)); right:calc(3*var(--u));   width:calc(17*var(--u)); height:calc(18*var(--u)); border-radius:0 calc(3*var(--u)) calc(3*var(--u)) 0; }
+  .dpad .c {
+    left:calc(18*var(--u)); top:calc(18*var(--u)); width:calc(18*var(--u)); height:calc(18*var(--u));
+    background:radial-gradient(circle at 50% 40%, #3b3648, #262232);
+    box-shadow:inset 0 0 calc(2*var(--u)) rgba(0,0,0,.6);
+  }
 
-  .ab { display:flex; gap:calc(8*var(--u)); align-items:center; transform:rotate(-20deg); }
+  .ab { display:flex; gap:calc(7*var(--u)); align-items:center; transform:rotate(-22deg); }
+  .ab .btnwrap { display:flex; flex-direction:column; align-items:center; gap:calc(1.5*var(--u)); }
   .ab button {
-    width:calc(26*var(--u)); height:calc(26*var(--u)); border-radius:50%; border:0;
-    background:radial-gradient(circle at 35% 30%,#a8536f,#7b2f4d);
-    color:#f1e2ea; font-size:calc(9*var(--u)); font-weight:700; line-height:1;
-    box-shadow:0 calc(1.5*var(--u)) 0 #4d1c30;
+    width:calc(24*var(--u)); height:calc(24*var(--u)); border-radius:50%; border:0;
+    background:radial-gradient(circle at 34% 28%, #6b3f8f 0%, #4a2668 48%, #2d1442 100%);
+    color:#f0e2ff; font-size:calc(8*var(--u)); font-weight:800; line-height:1;
+    box-shadow:0 calc(2*var(--u)) 0 #1d0d2c,
+               inset 0 calc(1*var(--u)) 0 rgba(255,255,255,.30),
+               inset 0 calc(-1.5*var(--u)) calc(1.5*var(--u)) rgba(0,0,0,.45);
+    text-shadow:0 calc(.6*var(--u)) 0 rgba(0,0,0,.5);
   }
-  button:active { transform:translateY(calc(1*var(--u))); box-shadow:none !important; }
-  .ab button:active { transform:rotate(0deg) translateY(calc(1*var(--u))); }
+  button:active { transform:translateY(calc(1.2*var(--u))); box-shadow:none !important; }
+  .ab button:active { transform:translateY(calc(1.2*var(--u))); }
 
-  .sys { display:flex; gap:calc(15*var(--u)); margin-top:calc(1*var(--u)); }
+  .bottom {
+    width:100%; display:flex; align-items:flex-end; justify-content:space-between;
+    padding:calc(3*var(--u)) calc(3*var(--u)) 0;
+  }
+  .sys { display:flex; gap:calc(9*var(--u)); padding-left:calc(6*var(--u)); }
   .sys button {
     position:relative;
-    width:calc(30*var(--u)); height:calc(7*var(--u));
-    border-radius:calc(4*var(--u)); border:0; background:#8a8894;
-    transform:rotate(-20deg); box-shadow:0 calc(1*var(--u)) 0 #55535c;
+    width:calc(26*var(--u)); height:calc(6.5*var(--u));
+    border-radius:calc(4*var(--u)); border:0;
+    background:linear-gradient(180deg,#a9a2bb,#7c7590);
+    transform:rotate(-22deg);
+    box-shadow:0 calc(1.4*var(--u)) 0 #4e4860, inset 0 calc(.8*var(--u)) 0 rgba(255,255,255,.45);
   }
   /* área táctil generosa sin agrandar el botón dibujado */
-  .sys button::before { content:""; position:absolute; inset:calc(-7*var(--u)) calc(-5*var(--u)); }
+  .sys button::before { content:""; position:absolute; inset:calc(-8*var(--u)) calc(-5*var(--u)); }
   .sys .lbl {
-    font-size:calc(4*var(--u)); color:#4b4956; letter-spacing:calc(.5*var(--u));
-    text-align:center; margin-top:calc(3*var(--u));
+    font-size:calc(3.6*var(--u)); color:rgba(255,255,255,.60); letter-spacing:calc(.5*var(--u));
+    text-align:center; margin-top:calc(4*var(--u)); font-weight:700;
   }
   .sysgroup { display:flex; flex-direction:column; align-items:center; }
+
+  .speaker { display:grid; grid-template-columns:repeat(3,calc(4.5*var(--u))); gap:calc(3.5*var(--u));
+             transform:rotate(-22deg); padding:calc(2*var(--u)) calc(2*var(--u)); }
+  .speaker i {
+    width:calc(4.5*var(--u)); height:calc(4.5*var(--u)); border-radius:50%;
+    background:#2a2338;
+    box-shadow:inset 0 calc(1*var(--u)) calc(1*var(--u)) rgba(0,0,0,.85),
+               0 calc(.8*var(--u)) 0 rgba(255,255,255,.20);
+  }
 
   .mute {
     position:fixed; z-index:5;
     top:  calc(env(safe-area-inset-top,   0px) + 8px);
     right:calc(env(safe-area-inset-right, 0px) + 10px);
     min-height:40px; padding:10px 13px;
-    background:rgba(255,255,255,.08); color:#9bbc0f; border:1px solid #4a4a44;
-    border-radius:8px; font-size:11px; font-family:inherit;
+    background:rgba(148,99,214,.18); color:#d9c2ff;
+    border:1px solid rgba(217,194,255,.35);
+    border-radius:10px; font-size:11px; font-family:inherit; font-weight:700;
+    letter-spacing:.5px;
+    backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
   }
 </style>
 </head>
@@ -132,19 +241,31 @@
 
 <div id="stage">
 <div class="gb">
-  <div class="brand">GAME <span>NOSOTROS</span></div>
+
+  <div class="top">
+    <div class="power"></div>
+    <div class="powerlbl">OFF&nbsp;&#9679;&nbsp;ON</div>
+  </div>
+
   <div class="bezel">
     <div class="lamp"></div>
-    <canvas id="lcd" width="160" height="144"></canvas>
+    <div class="lamplbl">POWER</div>
+    <div class="screen"><canvas id="lcd" width="160" height="144"></canvas></div>
+  </div>
+
+  <div class="logo">
+    <span class="gbtxt">GAME BOY</span>
+    <span class="color"><i>C</i><i>O</i><i>L</i><i>O</i><i>R</i></span>
+    <span class="nos">NOSOTROS</span>
   </div>
 
   <div class="pad">
     <div class="dpad">
-      <button class="u" data-k="up">▲</button>
-      <button class="l" data-k="left">◀</button>
+      <button class="u" data-k="up">&#9650;</button>
+      <button class="l" data-k="left">&#9664;</button>
       <div class="c"></div>
-      <button class="r" data-k="right">▶</button>
-      <button class="d" data-k="down">▼</button>
+      <button class="r" data-k="right">&#9654;</button>
+      <button class="d" data-k="down">&#9660;</button>
     </div>
     <div class="ab">
       <button data-k="b">B</button>
@@ -152,10 +273,14 @@
     </div>
   </div>
 
-  <div class="sys">
-    <div class="sysgroup"><button data-k="select"></button><div class="lbl">SELECT</div></div>
-    <div class="sysgroup"><button data-k="start"></button><div class="lbl">START</div></div>
+  <div class="bottom">
+    <div class="sys">
+      <div class="sysgroup"><button data-k="select"></button><div class="lbl">SELECT</div></div>
+      <div class="sysgroup"><button data-k="start"></button><div class="lbl">START</div></div>
+    </div>
+    <div class="speaker"><i></i><i></i><i></i><i></i><i></i><i></i></div>
   </div>
+
 </div>
 </div>
 
@@ -165,10 +290,12 @@
    Escribe aquí su historia. Todo en MAYÚSCULAS (la fuente es de Game Boy).
    Acentos permitidos: Á É Í Ó Ú Ñ ¿ ¡
    Máximo ~23 letras por renglón; el juego corta las líneas solo.
+
+   escena: "parque" | "cine" | "lluvia" | "noche" | "casa" | "cabana" | "ciudad"
    ========================================================================= */
 const HISTORIA = {
   titulo:    "6 MESES",
-  subtitulo: "ANA & LUIS",
+  subtitulo: "SANTIAGO & ROBERTO",
   fecha:     "12.08.2026",
 
   meses: [
@@ -177,14 +304,15 @@ const HISTORIA = {
     { escena:"lluvia", texto:"MES 3. NOS AGARRÓ EL AGUA Y NOS REÍMOS TODO EL CAMINO A CASA." },
     { escena:"noche",  texto:"MES 4. CONTAMOS ESTRELLAS EN LA AZOTEA Y ME CONTASTE TUS PLANES." },
     { escena:"casa",   texto:"MES 5. UN DOMINGO CUALQUIERA, EN EL SILLÓN. MI LUGAR FAVORITO." },
-    { escena:"ciudad", texto:"MES 6. HOY. Y TODAVÍA ME LATE IGUAL DE FUERTE QUE EL PRIMER DÍA." }
+    { escena:"cabana", texto:"MES 6. HOY. Y TODAVÍA ME LATE IGUAL DE FUERTE QUE EL PRIMER DÍA." }
   ],
 
   final: "SEIS MESES CONTIGO Y APENAS VAMOS EMPEZANDO. GRACIAS POR CADA UNO. TE AMO.",
 
-  // Quién camina: "a" = pelo largo, "b" = pelo corto
-  jugador: "a",
-  pareja:  "b"
+  // Quién camina y quién espera. Si los sprites salieran al revés,
+  // intercambia estos dos valores y ya.
+  jugador: "santiago",
+  pareja:  "roberto"
 };
 /* =========================================================================
    ▲▲▲  FIN DEL BLOQUE EDITABLE  ▲▲▲
@@ -195,9 +323,6 @@ const HISTORIA = {
 const cv = document.getElementById('lcd');
 const ctx = cv.getContext('2d');
 ctx.imageSmoothingEnabled = false;
-
-// Paleta DMG original: 0 = más oscuro, 3 = más claro
-const PAL = ['#0f380f', '#306230', '#8bac0f', '#9bbc0f'];
 
 /* Escala la consola completa al espacio que de verdad hay.
    Mide la consola a escala 4 para saber cuánto ocupa en "unidades" y
@@ -230,14 +355,38 @@ if (window.visualViewport) visualViewport.addEventListener('resize', fitSoon);
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { UW = 0; fit(); });
 fit();
 
-function px(x, y, c) {
-  if (c === null) return;
-  ctx.fillStyle = PAL[c];
-  ctx.fillRect(x | 0, y | 0, 1, 1);
+
+/* ---------- Primitivas de dibujo (ahora a color) ---------- */
+function R(x, y, w, h, c) { ctx.fillStyle = c; ctx.fillRect(x|0, y|0, w|0, h|0); }
+function P(x, y, c)       { ctx.fillStyle = c; ctx.fillRect(x|0, y|0, 1, 1); }
+
+/* Trama de medio tono: así se ven los degradados en consolas de 8 bits */
+function dith(x, y, w, c, ph) {
+  ctx.fillStyle = c;
+  for (let i = 0; i < w; i++) if (((i + ph) & 1) === 0) ctx.fillRect((x + i)|0, y|0, 1, 1);
 }
-function rect(x, y, w, h, c) {
-  ctx.fillStyle = PAL[c];
-  ctx.fillRect(x | 0, y | 0, w | 0, h | 0);
+/* Degradado vertical en bandas, con las costuras tramadas */
+function vgrad(x, y, w, h, cols) {
+  const n = cols.length;
+  for (let i = 0; i < n; i++) {
+    const a = y + Math.round(h * i / n), b = y + Math.round(h * (i + 1) / n);
+    R(x, a, w, b - a, cols[i]);
+    if (i) { dith(x, a, w, cols[i-1], 0); dith(x, a + 1, w, cols[i-1], 1); }
+  }
+}
+function elipse(cx, cy, rx, ry, c) {
+  ctx.fillStyle = c;
+  for (let yy = -ry; yy <= ry; yy++) {
+    const t = 1 - (yy * yy) / (ry * ry);
+    if (t < 0) continue;
+    const half = Math.floor(rx * Math.sqrt(t));
+    ctx.fillRect((cx - half)|0, (cy + yy)|0, half * 2 + 1, 1);
+  }
+}
+function disco(cx, cy, r, c) { elipse(cx, cy, r, r, c); }
+function sombraPiso(cx, cy) {
+  elipse(cx, cy, 9, 3, 'rgba(24,10,44,.26)');
+  elipse(cx, cy, 6, 2, 'rgba(24,10,44,.22)');
 }
 
 
@@ -270,163 +419,458 @@ function glyph(ch) {
 }
 function drawText(x, y, str, c) {
   str = (str || '').toUpperCase();
+  ctx.fillStyle = c;
   for (let i = 0; i < str.length; i++) {
     const rows = glyph(str[i]);
     for (let r = 0; r < 7; r++)
       for (let col = 0; col < 5; col++)
-        if ((rows[r] >> (4 - col)) & 1) px(x + i * 6 + col, y + r, c);
+        if ((rows[r] >> (4 - col)) & 1) ctx.fillRect((x + i * 6 + col)|0, (y + r)|0, 1, 1);
   }
 }
+/* Texto con sombra dura: da profundidad y se lee sobre cualquier fondo */
+function drawTextS(x, y, str, c, sombra) {
+  if (sombra) drawText(x + 1, y + 1, str, sombra);
+  drawText(x, y, str, c);
+}
 function textW(s) { return (s || '').length * 6 - 1; }
-function centerText(y, s, c) { drawText(Math.round((160 - textW(s)) / 2), y, s, c); }
+function centerText(y, s, c, sombra) { drawTextS(Math.round((160 - textW(s)) / 2), y, s, c, sombra); }
 
 
-/* ---------- Sprites ---------- */
-const SPR_A = [ // pelo largo
-  "....0000....","..00111100..",".0111111110.",".0113333110.",
-  ".0110330110.",".0113333110.","..0011331100","...022220...",
-  "..02222220..","..02222220..","..02222220..","..00222200..",
-  "...011110...","...011110...","...01..10...","..000..000.."
+/* =========================================================================
+   PERSONAJES
+   Sprites de 14x22 con clave de color. Cada quien tiene su paleta, así que
+   siempre se sabe quién está en pantalla:
+     ROBERTO  -> pelo oscuro más corto, chamarra negra/gris, jeans azules
+     SANTIAGO -> rizos más altos, fleece crema con cuello negro, arete,
+                 pantalón verde olivo
+   Claves: k borde  1/2 pelo  s/S piel  e ojo  b barba  m boca
+           c/C ropa  t detalle de ropa  p/Q pantalón  o zapato  g arete
+   ========================================================================= */
+const CUERPO_QUIETO = [
+  "..kppQ..ppQk..",
+  "..kppQ..ppQk..",
+  "..kooo..oook.."
 ];
-const SPR_A2 = SPR_A.slice(0, 14).concat(["..01....10..", ".000....000."]);
-const SPR_B = [ // pelo corto
-  "...000000...","..01111110..",".0111111110.",".0133333310.",
-  ".0130330310.",".0133333310.","..03333330..","...022220...",
-  "..02222220..","..02222220..","..02222220..","..00222200..",
-  "...011110...","...011110...","...01..10...","..000..000.."
+const CUERPO_PASO = [
+  "..kppppppQk...",
+  ".kppQ...ppQk..",
+  ".kooo...oook.."
 ];
-const SPR_B2 = SPR_B.slice(0, 14).concat(["..01....10..", ".000....000."]);
-const HEART = [".00..00.","00000000","00000000","00000000",".000000.","..0000..","...00..."];
 
-function drawSprite(spr, x, y, flip) {
+function armar(cabeza, torso, piernas) { return cabeza.concat(torso, piernas); }
+
+const CAB_ROBERTO = [
+  "....kkkkkk....",
+  "..kk222222kk..",
+  ".k1222222221k.",
+  ".k1122222211k.",
+  "k111111111111k",
+  "k11ssssssss11k",
+  "k1skksssskks1k",
+  "k1seessssees1k",
+  "k1ssssSSssss1k",
+  "k1bbsbbbbsbb1k",
+  "k1bbbmmmmbbb1k",
+  ".kbbbbbbbbbbk.",
+  "...kksssskk..."
+];
+const TOR_ROBERTO = [
+  ".kcccccccccck.",
+  "kccccCttCcccck",
+  "kCcccCttCcccCk",
+  "kCcccCttCcccCk",
+  "kCsccCttCccsCk",
+  ".kcccccccccck."
+];
+
+const CAB_SANTIAGO = [
+  "...kkkkkkkk...",
+  ".kk22222222kk.",
+  "k122222222221k",
+  "k112222222211k",
+  "k111111111111k",
+  "k11ssssssss11k",
+  "k1skksssskks1k",
+  "k1seessssees1k",
+  "k1ssssSSssssgk",
+  "k1bbsbbbbsbb1k",
+  "k1bbbmmmmbbb1k",
+  ".kbbbbbbbbbbk.",
+  "...kksssskk..."
+];
+const TOR_SANTIAGO = [
+  ".kttttttttttk.",
+  "kcccttttttccck",
+  "kCcccttttcccCk",
+  "kCccccccccccCk",
+  "kCsccccccccsCk",
+  ".kcccccccccck."
+];
+
+const PERSONAJES = {
+  roberto: {
+    nombre: 'ROBERTO',
+    quieto: armar(CAB_ROBERTO, TOR_ROBERTO, CUERPO_QUIETO),
+    paso:   armar(CAB_ROBERTO, TOR_ROBERTO, CUERPO_PASO),
+    color: {
+      k:'#1b1226', '1':'#2c1a12', '2':'#4d3020',
+      s:'#f0bf92', S:'#c98a5e', e:'#241726', b:'#4a3527', m:'#241726',
+      c:'#3a3f4e', C:'#242833', t:'#98a3b0',
+      p:'#3b4c78', Q:'#2b385c', o:'#241d2b'
+    }
+  },
+  santiago: {
+    nombre: 'SANTIAGO',
+    quieto: armar(CAB_SANTIAGO, TOR_SANTIAGO, CUERPO_QUIETO),
+    paso:   armar(CAB_SANTIAGO, TOR_SANTIAGO, CUERPO_PASO),
+    color: {
+      k:'#1b1226', '1':'#402715', '2':'#6f472a',
+      s:'#f4c79b', S:'#cd9166', e:'#241726', b:'#5a4030', m:'#241726',
+      c:'#e2d7c0', C:'#b7a98d', t:'#23222e',
+      p:'#5c6238', Q:'#454a29', o:'#2b2320', g:'#f2d35a'
+    }
+  }
+};
+
+function drawSprite(spr, x, y, flip, map) {
   for (let r = 0; r < spr.length; r++) {
     const row = spr[r];
     for (let c = 0; c < row.length; c++) {
       const ch = row[c];
       if (ch === '.') continue;
-      px(x + (flip ? row.length - 1 - c : c), y + r, +ch);
+      const col = map[ch];
+      if (!col) continue;
+      P(x + (flip ? row.length - 1 - c : c), y + r, col);
     }
   }
 }
-const SETS = { a: [SPR_A, SPR_A2], b: [SPR_B, SPR_B2] };
+/* Dibuja a un personaje con su sombra en el piso */
+function persona(quien, x, y, flip, caminando, t) {
+  const p = PERSONAJES[quien] || PERSONAJES.santiago;
+  sombraPiso(Math.round(x) + 7, y + 22);
+  const spr = (caminando && (t / 7 | 0) % 2) ? p.paso : p.quieto;
+  drawSprite(spr, Math.round(x), y, flip, p.color);
+}
+
+const CORAZON = [
+  ".kk..kk.",
+  "kHRkkRRk",
+  "kHRRRRRk",
+  "kRRRRRRk",
+  ".kRRRRk.",
+  "..kRRk..",
+  "...kk..."
+];
+const PAL_COR  = { k:'#7d1230', R:'#e8355c', H:'#ff9db4' };
+const PAL_COR2 = { k:'#5c0d24', R:'#ff6f8d', H:'#ffd0dc' };
+function corazon(x, y, brillo) { drawSprite(CORAZON, x, y, false, brillo ? PAL_COR2 : PAL_COR); }
 
 
-/* ---------- Escenas (fondos dibujados a mano) ---------- */
-const GROUND = 88;
+/* =========================================================================
+   ESCENAS
+   Cada una se dibuja en tres capas para que haya profundidad:
+   fondo lejano (claro y desaturado) -> capa media -> piso -> frente.
+   Lo del "frente" se pinta DESPUÉS de los personajes, así se meten dentro
+   del decorado en vez de quedar pegados encima.
+   ========================================================================= */
+const GROUND = 92;
 
+function nube(x, y, e, c1, c2) {
+  elipse(x,          y,           Math.round(6*e), Math.round(3*e), c1);
+  elipse(x + 7*e|0,  y - 2*e|0,   Math.round(8*e), Math.round(4*e), c1);
+  elipse(x + 15*e|0, y,           Math.round(6*e), Math.round(3*e), c1);
+  R(x - 5*e, y + 2*e, 26*e, 1, c2);
+}
+function arbol(cx, base, e, cop, copL, copS, tr, trS) {
+  const h = Math.round(15*e), w = Math.round(12*e), hh = Math.round(9*e);
+  R(cx - 2, base - h, 4, h, tr);
+  R(cx - 2, base - h, 1, h, trS);
+  elipse(cx, base - h - Math.round(4*e), w, hh, copS);
+  elipse(cx, base - h - Math.round(6*e), w - 1, hh - 1, cop);
+  elipse(cx - Math.round(4*e), base - h - Math.round(9*e), Math.round(w*0.45), Math.round(hh*0.45), copL);
+}
+
+/* ---- 1. PARQUE (día) ---- */
 function bgParque(t) {
-  rect(0, 0, 160, GROUND, 3);
-  for (let i = 0; i < 3; i++) {
-    const cx = 18 + i * 58, base = GROUND;
-    rect(cx - 2, base - 22, 5, 22, 1);
-    rect(cx - 12, base - 42, 25, 18, 2);
-    rect(cx - 9, base - 46, 19, 6, 2);
-    rect(cx - 12, base - 42, 25, 1, 1);
-    rect(cx - 9, base - 47, 19, 1, 1);
-  }
-  rect(96, GROUND - 14, 30, 3, 1);   // banca
-  rect(96, GROUND - 22, 30, 2, 1);
-  rect(98, GROUND - 14, 2, 14, 1);
-  rect(122, GROUND - 14, 2, 14, 1);
-  rect(0, GROUND, 160, 56, 2);
-  rect(0, GROUND, 160, 2, 1);
-  for (let i = 0; i < 26; i++) {
-    const gx = (i * 13 + 5) % 158;
-    px(gx, GROUND + 6 + (i % 4) * 9, 1);
-    px(gx + 1, GROUND + 5 + (i % 4) * 9, 1);
+  vgrad(0, 0, 160, GROUND, ['#4fb9ec','#74cef2','#9ee0f6','#c9f0e4']);
+  disco(134, 15, 11, 'rgba(255,248,190,.30)');
+  disco(134, 15, 7, '#fff3ae'); disco(134, 15, 4, '#ffffff');
+  const n1 = ((t * 0.09) % 220 | 0) - 40, n2 = ((t * 0.16) % 230 | 0) - 50;
+  nube(n1, 17, 1, '#eef9ff', '#c2e2f3');
+  nube(n2, 33, 1, '#ffffff', '#d3ebf8');
+  for (let i = 0; i < 5; i++) elipse(i * 40 - 12, GROUND - 4, 32, 15, '#96d6a0');
+  dith(0, GROUND - 17, 160, '#b0e3b4', 0);
+  arbol(16,  GROUND + 1, 0.75, '#4aa85c', '#7fcd7e', '#2f7b45', '#7a5136', '#5a3927');
+  arbol(140, GROUND + 1, 0.72, '#4aa85c', '#7fcd7e', '#2f7b45', '#7a5136', '#5a3927');
+  arbol(62,  GROUND + 3, 1.0,  '#3f9a52', '#71c273', '#26683a', '#6b4630', '#4b3021');
+  R(96, GROUND - 26, 32, 3, '#a9713f'); R(96, GROUND - 26, 32, 1, '#d09a63');
+  R(96, GROUND - 21, 32, 2, '#a9713f'); R(96, GROUND - 21, 32, 1, '#d09a63');
+  R(94, GROUND - 16, 36, 4, '#b87c46'); R(94, GROUND - 16, 36, 1, '#d9a56d');
+  R(96, GROUND - 26, 2, 14, '#5d5b66'); R(126, GROUND - 26, 2, 14, '#5d5b66');
+  R(97, GROUND - 12, 3, 12, '#4d4b56'); R(124, GROUND - 12, 3, 12, '#4d4b56');
+  vgrad(0, GROUND, 160, 144 - GROUND, ['#77c667','#5faf55','#4a9247','#3b7a3c']);
+  R(0, GROUND, 160, 1, '#a8e79c');
+  elipse(80, GROUND + 15, 86, 7, '#c9ab6e');
+  elipse(80, GROUND + 14, 80, 5, '#dcc189');
+  dith(0, GROUND + 8, 160, '#b59a62', 0);
+  dith(0, GROUND + 22, 160, '#b59a62', 1);
+}
+function frParque(t) {
+  for (let i = 0; i < 24; i++) {
+    const gx = (i * 27 + 3) % 160, gy = 128 + (i % 3) * 5;
+    R(gx, gy, 1, 4, '#2d6b33'); R(gx + 2, gy + 1, 1, 3, '#3b8340');
+    if (i % 4 === 0) { P(gx + 1, gy - 1, '#ffd75e'); P(gx + 1, gy - 2, '#ff9ec2'); }
   }
 }
 
+/* ---- 2. CINE ---- */
 function bgCine(t) {
-  rect(0, 0, 160, 144, 1);
-  rect(20, 8, 120, 56, 0);
-  rect(23, 11, 114, 50, 3);
-  if ((t / 40 | 0) % 2) rect(46, 22, 68, 28, 2);
-  rect(0, GROUND, 160, 56, 0);
-  for (let row = 0; row < 2; row++)
-    for (let i = 0; i < 6; i++) {
-      const sx = 6 + i * 26, sy = GROUND + 8 + row * 22;
-      rect(sx, sy, 20, 12, 1);
-      rect(sx, sy - 4, 20, 5, 2);
+  vgrad(0, 0, 160, 144, ['#2c1c4e','#221540','#191030','#120b24']);
+  R(16, 6, 128, 58, '#0b0716');
+  R(19, 9, 122, 52, '#e9e4ff');
+  const f = (t / 46 | 0) % 3;
+  if (f === 0) { R(38, 18, 84, 34, '#ffd9a0'); disco(80, 34, 12, '#ff9ec2'); }
+  if (f === 1) { R(38, 18, 84, 34, '#a8d8ff'); R(52, 40, 56, 10, '#5f86c9'); }
+  if (f === 2) { R(38, 18, 84, 34, '#c9b6ff'); corazon(76, 28, true); }
+  R(19, 9, 122, 2, 'rgba(255,255,255,.55)');
+  for (let i = 0; i < 26; i++) {
+    const y = 62 + i * 2;
+    R(19 - i * 2, y, 122 + i * 4, 2, 'rgba(232,224,255,' + (0.055 - i * 0.002).toFixed(3) + ')');
+  }
+  vgrad(0, GROUND, 160, 144 - GROUND, ['#3a2450','#2b1a3d','#1e1230']);
+  R(0, GROUND, 160, 1, '#5a3a72');
+}
+function frCine(t) {
+  for (let row = 0; row < 2; row++) {
+    const sy = 118 + row * 16;
+    for (let i = 0; i < 7; i++) {
+      const sx = -4 + i * 25;
+      R(sx, sy, 21, 26, row ? '#8c1f3c' : '#6e1730');
+      R(sx, sy - 5, 21, 6, row ? '#a82a4c' : '#87213c');
+      R(sx, sy - 5, 21, 1, row ? '#d1547a' : '#a8446a');
+      R(sx + 21, sy - 5, 2, 31, '#4a0f22');
     }
+  }
 }
 
+/* ---- 3. LLUVIA ---- */
 function bgLluvia(t) {
-  rect(0, 0, 160, GROUND, 2);
-  for (let i = 0; i < 6; i++) rect(10 + i * 28, 6 + (i % 3) * 7, 22, 5, 1);
-  for (let i = 0; i < 40; i++) {
-    const rx = (i * 37 + (t * 2)) % 168 - 8;
-    const ry = (i * 23 + (t * 5)) % GROUND;
-    px(rx, ry, 1); px(rx, ry + 1, 1); px(rx - 1, ry + 2, 1);
-  }
-  rect(0, GROUND, 160, 56, 1);
-  rect(0, GROUND, 160, 2, 0);
-  for (let i = 0; i < 5; i++) {
-    const w = 16 + (i % 3) * 8;
-    rect(8 + i * 32, GROUND + 14 + (i % 2) * 16, w, 3, 0);
-  }
-}
-
-function bgNoche(t) {
-  rect(0, 0, 160, GROUND, 0);
-  for (let i = 0; i < 34; i++) {
-    const sx = (i * 47) % 158, sy = (i * 29) % (GROUND - 20);
-    if ((t / 18 + i) % 5 > 1.2) px(sx, sy, i % 3 ? 2 : 3);
-  }
-  rect(120, 10, 8, 8, 3); rect(118, 12, 8, 8, 0); // luna
+  vgrad(0, 0, 160, GROUND, ['#4b5b80','#5e6d8f','#78859f','#98a4b8']);
+  for (let i = 0; i < 7; i++) nube(((i * 31 + (t * 0.12 | 0)) % 200) - 30, 8 + (i % 3) * 9, 1, '#6d7a97', '#5a6684');
   for (let i = 0; i < 8; i++) {
-    const bw = 14 + (i % 3) * 6, bh = 16 + ((i * 7) % 20);
-    rect(i * 20, GROUND - bh, bw, bh, 1);
+    const bh = 26 + ((i * 17) % 26), bx = i * 21 - 6;
+    R(bx, GROUND - bh, 19, bh, '#56617f');
+    R(bx, GROUND - bh, 19, 1, '#6c7797');
+    for (let wy = GROUND - bh + 4; wy < GROUND - 5; wy += 8)
+      for (let wx = bx + 3; wx < bx + 16; wx += 6)
+        P(wx, wy, ((wx * wy + i) % 3) ? '#3f4864' : '#ffcf8a');
   }
-  rect(0, GROUND, 160, 56, 1);
-  rect(0, GROUND, 160, 2, 0);
-  rect(0, GROUND + 10, 160, 1, 0);
+  vgrad(0, GROUND, 160, 144 - GROUND, ['#4a5470','#3e4762','#333b53']);
+  R(0, GROUND, 160, 1, '#6b769a');
+  for (let i = 0; i < 5; i++) {
+    const px0 = 6 + i * 33, py0 = GROUND + 16 + (i % 2) * 18, w = 18 + (i % 3) * 7;
+    elipse(px0 + w / 2, py0, w / 2, 3, '#7f9ec4');
+    elipse(px0 + w / 2, py0 - 1, w / 2 - 2, 2, '#a9c6e2');
+    const on = ((t / 9 + i * 3) | 0) % 7;
+    if (on < 3) elipse(px0 + w / 2, py0, on * 2 + 2, on, 'rgba(220,238,255,.22)');
+  }
+  for (let i = 0; i < 44; i++) {
+    const rx = ((i * 37 + t * 2) % 176) - 8, ry = (i * 23 + t * 4) % GROUND;
+    R(rx, ry, 1, 3, 'rgba(198,216,238,.55)');
+  }
+}
+function frLluvia(t) {
+  for (let i = 0; i < 26; i++) {
+    const rx = ((i * 53 + t * 5) % 190) - 15, ry = (i * 41 + t * 9) % 144;
+    R(rx, ry, 1, 6, 'rgba(226,240,255,.75)');
+    P(rx - 1, ry + 6, 'rgba(226,240,255,.45)');
+  }
 }
 
+/* ---- 4. NOCHE (azotea) ---- */
+function bgNoche(t) {
+  vgrad(0, 0, 160, GROUND, ['#0b0a2e','#171043','#2c1454','#59205c','#8a3358']);
+  for (let i = 0; i < 44; i++) {
+    const sx = (i * 47) % 158, sy = (i * 29) % (GROUND - 26);
+    const b = (t / 17 + i) % 6;
+    if (b > 1.3) P(sx, sy, i % 5 === 0 ? '#ffe9a8' : (i % 3 ? '#ffffff' : '#a8d8ff'));
+    if (b > 4.6) { P(sx - 1, sy, 'rgba(255,255,255,.45)'); P(sx + 1, sy, 'rgba(255,255,255,.45)'); }
+  }
+  disco(124, 16, 12, 'rgba(255,246,205,.13)');
+  disco(124, 16, 8, '#fff6cd'); disco(121, 14, 7, '#1a1046');
+  P(127, 19, '#e8dcae'); P(126, 13, '#e8dcae');
+  for (let i = 0; i < 9; i++) {
+    const bw = 15 + (i % 4) * 5, bh = 20 + ((i * 23) % 30);
+    R(i * 18 - 4, GROUND - bh, bw, bh, '#241650');
+    for (let wy = GROUND - bh + 4; wy < GROUND - 4; wy += 6)
+      for (let wx = i * 18 - 1; wx < i * 18 - 4 + bw - 2; wx += 5)
+        if ((wx * wy + i * 7) % 3) P(wx, wy, ((wx + wy) % 5) ? '#ffcf7a' : '#8fe0ff');
+  }
+  vgrad(0, GROUND, 160, 144 - GROUND, ['#2b1d4c','#221740','#191032']);
+  R(0, GROUND, 160, 1, '#5b3d80');
+  for (let x = 0; x < 160; x += 16) R(x, GROUND + 8, 15, 1, '#3a2860');
+}
+function frNoche(t) {
+  R(0, 118, 160, 2, '#3d2a63');
+  for (let x = 4; x < 160; x += 22) R(x, 118, 2, 22, '#3d2a63');
+  R(0, 117, 160, 1, '#6a4a94');
+}
+
+/* ---- 5. CASA ---- */
 function bgCasa(t) {
-  rect(0, 0, 160, GROUND, 3);
-  rect(0, GROUND - 6, 160, 6, 2);
-  rect(14, 10, 34, 30, 2); rect(14, 10, 34, 1, 0); rect(14, 39, 34, 1, 0);
-  rect(30, 10, 1, 30, 0); rect(14, 24, 34, 1, 0);
-  rect(14, 10, 1, 30, 0); rect(47, 10, 1, 30, 0);
-  rect(96, 22, 30, 20, 1); rect(99, 25, 24, 14, 3); rect(108, 42, 6, 4, 0);
-  rect(58, GROUND - 26, 46, 26, 1);   // sillón
-  rect(58, GROUND - 32, 46, 8, 2);
-  rect(58, GROUND - 26, 4, 26, 0);
-  rect(100, GROUND - 26, 4, 26, 0);
-  rect(0, GROUND, 160, 56, 2);
-  rect(0, GROUND, 160, 2, 1);
-  for (let i = 0; i < 8; i++) rect(i * 20, GROUND + 2, 1, 54, 1);
+  vgrad(0, 0, 160, GROUND, ['#f7e2b8','#f0d5a4','#e6c48d','#d9b47c']);
+  for (let x = 0; x < 160; x += 14) R(x, 0, 2, GROUND - 14, 'rgba(198,152,98,.22)');
+  R(0, GROUND - 14, 160, 3, '#b98d58'); R(0, GROUND - 14, 160, 1, '#e0b880');
+  R(0, GROUND - 11, 160, 11, '#c9a271');
+
+  /* ventana al atardecer */
+  R(10, 10, 40, 34, '#7a5a3a');
+  vgrad(13, 13, 34, 28, ['#ffb96b','#f79a7e','#c06fa0','#5a4490']);
+  disco(30, 33, 6, '#fff0b0'); disco(30, 33, 9, 'rgba(255,240,176,.28)');
+  R(13, 13, 34, 1, 'rgba(255,255,255,.5)');
+  R(29, 13, 2, 28, '#7a5a3a'); R(13, 26, 34, 2, '#7a5a3a');
+  R(10, 10, 40, 3, '#a37c4f'); R(10, 41, 40, 3, '#6b4a2c');
+
+  /* cuadrito de los dos colgado en la pared */
+  R(65, 13, 24, 19, '#8a6240'); R(65, 13, 24, 1, '#b98d58');
+  R(67, 15, 20, 15, '#f6efdc');
+  R(70, 25, 6, 5, PERSONAJES.roberto.color.c);
+  R(80, 25, 6, 5, PERSONAJES.santiago.color.c);
+  R(70, 21, 6, 4, PERSONAJES.roberto.color['1']);
+  R(80, 21, 6, 4, PERSONAJES.santiago.color['1']);
+  R(71, 23, 4, 2, PERSONAJES.roberto.color.s);
+  R(81, 23, 4, 2, PERSONAJES.santiago.color.s);
+  corazon(74, 15, (t / 30 | 0) % 2);
+
+  /* lámpara de pie con su halo */
+  disco(134, 26, 24, 'rgba(255,214,130,.09)');
+  disco(134, 26, 15, 'rgba(255,214,130,.15)');
+  for (let i = 0; i < 8; i++) R(128 - i, 14 + i, 13 + i * 2, 1, i < 2 ? '#ffe6a8' : '#e8a94c');
+  R(126, 22, 17, 2, '#c98a3a');
+  R(133, 24, 2, GROUND - 36, '#6b5540');
+  R(129, GROUND - 12, 10, 2, '#6b5540');
+
+  /* sillón */
+  const sx = 54, sy = GROUND - 34;
+  R(sx + 3, sy + 33, 52, 3, 'rgba(70,36,22,.28)');
+  R(sx, sy, 58, 13, '#c0526f'); R(sx, sy, 58, 1, '#e07d95');
+  R(sx, sy + 13, 58, 17, '#a8405f'); R(sx, sy + 13, 58, 1, '#8a2f4b');
+  R(sx + 9, sy + 15, 18, 8, '#e08fa4'); R(sx + 30, sy + 15, 18, 8, '#e08fa4');
+  R(sx, sy + 5, 8, 25, '#8a2f4b'); R(sx + 50, sy + 5, 8, 25, '#8a2f4b');
+  R(sx, sy + 5, 8, 1, '#c0526f'); R(sx + 50, sy + 5, 8, 1, '#c0526f');
+  R(sx + 4, sy + 30, 4, 5, '#6b4630'); R(sx + 50, sy + 30, 4, 5, '#6b4630');
+
+  /* maceta */
+  R(140, GROUND - 21, 13, 10, '#b06a44'); R(139, GROUND - 24, 15, 3, '#c9825a');
+  R(140, GROUND - 21, 2, 10, '#8a4f31');
+  elipse(146, GROUND - 29, 9, 7, '#2f7b45');
+  elipse(146, GROUND - 31, 7, 5, '#3f8f4f');
+  elipse(143, GROUND - 34, 4, 3, '#6cbd6b');
+
+  vgrad(0, GROUND, 160, 144 - GROUND, ['#b0803f','#9c7038','#875f31','#74502a']);
+  R(0, GROUND, 160, 1, '#d4a86a');
+  for (let y = GROUND + 10; y < 144; y += 13) R(0, y, 160, 1, 'rgba(88,56,28,.35)');
+  for (let i = 0; i < 9; i++) R(i * 19 + 6, GROUND + 1, 1, 52, 'rgba(88,56,28,.40)');
+}
+function frCasa(t) {
+  elipse(80, 137, 68, 11, '#8a2f4b');
+  elipse(80, 137, 64, 9, '#c95f7a');
+  elipse(80, 137, 54, 7, '#a8405f');
+  elipse(80, 137, 49, 5, '#e08fa4');
+  for (let i = 0; i < 8; i++) R(34 + i * 14, 135, 4, 3, '#a8405f');
 }
 
+/* ---- 6. CABAÑA (la de la foto: madera, ventana y árboles) ---- */
+function bgCabana(t) {
+  vgrad(0, 0, 160, GROUND, ['#c9a06a','#b78b58','#a67a4c']);
+  for (let y = 0; y < GROUND; y += 9) {
+    R(0, y, 160, 1, 'rgba(112,74,42,.55)');
+    dith(0, y + 4, 160, 'rgba(212,172,124,.35)', (y / 9) & 1);
+  }
+  R(58, 10, 86, 46, '#6b4526'); R(61, 13, 80, 40, '#8fc9e8');
+  vgrad(61, 13, 80, 40, ['#a9dcf2','#8fc9e8','#cfe8d0']);
+  for (let i = 0; i < 6; i++) {
+    const cx = 66 + i * 14, base = 53 - (i % 2) * 3;
+    R(cx - 1, base - 10, 2, 10, '#5b4028');
+    elipse(cx, base - 14, 7, 6, '#3f8a4b');
+    elipse(cx - 2, base - 16, 3, 3, '#69b96a');
+  }
+  R(61, 13, 80, 2, 'rgba(255,255,255,.45)');
+  R(61, 51, 80, 2, '#5b7f5b');
+  R(58, 10, 86, 3, '#8a5c33'); R(58, 53, 86, 3, '#54371f');
+  R(12, 58, 24, 16, '#2f6b46'); R(13, 59, 22, 14, '#3f8a58');
+  R(17, 63, 12, 2, '#d9ecdc'); R(17, 67, 9, 2, '#d9ecdc');
+  disco(146, 16, 11, 'rgba(255,226,150,.18)');
+  R(140, 10, 13, 9, '#3a3040'); R(141, 12, 11, 6, '#ffe6a0');
+  R(140, 10, 13, 1, '#5a4c60'); R(145, 19, 3, 4, '#3a3040');
+  R(62, GROUND - 20, 46, 4, '#7a5230'); R(62, GROUND - 20, 46, 1, '#a3714a');
+  R(66, GROUND - 16, 3, 16, '#5b3b20'); R(101, GROUND - 16, 3, 16, '#5b3b20');
+  R(62, GROUND - 1, 46, 2, 'rgba(70,42,18,.30)');
+  vgrad(0, GROUND, 160, 144 - GROUND, ['#b0834c','#9c7241','#886036']);
+  R(0, GROUND, 160, 1, '#d4a56a');
+  for (let y = GROUND + 8; y < 144; y += 12) R(0, y, 160, 1, 'rgba(92,58,28,.45)');
+  for (let x = 0; x < 160; x += 26) R(x, GROUND, 1, 52, 'rgba(92,58,28,.35)');
+}
+function frCabana(t) {
+  R(94, 114, 56, 5, '#f2ead8'); R(94, 114, 56, 1, '#ffffff');
+  R(99, 119, 3, 15, '#c9b89a'); R(141, 119, 3, 15, '#c9b89a');
+  R(104, 110, 13, 4, '#d9c9a8'); R(104, 110, 13, 1, '#f2ead8');
+  R(122, 109, 9, 5, '#3f8a58'); R(124, 106, 5, 3, '#69b96a');
+  R(0, 134, 160, 10, '#7a5230'); R(0, 134, 160, 1, '#a3714a');
+  R(0, 138, 160, 1, 'rgba(70,42,18,.35)');
+}
+
+/* ---- 7. CIUDAD (final, con fuegos artificiales) ---- */
+const FUEGO_COL = ['#ff6b8a','#ffd166','#7ee8fa','#b892ff','#8ef2a0'];
 function bgCiudad(t) {
-  rect(0, 0, 160, GROUND, 0);
-  for (let f = 0; f < 3; f++) {
-    const p = (t + f * 90) % 180;
-    if (p < 60) {
-      const cx = 30 + f * 50, cy = 22 + (f % 2) * 14, rad = p * 0.45;
-      for (let a = 0; a < 12; a++) {
-        const ang = a * Math.PI / 6;
-        px(cx + Math.cos(ang) * rad, cy + Math.sin(ang) * rad, p < 34 ? 3 : 2);
+  vgrad(0, 0, 160, GROUND, ['#0a0930','#150f42','#2b1355','#4a1a55','#7a2a4c']);
+  for (let i = 0; i < 30; i++) {
+    const sx = (i * 61) % 158, sy = (i * 37) % (GROUND - 34);
+    if ((t / 20 + i) % 5 > 1.4) P(sx, sy, '#ffffff');
+  }
+  for (let f = 0; f < 4; f++) {
+    const p = (t + f * 62) % 250;
+    if (p < 76) {
+      const cx = 22 + f * 38, cy = 20 + (f % 3) * 13, rad = p * 0.42;
+      const col = FUEGO_COL[f % FUEGO_COL.length];
+      if (p < 14) disco(cx, cy, 14 - p, '#ffffff');
+      const caida = p > 44 ? (p - 44) * 0.22 : 0;
+      for (let a = 0; a < 26; a++) {
+        const ang = a * Math.PI / 13, dx = Math.cos(ang), dy = Math.sin(ang) * 0.85;
+        for (let e = 0; e < 4; e++) {
+          const rr = rad - e * 2.4;
+          if (rr < 1) continue;
+          P(cx + dx * rr, cy + dy * rr + caida, e ? col : '#ffffff');
+        }
       }
     }
   }
-  for (let i = 0; i < 9; i++) {
-    const bw = 16 + (i % 4) * 4, bh = 22 + ((i * 13) % 34);
-    rect(i * 18, GROUND - bh, bw, bh, 1);
-    for (let wy = GROUND - bh + 4; wy < GROUND - 4; wy += 7)
-      for (let wx = i * 18 + 3; wx < i * 18 + bw - 3; wx += 6)
-        if ((wx * wy + t / 30 | 0) % 3) px(wx, wy, 3);
+  for (let i = 0; i < 8; i++) {
+    const bw = 18 + (i % 3) * 6, bh = 34 + ((i * 29) % 26);
+    R(i * 21 - 6, GROUND - bh, bw, bh, '#1c1140');
   }
-  rect(0, GROUND, 160, 56, 1);
-  rect(0, GROUND, 160, 2, 0);
+  for (let i = 0; i < 9; i++) {
+    const bw = 15 + (i % 4) * 4, bh = 20 + ((i * 13) % 32);
+    R(i * 18 - 2, GROUND - bh, bw, bh, '#2a1a55');
+    R(i * 18 - 2, GROUND - bh, bw, 1, '#442b78');
+    for (let wy = GROUND - bh + 4; wy < GROUND - 4; wy += 6)
+      for (let wx = i * 18 + 1; wx < i * 18 - 2 + bw - 2; wx += 5)
+        if ((wx * wy + (t / 40 | 0)) % 3) P(wx, wy, ((wx + wy) % 4) ? '#ffd07a' : '#9ae8ff');
+  }
+  vgrad(0, GROUND, 160, 144 - GROUND, ['#2a1b4e','#211540','#180f30']);
+  R(0, GROUND, 160, 1, '#63428f');
+  for (let x = 0; x < 160; x += 20) R(x, GROUND + 10, 12, 1, '#3d2a63');
 }
+function frCiudad(t) {}
 
-const ESCENAS = { parque:bgParque, cine:bgCine, lluvia:bgLluvia, noche:bgNoche, casa:bgCasa, ciudad:bgCiudad };
+const ESCENAS = { parque:bgParque, cine:bgCine, lluvia:bgLluvia, noche:bgNoche,
+                  casa:bgCasa, cabana:bgCabana, ciudad:bgCiudad };
+const FRENTES = { parque:frParque, cine:frCine, lluvia:frLluvia, noche:frNoche,
+                  casa:frCasa, cabana:frCabana, ciudad:frCiudad };
 
 
 /* ---------- Caja de diálogo ---------- */
-const BOX_Y = 96, MAXCH = 23;
+const BOX_Y = 96, BOX_H = 46, MAXCH = 23;
 
 function wrap(str) {
   const words = str.toUpperCase().split(/\s+/);
@@ -442,11 +886,25 @@ function wrap(str) {
   return pages;
 }
 
-function drawBox(pages, page, revealed, blink) {
-  rect(4, BOX_Y, 152, 44, 3);
-  rect(4, BOX_Y, 152, 1, 0); rect(4, BOX_Y + 43, 152, 1, 0);
-  rect(4, BOX_Y, 1, 44, 0);  rect(155, BOX_Y, 1, 44, 0);
-  rect(6, BOX_Y + 2, 148, 1, 1); rect(6, BOX_Y + 41, 148, 1, 1);
+/* Marco con relieve: borde oscuro, luz arriba, sombra abajo. */
+function drawBox(pages, page, revealed, blink, quien) {
+  const p = PERSONAJES[quien];
+  R(5, BOX_Y + 2, 152, BOX_H, 'rgba(12,6,28,.40)');           // sombra proyectada
+  R(4, BOX_Y, 152, BOX_H, '#f6efdc');                          // papel
+  R(4, BOX_Y, 152, 10, p ? p.color.c : '#5f34a0');             // barra del nombre
+  R(4, BOX_Y, 152, 1, 'rgba(255,255,255,.55)');
+  R(4, BOX_Y + 9, 152, 1, 'rgba(0,0,0,.35)');
+  R(4, BOX_Y, 152, 1, '#241a3c'); R(4, BOX_Y + BOX_H - 1, 152, 1, '#241a3c');
+  R(4, BOX_Y, 1, BOX_H, '#241a3c'); R(155, BOX_Y, 1, BOX_H, '#241a3c');
+  R(5, BOX_Y + 10, 150, 1, 'rgba(255,255,255,.85)');
+  R(5, BOX_Y + BOX_H - 2, 150, 1, '#cbbfa4');
+  R(154, BOX_Y + 10, 1, BOX_H - 12, '#cbbfa4');
+  if (p) {
+    const esClaro = (quien === 'santiago');
+    drawTextS(10, BOX_Y + 2, p.nombre, esClaro ? '#2a2438' : '#f4eeff',
+                             esClaro ? 'rgba(255,255,255,.4)' : 'rgba(0,0,0,.45)');
+    corazon(146, BOX_Y + 2, blink);
+  }
 
   const lines = pages[page] || [];
   let count = 0;
@@ -454,12 +912,23 @@ function drawBox(pages, page, revealed, blink) {
     let ln = lines[i];
     if (count + ln.length > revealed) ln = ln.slice(0, Math.max(0, revealed - count));
     count += (pages[page][i] || '').length;
-    drawText(10, BOX_Y + 7 + i * 11, ln, 0);
+    drawTextS(10, BOX_Y + 13 + i * 11, ln, '#2a2035', 'rgba(190,176,148,.75)');
   }
   const total = lines.join('').length;
   if (revealed >= total && blink) {
-    rect(146, BOX_Y + 35, 5, 1, 0); rect(147, BOX_Y + 36, 3, 1, 0); rect(148, BOX_Y + 37, 1, 1, 0);
+    for (let i = 0; i < 4; i++) R(145 + i, BOX_Y + BOX_H - 8 + i, 7 - i * 2, 1, '#a8407a');
   }
+}
+
+/* ---------- Marcador ---------- */
+function hud(mes, total) {
+  R(4, 5, 62, 14, 'rgba(12,6,28,.45)');
+  R(3, 4, 62, 14, '#f6efdc');
+  R(3, 4, 62, 1, '#241a3c'); R(3, 17, 62, 1, '#241a3c');
+  R(3, 4, 1, 14, '#241a3c'); R(64, 4, 1, 14, '#241a3c');
+  R(4, 5, 60, 1, '#ffffff');
+  corazon(7, 7, false);
+  drawText(18, 8, "MES " + mes + "/" + total, '#2a2035');
 }
 
 
@@ -551,13 +1020,14 @@ function consumed(k) { if (pressed[k]) { pressed[k] = false; return true; } retu
 /* ---------- Estado ---------- */
 let estado = 'titulo';
 let mes = 0, t = 0;
-let jug = { x: 16, frame: 0, mirando: 1 };
+let jug = { x: 16, mirando: 1 };
 let corazonTomado = false;
-let pages = [], page = 0, revealed = 0, textTimer = 0;
+let pages = [], page = 0, revealed = 0, textTimer = 0, hablante = HISTORIA.jugador;
 let fade = 0, fadeDir = 0, pendiente = null;
 
-function abrirDialogo(txt, tipo) {
+function abrirDialogo(txt, tipo, quien) {
   pages = wrap(txt); page = 0; revealed = 0; textTimer = 0;
+  hablante = quien || HISTORIA.jugador;
   estado = tipo || 'dialogo'; chime();
 }
 /* Si ya hay un barrido corriendo se ignora: si no, la condición de salida
@@ -578,8 +1048,87 @@ function pasoFade() {
   } else if (fadeDir === -1 && fade <= 0) {
     fade = 0; fadeDir = 0; return;
   }
-  if (fadeDir === 1) rect(0, 0, fade, 144, 0);
-  else               rect(160 - fade, 0, fade, 144, 0);
+  const x = (fadeDir === 1) ? 0 : 160 - fade;
+  R(x, 0, fade, 144, '#120b24');
+  R(fadeDir === 1 ? fade - 2 : x, 0, 2, 144, '#5f34a0');
+}
+
+
+/* ---------- Pantallas fijas ---------- */
+function fondoMenu(t) {
+  vgrad(0, 0, 160, 144, ['#2e1560','#431c74','#5c2380','#7a2b7c','#a03a76','#c04a72','#dc6272','#f07a72']);
+  for (let i = 0; i < 40; i++) {
+    const sx = (i * 53) % 158, sy = (i * 31) % 144;
+    if ((t / 15 + i) % 5 > 2) P(sx, sy, 'rgba(255,255,255,.55)');
+  }
+  /* rayos diagonales suaves de fondo */
+  for (let i = -20; i < 40; i++) {
+    const x = i * 8 + ((t * 0.25) % 16 | 0);
+    if (i % 2) R(x, 0, 3, 144, 'rgba(255,255,255,.045)');
+  }
+}
+function panel(x, y, w, h) {
+  R(x + 2, y + 3, w, h, 'rgba(12,6,28,.45)');
+  R(x, y, w, h, '#f6efdc');
+  R(x, y, w, 1, '#241a3c'); R(x, y + h - 1, w, 1, '#241a3c');
+  R(x, y, 1, h, '#241a3c'); R(x + w - 1, y, 1, h, '#241a3c');
+  R(x + 1, y + 1, w - 2, 1, '#ffffff');
+  R(x + 1, y + h - 2, w - 2, 1, '#cbbfa4');
+}
+
+function pantallaTitulo(t) {
+  fondoMenu(t);
+  panel(10, 18, 140, 94);
+  centerText(26, HISTORIA.titulo, '#8a2f78', 'rgba(190,176,148,.8)');
+  corazon(34, 24, (t / 24 | 0) % 2);
+  corazon(118, 24, (t / 24 | 0) % 2);
+  centerText(42, HISTORIA.subtitulo, '#3a2a58');
+  centerText(54, HISTORIA.fecha, '#8a7a58');
+
+  R(20, 88, 120, 1, '#d8cdb2');
+  persona('roberto', 40, 66, false, false, t);
+  persona('santiago', 100, 66, true, false, t);
+  corazon(72, 70 + (Math.sin(t / 18) * 2 | 0), (t / 16 | 0) % 2);
+  drawText(26, 92, 'ROBERTO',  '#3a2a58');
+  drawText(83, 92, 'SANTIAGO', '#3a2a58');
+
+  if ((t / 30 | 0) % 2) centerText(118, "PRESIONA A", '#ffe9a8', 'rgba(60,10,50,.7)');
+  centerText(132, "-- LADO A --", 'rgba(255,255,255,.7)');
+}
+
+function pantallaCreditos(t) {
+  vgrad(0, 0, 160, 144, ['#12093a','#200c48','#2f1156','#451760','#5a1c62','#762660','#96305e','#b23c5c']);
+  for (let i = 0; i < 50; i++) {
+    const sx = (i * 47) % 158, sy = (i * 29) % 144;
+    if ((t / 13 + i) % 6 > 2.2) P(sx, sy, i % 4 ? '#ffffff' : '#ffe9a8');
+  }
+  for (let f = 0; f < 3; f++) {
+    const p = (t + f * 70) % 210;
+    if (p < 60) {
+      const cx = 26 + f * 54, cy = 22 + (f % 2) * 12, rad = p * 0.4;
+      const col = FUEGO_COL[(f + 1) % FUEGO_COL.length];
+      if (p < 12) disco(cx, cy, 12 - p, '#ffffff');
+      for (let a = 0; a < 22; a++) {
+        const ang = a * Math.PI / 11, dx = Math.cos(ang), dy = Math.sin(ang) * .85;
+        for (let e = 0; e < 3; e++) {
+          const rr = rad - e * 2.4;
+          if (rr < 1) continue;
+          P(cx + dx * rr, cy + dy * rr, e ? col : '#ffffff');
+        }
+      }
+    }
+  }
+  centerText(30, "FELICES", '#ffe9a8', 'rgba(40,6,40,.8)');
+  centerText(44, HISTORIA.titulo, '#ffe9a8', 'rgba(40,6,40,.8)');
+  for (let i = 0; i < 7; i++) {
+    const hx = 12 + i * 21, hy = 62 + (Math.sin(t / 22 + i) * 5 | 0);
+    corazon(hx, hy, ((t / 14 | 0) + i) % 2);
+  }
+  persona('roberto',  52, 82, false, false, t);
+  persona('santiago', 78, 82, true,  false, t);
+  corazon(70, 70 + (Math.sin(t / 15) * 2 | 0), true);
+  centerText(112, HISTORIA.subtitulo, '#ffd0dc');
+  if ((t / 30 | 0) % 2) centerText(128, "A = OTRA VEZ", '#ffffff', 'rgba(40,6,40,.8)');
 }
 
 
@@ -589,22 +1138,11 @@ function loop() {
   ctx.clearRect(0, 0, 160, 144);
 
   if (estado === 'titulo') {
-    rect(0, 0, 160, 144, 3);
-    for (let i = 0; i < 160; i += 8) rect(i, 0, 4, 144, (i / 8) % 2 ? 3 : 2);
-    rect(10, 26, 140, 78, 3);
-    rect(10, 26, 140, 1, 0); rect(10, 103, 140, 1, 0);
-    rect(10, 26, 1, 78, 0); rect(149, 26, 1, 78, 0);
-    centerText(38, HISTORIA.titulo, 0);
-    drawSprite(HEART, 40, 34, false);
-    drawSprite(HEART, 112, 34, false);
-    centerText(56, HISTORIA.subtitulo, 1);
-    centerText(70, HISTORIA.fecha, 1);
-    if ((t / 30 | 0) % 2) centerText(88, "PRESIONA A", 0);
-    centerText(120, "-- LADO A --", 1);
+    pantallaTitulo(t);
     if (consumed('a') || consumed('start')) {
       ensureAudio();
       if (!musicOn) muteBtn.click();
-      mes = 0; jug.x = 16; corazonTomado = false;
+      mes = 0; jug.x = 16; jug.mirando = 1; corazonTomado = false;
       transicionar(() => { estado = 'juego'; });
     }
     pasoFade();
@@ -612,56 +1150,41 @@ function loop() {
   }
 
   if (estado === 'creditos') {
-    rect(0, 0, 160, 144, 0);
-    centerText(30, "FELICES", 3);
-    centerText(44, "6 MESES", 3);
-    for (let i = 0; i < 7; i++) {
-      const hx = 12 + i * 21, hy = 66 + Math.sin(t / 22 + i) * 6;
-      drawSprite(HEART, hx, hy, false);
-      rect(hx, hy, 8, 7, 2);
-      for (let r = 0; r < 7; r++) for (let c = 0; c < 8; c++)
-        if (HEART[r][c] === '0') px(hx + c, hy + r, 3);
-    }
-    centerText(94, HISTORIA.subtitulo, 2);
-    if ((t / 30 | 0) % 2) centerText(118, "A = OTRA VEZ", 2);
+    pantallaCreditos(t);
     if (consumed('a') || consumed('start')) transicionar(() => { estado = 'titulo'; });
     pasoFade();
     requestAnimationFrame(loop); return;
   }
 
-  // --- Escena de juego ---
+  /* --- Escena de juego --- */
   const esFinal = (estado === 'final' || estado === 'dialogoFinal');
   const datosMes = HISTORIA.meses[mes];
-  const key = (esFinal || !datosMes) ? 'ciudad' : datosMes.escena;
-  (ESCENAS[key] || bgParque)(t);
+  const clave = (esFinal || !datosMes) ? 'ciudad' : datosMes.escena;
+  (ESCENAS[clave] || bgParque)(t);
+
+  const yPie = GROUND - 22;
+  const juntos = esFinal && jug.x >= 88;
 
   if (esFinal) {
-    const ps = SETS[HISTORIA.pareja][0];
-    drawSprite(ps, 108, GROUND - 16, true);
+    persona(HISTORIA.pareja, 108, yPie, true, false, t);
+    if (juntos) for (let i = 0; i < 3; i++)
+      corazon(96 + i * 8, yPie - 12 - (((t / 3 + i * 9) % 22) | 0), (t / 10 | 0) % 2);
   } else if (!corazonTomado) {
-    const hy = GROUND - 42 + Math.sin(t / 16) * 3;
-    drawSprite(HEART, 122, hy, false);
-  } else {
-    // flecha de salida
-    if ((t / 20 | 0) % 2) {
-      for (let i = 0; i < 6; i++) rect(146, GROUND - 30 + i, 6 - i, 1, 0);
-      rect(146, GROUND - 24, 8, 1, 0);
-    }
+    const hy = GROUND - 46 + (Math.sin(t / 16) * 3 | 0);
+    corazon(122, hy, (t / 14 | 0) % 2);
+    R(125, GROUND - 3, 2, 2, 'rgba(0,0,0,.15)');
+  } else if ((t / 20 | 0) % 2) {
+    for (let i = 0; i < 6; i++) R(146, GROUND - 34 + i, 6 - i, 1, '#fff3ae');
+    R(146, GROUND - 28, 9, 1, '#fff3ae');
+    for (let i = 0; i < 6; i++) R(147, GROUND - 33 + i, 5 - i, 1, '#e8a94c');
   }
 
-  // jugador
-  const set = SETS[HISTORIA.jugador];
-  const moviendo = (estado === 'juego' || estado === 'final') && (keys.left || keys.right);
-  const spr = moviendo && (t / 8 | 0) % 2 ? set[1] : set[0];
-  drawSprite(spr, Math.round(jug.x), GROUND - 16, jug.mirando < 0);
+  const caminando = (estado === 'juego' || estado === 'final') && (keys.left || keys.right);
+  persona(HISTORIA.jugador, jug.x, yPie, jug.mirando < 0, caminando, t);
 
-  // HUD
-  if (!esFinal) {
-    rect(4, 4, 52, 13, 3);
-    rect(4, 4, 52, 1, 0); rect(4, 16, 52, 1, 0);
-    rect(4, 4, 1, 13, 0); rect(55, 4, 1, 13, 0);
-    drawText(8, 7, "MES " + (mes + 1) + "/" + HISTORIA.meses.length, 0);
-  }
+  (FRENTES[clave] || frParque)(t);
+
+  if (!esFinal) hud(mes + 1, HISTORIA.meses.length);
 
   if (estado === 'juego' || estado === 'final') {
     if (keys.left)  { jug.x -= 0.9; jug.mirando = -1; }
@@ -670,7 +1193,7 @@ function loop() {
 
     if (estado === 'juego' && !corazonTomado && Math.abs(jug.x - 118) < 14) {
       corazonTomado = true;
-      abrirDialogo(HISTORIA.meses[mes].texto);
+      abrirDialogo(HISTORIA.meses[mes].texto, 'dialogo', HISTORIA.jugador);
     }
     if (estado === 'juego' && corazonTomado && jug.x >= 143) {
       transicionar(() => {
@@ -680,7 +1203,7 @@ function loop() {
       });
     }
     if (estado === 'final' && jug.x >= 92) {
-      abrirDialogo(HISTORIA.final, 'dialogoFinal');
+      abrirDialogo(HISTORIA.final, 'dialogoFinal', HISTORIA.jugador);
     }
   }
 
@@ -690,7 +1213,7 @@ function loop() {
       textTimer++;
       if (textTimer % 2 === 0) { revealed++; if (revealed % 3 === 0) blip(); }
     }
-    drawBox(pages, page, revealed, (t / 22 | 0) % 2);
+    drawBox(pages, page, revealed, (t / 22 | 0) % 2, hablante);
 
     if (consumed('a') || consumed('b')) {
       if (revealed < total) revealed = total;
@@ -702,9 +1225,7 @@ function loop() {
     }
   }
 
-  // transición (barrido)
   pasoFade();
-
   requestAnimationFrame(loop);
 }
 loop();
