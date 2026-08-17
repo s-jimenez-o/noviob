@@ -176,7 +176,52 @@ Y ya se van al aeropuerto juntos:
 
 6. **SANTIAGO:** PUERTO ESCONDIDO. NO LLEVÁBAMOS NI UN MES.
 
-## 10. Meses 2 al 6
+## 10. Ya en Puerto Escondido
+
+### En la playa
+
+1. **SANTIAGO:** LA ÚLTIMA VEZ QUE VINE A PUERTO ESCONDIDO LA PASÉ FATAL.
+2. **SANTIAGO:** ME DABA UN POCO DE PTSD VOLVER.
+3. **ROBERTO:** ESTA VEZ VIENES CONMIGO.
+
+### Los amigos de Roberto, junto al coche
+
+1. **LOS AMIGOS:** ONICHAN.
+2. **SANTIAGO:** ¿AY, LES GUSTA EL ANIME?
+3. (todo se vuelve japonés y les salen ojos enormes de anime)
+4. **LOS AMIGOS:** NO.
+5. (y todo vuelve a la normalidad)
+
+### La casa roja y el pescado
+
+1. **SANTIAGO:** SU CASA ESTÁ ENFRENTE DE LA PLAYA Y ES TODA ROJA.
+2. (llega el pescado frito completo; cara de asco, pero no dice nada)
+3. **SANTIAGO:** ...
+4. (faceswap: Santi con cabeza de pescado y el pescado con cara de Santi)
+5. **ROBERTO:** ¿QUÉ HACES?
+6. **SANTIAGO:** NADA.
+
+### Superestrella
+
+1. **ROBERTO:** PONLE SUPERESTRELLA.
+2. (los dos bailando encima de la mesa) · Cartel: **SUPERESTRELLA**
+
+### El love meter
+
+- **LOVE METER** · barras de **ROBERTO** y **SANTIAGO** · la de Santiago se sale de
+  la caja y explota · **SE ROMPIÓ**
+
+### La pregunta
+
+- **¿Y TÚ CÓMO ESTABAS?** · pista: **A = ESCOGER**
+- Si contesta dentro de la barra: **NO SEAS MENTIROSO.** / **OTRA VEZ.**
+- Sólo vale si saca el corazón fuera de la barra.
+
+### El aeropuerto de Puerto Escondido
+
+1. **SANTIAGO:** QUÉ BONITO QUE PUDE SANAR MIS HERIDAS.
+
+## 11. Meses 2 al 6
 
 - **MES 2** (`cine`) — MES 2. FUIMOS AL CINE. NO ME ACUERDO DE LA PELÍCULA.
 - **MES 3** (`lluvia`) — MES 3. NOS AGARRÓ LA LLUVIA SIN PARAGUAS Y NOS FUIMOS CAMINANDO.
@@ -184,12 +229,12 @@ Y ya se van al aeropuerto juntos:
 - **MES 5** (`casa`) — MES 5. DOMINGO ENTERO EN EL SILLÓN SIN HACER NADA.
 - **MES 6** (`cabana`) — MES 6. HOY. SEGUIMOS AQUÍ.
 
-## 11. Final y créditos
+## 12. Final y créditos
 
 - **SANTIAGO:** SEIS MESES. NADA MAL PARA ALGUIEN CUYO PLAN IDEAL ERA GOING OUT AND BLACKING OUT.
 - Créditos: **FELICES** · **6 MESES** · **SANTIAGO & ROBERTO** · **A = OTRA VEZ**
 
-## 12. Consola y selector
+## 13. Consola y selector
 
 - **REINICIAR**, **SONIDO: ON/OFF**, **ESCENAS**, **MES 1/6**
-- Selector (SELECT o botón ESCENAS): **IR A...** con 34 secciones, pie **A = IR    B = SALIR**
+- Selector (SELECT o botón ESCENAS): **IR A...** con 41 secciones, pie **A = IR    B = SALIR**
