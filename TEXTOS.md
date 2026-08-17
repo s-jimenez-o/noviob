@@ -22,21 +22,22 @@ Edita lo que quieras y mándamelo de vuelta. Reglas de la fuente:
 
 ## 3. Intro: cómo nos conocimos
 
-1. **SANTIAGO:** PS A VER QUÉ HAY.
+1. (saca el teléfono y abre la app)
 2. **SANTIAGO:** NO.
-3. **SANTIAGO:** QUÉ GUAPO.
-4. **SANTIAGO:** PLAN IDEAL: GOING OUT AND BLACKING OUT. VEINTIDÓS AÑOS.
-5. **SANTIAGO:** MATCH.
-6. **SANTIAGO:** LE VOY A ESCRIBIR:
-7. **SANTIAGO:** TENGO UN PLAN LOQUÍSIMO. ¿QUIERES IR A LANZAR HACHAS?
-8. **SANTIAGO:** LISTO. ENVIADO.
-9. **ROBERTO:** SÍ. ¿A QUÉ HORA?
-10. **SANTIAGO:** LE MANDO LA CAPTURA A LAS AMIGAS.
-11. **SANTIAGO:** MIREN LO QUE TIENE EN LA DESCRIPCIÓN.
-12. **SANTIAGO:** TENGO DATE CON ÉL EL SÁBADO.
-13. **LAS AMIGAS:** SOULMATES.
-14. **SANTIAGO:** ESTÁ RARO: CASI NO HEMOS HABLADO Y NI LO CONOZCO.
-15. **SANTIAGO:** PERO SIENTO QUE ALGO IMPORTANTE VA A PASAR CON ÉL.
+3. **SANTIAGO:** NO.
+4. **SANTIAGO:** QUÉ GUAPO.
+5. **SANTIAGO:** PLAN IDEAL: GOING OUT AND BLACKING OUT. VEINTIDÓS AÑOS.
+6. **SANTIAGO:** MATCH.
+7. **SANTIAGO:** HOLA. ¿SALIMOS EL SÁBADO?
+8. **SANTIAGO:** TENGO UN PLAN LOQUÍSIMO. ¿QUIERES IR A LANZAR HACHAS?
+9. **SANTIAGO:** LISTO. ENVIADO.
+10. **ROBERTO:** SÍ. ¿A QUÉ HORA?
+11. **SANTIAGO:** LE MANDO LA CAPTURA A LAS AMIGAS.
+12. **SANTIAGO:** MIREN LO QUE TIENE EN LA DESCRIPCIÓN.
+13. **SANTIAGO:** TENGO DATE CON ÉL EL SÁBADO.
+14. **LAS AMIGAS:** SOULMATES.
+15. **SANTIAGO:** ESTÁ RARO: CASI NO HEMOS HABLADO Y NI LO CONOZCO.
+16. **SANTIAGO:** PERO SIENTO QUE ALGO IMPORTANTE VA A PASAR CON ÉL.
 
 ### Mensajes del chat de la app
 
@@ -99,13 +100,12 @@ Avisos en pantalla: **ENTRAR** (para meterse al club) / **SEGUIR** (en los otros
 
 Avisos: **ESCOGE MESA** / **A = SENTARSE** · Cartel: **MÁS TARDE...**
 
-1. **SANTIAGO:** ESTÁ BONITO ESTE LUGAR.
-2. **ROBERTO:** A VER QUÉ HAY DE TOMAR.
-3. **MESERA:** HOLA, BUENAS NOCHES. ¿LES PUEDO TOM...
-4. **ROBERTO:** YA ÓRALE PUES NECIA, TRÁEME LA CAGUAMA.
-5. **SANTIAGO:** YO UNA CUBA, POR FAVOR.
-6. **SANTIAGO:** OYE, TENGO UN CUMPLEAÑOS. ¿ME ACOMPAÑAS?
-7. **ROBERTO:** VAMOS.
+1. **ROBERTO:** A VER QUÉ HAY DE TOMAR.
+2. **MESERA:** HOLA, BUENAS NOCHES. ¿LES PUEDO TOM...
+3. **ROBERTO:** YA ÓRALE PUES NECIA, TRÁEME LA CAGUAMA.
+4. **SANTIAGO:** YO UNA CUBA, POR FAVOR.
+5. **SANTIAGO:** OYE, TENGO UN CUMPLEAÑOS. ¿ME ACOMPAÑAS?
+6. **ROBERTO:** VAMOS.
 
 ### El cumpleaños en el lugar de drags
 
@@ -149,7 +149,7 @@ Prompt (los prompts ya no llevan nombre arriba):
 
 ### Si sí lo invita
 
-1. **ROBERTO:** ME VOY A PUERTO ESCONDIDO. VENTE CONMIGO.
+1. **ROBERTO:** ¿PUERTO ESCONDIDO?
 2. **SANTIAGO:** SIIII (EN LESBIANA)
 
 Cartel: **UNA SEMANA** / **DESPUÉS...**
@@ -212,13 +212,14 @@ La casa es abierta: pilares rojos en vez de pared, con la playa detrás.
 
 ### El love meter
 
+- Anuncio antes: **PARA ESE MOMENTO** / **EL LOVE METER DE** / **SANTIAGO ESTABA** / **ASÍ:**
 - **LOVE METER** · barras de **ROBERTO** y **SANTIAGO** · la de Santiago se sale de
   la caja y explota · **SE ROMPIÓ**
 
 ### La pregunta
 
-- **¿Y TÚ CÓMO ESTABAS?** · pista: **A = ESCOGER**
-- Si contesta dentro de la barra: **NO SEAS MENTIROSO.** / **OTRA VEZ.**
+- **¿Y PARA TI?** · pista: **A = ESCOGER**
+- Si contesta dentro de la barra: **MENTIROSO.** / **OTRA VEZ.**
 - Sólo vale si saca el corazón fuera de la barra.
 
 ### El aeropuerto de Puerto Escondido
@@ -240,5 +241,5 @@ La casa es abierta: pilares rojos en vez de pared, con la playa detrás.
 
 ## 13. Consola y selector
 
-- **REINICIAR**, **SONIDO: ON/OFF**, **ESCENAS**, **MES 1/6**
+- **REINICIAR**, **SONIDO: ON/OFF**, **ESCENAS**, **MES 2/6** (el contador sale a partir del mes 2)
 - Selector (SELECT o botón ESCENAS): **IR A...** con 43 secciones, pie **A = IR    B = SALIR**

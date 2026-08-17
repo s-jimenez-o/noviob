@@ -736,6 +736,7 @@ function bailando(quien, x, y, t, tipo) {
   sombraPiso(Math.round(x) + 8, y + 30);
   drawSprite(mueve ? p.paso : p.quieto, Math.round(x + dx), y + dy, false, p.color);
   if (capa) drawSprite(capa, Math.round(x + dx), y + dy, false, p.color);
+  if (cangurera && quien === 'santiago') pintaCangurera(Math.round(x + dx), y + dy, false);
   for (let i = 0; i < 3; i++) {
     const a = ((t / 3 | 0) + i * 7) % 24;
     if (a < 12) drawText(x - 4 + i * 11, y - 4 - a, NOTAS[i], i % 2 ? '#ffe08a' : '#7ee8fa');
@@ -2315,6 +2316,17 @@ const CUADROS = {
     bgCuarto(tt); velo();
     telefono((sx, sy, sw, sh) => appWA(sx, sy, sw, sh, a.n, tt), tt);
   },
+  saca: (tt) => {
+    bgCuarto(tt);
+    const p = Math.min(1, tt / 28);
+    persona('santiago', 46, GROUND - 30, false, false, tt);
+    frCuarto(tt);
+    velo(.5 * p);
+    const guardado = CEL.y;
+    CEL.y = guardado + Math.round((1 - p) * (1 - p) * 150);
+    telefono((sx, sy, sw, sh) => appMatch(sx, sy, sw, sh, PERFILES[0], 0, 0, tt), tt);
+    CEL.y = guardado;
+  },
   guarda: (tt) => {
     bgCuarto(tt);
     const p = Math.min(1, tt / 22);
@@ -2367,7 +2379,8 @@ const CUADROS = {
 };
 
 const INTRO = [
-  { e:'perfil',  a:{i:0}, q:'santiago', t:'PS A VER QUÉ HAY.' },
+  { e:'saca',    a:{}, dur:36 },
+  { e:'perfil',  a:{i:0}, q:'santiago', t:'NO.' },
   { e:'desliza', a:{i:0, d:-1}, dur:22 },
   { e:'perfil',  a:{i:1}, q:'santiago', t:'NO.' },
   { e:'desliza', a:{i:1, d:-1}, dur:22 },
@@ -2375,7 +2388,7 @@ const INTRO = [
   { e:'perfil',  a:{i:2}, q:'santiago', t:'PLAN IDEAL: GOING OUT AND BLACKING OUT. VEINTIDÓS AÑOS.' },
   { e:'desliza', a:{i:2, d:1},  dur:24 },
   { e:'match',   a:{}, q:'santiago', t:'MATCH.' },
-  { e:'chat',    a:{n:1}, q:'santiago', t:'LE VOY A ESCRIBIR:' },
+  { e:'chat',    a:{n:1}, q:'santiago', t:'HOLA. ¿SALIMOS EL SÁBADO?' },
   { e:'chat',    a:{n:2}, q:'santiago', t:'TENGO UN PLAN LOQUÍSIMO. ¿QUIERES IR A LANZAR HACHAS?' },
   { e:'chat',    a:{n:2}, q:'santiago', t:'LISTO. ENVIADO.' },
   { e:'chat',    a:{n:4}, q:'roberto',  t:'SÍ. ¿A QUÉ HORA?' },
@@ -2480,6 +2493,7 @@ const CUADROS_NOCHE = {
     const s = PERSONAJES.santiago, r = PERSONAJES.roberto;
     sombraPiso(68 + j + 8, GROUND); sombraPiso(88 - j + 8, GROUND);
     drawSprite(s.quieto, Math.round(68 + j), GROUND - 30, false, s.color);
+    if (cangurera) pintaCangurera(Math.round(68 + j), GROUND - 30, false);
     drawSprite(r.quieto, Math.round(88 - j), GROUND - 30, true, r.color);
     if (ya || tt > 24) {
       corazon(76, GROUND - 44 - ((tt / 2) % 14 | 0), (tt / 6 | 0) % 2);
@@ -2495,7 +2509,6 @@ const CUADROS_NOCHE = {
 };
 
 const NOCHE = [
-  { e:'mesa', a:{}, q:'santiago', t:'ESTÁ BONITO ESTE LUGAR.' },
   { e:'mesa', a:{}, q:'roberto',  t:'A VER QUÉ HAY DE TOMAR.' },
   { e:'llegaMesera', a:{}, dur:34 },
   { e:'conMesera', a:{}, q:'mesera',  t:'HOLA, BUENAS NOCHES. ¿LES PUEDO TOM...' },
@@ -2705,6 +2718,20 @@ Object.assign(CUADROS, {
       R(nx, ny, 2, 5, '#ffe9a8'); R(nx - 2, ny + 4, 4, 2, '#ffe9a8');
     }
   },
+  anuncioAmor: (tt) => {
+    vgrad(0, 0, 160, 144, ['#2a1140','#3a1a55','#4a2168']);
+    for (let i = 0; i < 22; i++) P((i * 53) % 160, (i * 37 + (tt / 3 | 0)) % 144, 'rgba(255,255,255,.10)');
+    R(10, 40, 142, 64, 'rgba(10,4,24,.45)');
+    R(8, 38, 142, 64, '#f6efdc');
+    R(8, 38, 142, 1, '#241a3c'); R(8, 101, 142, 1, '#241a3c');
+    R(8, 38, 1, 64, '#241a3c'); R(149, 38, 1, 64, '#241a3c');
+    R(9, 39, 140, 1, '#ffffff');
+    if (tt > 6)  centerText(48, 'PARA ESE MOMENTO', '#5c4a6a', null);
+    if (tt > 20) centerText(62, 'EL LOVE METER DE', '#5c4a6a', null);
+    if (tt > 32) centerText(74, 'SANTIAGO ESTABA', '#5c4a6a', null);
+    if (tt > 44) drawTextS(72, 88, 'ASÍ:', '#8a2f78', 'rgba(0,0,0,.15)');
+    if (tt > 44 && (tt / 8 | 0) % 2) corazon(58, 87, true);
+  },
   lovemeter: (tt) => {
     vgrad(0, 0, 160, 144, ['#2a1140','#3a1a55','#4a2168']);
     for (let i = 0; i < 22; i++) P((i * 53) % 160, (i * 37 + (tt / 3 | 0)) % 144, 'rgba(255,255,255,.10)');
@@ -2768,7 +2795,7 @@ const AVION_MALO = [
 
 /* Si sí lo invita: se adelanta la semana y arranca el viaje. */
 const PUERTO = [
-  { e:'sofa', a:{manos:true}, q:'roberto',  t:'ME VOY A PUERTO ESCONDIDO. VENTE CONMIGO.' },
+  { e:'sofa', a:{manos:true}, q:'roberto',  t:'¿PUERTO ESCONDIDO?' },
   { e:'sofa', a:{manos:true}, q:'santiago', t:'SIIII (EN LESBIANA)' },
   { e:'semana', a:{}, dur:74 }
 ];
@@ -2819,6 +2846,7 @@ const PUERTO2 = [
   { e:'mesaBaile', a:{}, q:'roberto', t:'PONLE SUPERESTRELLA.' },
   { e:'mesaBaile', a:{}, dur:124 },
   /* y el medidor se rompe */
+  { e:'anuncioAmor', a:{}, dur:84 },
   { e:'lovemeter', a:{}, dur:106 }
 ];
 
@@ -3209,7 +3237,7 @@ function pantallaMedidor(t) {
   R(6, 20, 144, 12, '#d9366a'); R(6, 20, 144, 1, '#ff88a8');
   R(6, 20, 144, 1, '#241a3c'); R(6, 97, 144, 1, '#241a3c');
   R(6, 20, 1, 78, '#241a3c'); R(149, 20, 1, 78, '#241a3c');
-  centerText(23, '¿Y TÚ CÓMO ESTABAS?', '#ffffff', 'rgba(0,0,0,.4)');
+  centerText(23, '¿Y PARA TI?', '#ffffff', 'rgba(0,0,0,.4)');
   R(15, 52, 102, 14, '#3a2f48'); R(16, 53, 100, 12, '#2a2035');
   for (let i = 0; i < 96; i += 4) R(18 + i, 55, 3, 8, i > 76 ? '#ff5a7a' : '#ff8fa3');
   R(116, 48, 1, 22, '#241a3c');
@@ -3220,8 +3248,8 @@ function pantallaMedidor(t) {
   if (fuera) for (let i = 0; i < 3; i++)
     if (((t / 5 | 0) + i) % 3) destello(mx - 4 + i * 6, 32 + (i % 2) * 5, i % 2 ? '#ffe9a8' : '#ffffff');
   if (medMsg > 0) {
-    centerText(74, 'NO SEAS MENTIROSO.', '#c9382f', null);
-    centerText(84, 'OTRA VEZ.', '#c9382f', null);
+    centerText(74, 'MENTIROSO.', '#c9382f', null);
+    centerText(85, 'OTRA VEZ.', '#8a7a68', null);
   } else if ((t / 22 | 0) % 2) {
     const txt = 'A = ESCOGER', x0 = Math.round((160 - (textW(txt) + 16)) / 2);
     flechita(x0, 79, -1, '#8a7a68'); flechita(x0 + 6, 79, 1, '#8a7a68');
@@ -3397,9 +3425,9 @@ const SALTOS = [
   { n:'¿LO INVITAS?',     f:() => { menuPuerto(); } },
   { n:'EL AVIÓN (MALO)',  f:() => { maleta = false; correrGuion(AVION_MALO, () => { estado = 'explotado'; }); } },
   { n:'ME LO LLEVO',      f:() => { cangurera = true; correrGuion(PUERTO, empezarMaleta); } },
-  { n:'LA MALETA',        f:() => { cangurera = true; empezarMaleta(); } },
-  { n:'EL VIAJE',         f:() => { cangurera = true; maleta = true; correrGuion(VIAJE, finViaje); } },
-  { n:'LLEGO POR ÉL',     f:() => { cangurera = true; maleta = true; irGuion(VIAJE, 6, finViaje); } },
+  { n:'LA MALETA',        f:() => { empezarMaleta(); } },
+  { n:'EL VIAJE',         f:() => { cangurera = false; maleta = true; correrGuion(VIAJE, finViaje); } },
+  { n:'LLEGO POR ÉL',     f:() => { cangurera = false; maleta = true; irGuion(VIAJE, 6, finViaje); } },
   { n:'LA PLAYA',         f:() => { maleta = false; correrGuion(PUERTO2, empezarMedidor); } },
   { n:'ONICHAN',          f:() => { maleta = false; irGuion(PUERTO2, 3, empezarMedidor); } },
   { n:'SE SUBEN AL COCHE', f:() => { maleta = false; irGuion(PUERTO2, 9, empezarMedidor); } },
@@ -3508,7 +3536,7 @@ function finActo() {
 function finBeso() { correrGuion(CASA, () => correrGuion(AMIGO, menuPuerto)); }
 /* Una semana después: se despierta y no sale del cuarto sin la maleta */
 function empezarMaleta() {
-  cuartoNoche = false; maleta = false;
+  cuartoNoche = false; maleta = false; cangurera = false;
   jug.x = 64; jug.mirando = -1;
   abrirCharla([{ q:'santiago', t:'PUES YA NOS VAMOS A CASA DE ROBERTO.' }], 'dialogo', 'maleta');
 }
@@ -3784,7 +3812,7 @@ function loop() {
 
   (FRENTES[clave] || frParque)(t);
 
-  if (!esFinal) hud(mes + 1, HISTORIA.meses.length);
+  if (!esFinal && mes > 0) hud(mes + 1, HISTORIA.meses.length);
 
   if (estado === 'juego' || estado === 'final') {
     if (keys.left)  { jug.x -= 0.9; jug.mirando = -1; }
