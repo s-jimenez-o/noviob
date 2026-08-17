@@ -150,8 +150,7 @@ Prompt (los prompts ya no llevan nombre arriba):
 ### Si sí lo invita
 
 1. **ROBERTO:** ME VOY A PUERTO ESCONDIDO. VENTE CONMIGO.
-2. **SANTIAGO:** ¿ESTÁS HABLANDO EN SERIO?
-3. **ROBERTO:** MUY EN SERIO.
+2. **SANTIAGO:** SIIII (EN LESBIANA)
 
 Cartel: **UNA SEMANA** / **DESPUÉS...**
 
