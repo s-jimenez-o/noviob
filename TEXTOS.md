@@ -22,36 +22,37 @@ Edita lo que quieras y mándamelo de vuelta. Reglas de la fuente:
 
 ## 3. Intro: cómo nos conocimos
 
-1. (saca el teléfono y abre la app)
-2. **SANTIAGO:** NO.
+1. **SANTIAGO:** A VER QUÉ HAY.
+2. (saca el teléfono y abre la app)
 3. **SANTIAGO:** NO.
-4. **SANTIAGO:** QUÉ GUAPO.
-5. **SANTIAGO:** PLAN IDEAL: GOING OUT AND BLACKING OUT. VEINTIDÓS AÑOS.
-6. **SANTIAGO:** MATCH.
-7. **SANTIAGO:** HOLA. ¿SALIMOS EL SÁBADO?
-8. **SANTIAGO:** TENGO UN PLAN LOQUÍSIMO. ¿QUIERES IR A LANZAR HACHAS?
-9. **SANTIAGO:** LISTO. ENVIADO.
-10. **ROBERTO:** SÍ. ¿A QUÉ HORA?
-11. **SANTIAGO:** LE MANDO LA CAPTURA A LAS AMIGAS.
-12. **SANTIAGO:** MIREN LO QUE TIENE EN LA DESCRIPCIÓN.
-13. **SANTIAGO:** TENGO DATE CON ÉL EL SÁBADO.
+4. **SANTIAGO:** NO.
+5. **SANTIAGO:** QUÉ GUAPO.
+6. **SANTIAGO:** PLAN IDEAL: GOING OUT AND BLACKING OUT. VEINTIDÓS AÑOS.
+7. **SANTIAGO:** MATCH.
+8. **SANTIAGO:** HOLA. ¿SALIMOS EL SÁBADO?
+9. **SANTIAGO:** TENGO UN PLAN LOQUÍSIMO. ¿QUIERES IR A LANZAR HACHAS?
+10. **SANTIAGO:** LISTO. ENVIADO.
+11. **ROBERTO:** SÍ. ¿A QUÉ HORA?
+12. **SANTIAGO:** LE MANDO LA CAPTURA A LAS AMIGAS.
+13. **SANTIAGO:** MIREN LO QUE TIENE EN LA DESCRIPCIÓN.
 14. **LAS AMIGAS:** SOULMATES.
-15. **SANTIAGO:** ESTÁ RARO: CASI NO HEMOS HABLADO Y NI LO CONOZCO.
-16. **SANTIAGO:** PERO SIENTO QUE ALGO IMPORTANTE VA A PASAR CON ÉL.
+15. **SANTIAGO:** TENGO DATE CON ÉL EL SÁBADO.
+16. **SANTIAGO:** ESTÁ RARO: CASI NO HEMOS HABLADO Y NI LO CONOZCO.
+17. **SANTIAGO:** PERO SIENTO QUE ALGO IMPORTANTE VA A PASAR CON ÉL.
 
 ### Mensajes del chat de la app
 
 - **SANTIAGO:** HOLA. ¿SALIMOS EL SÁBADO?
 - **SANTIAGO:** TENGO UN PLAN LOQUÍSIMO. ¿QUIERES IR A LANZAR HACHAS?
 - **ROBERTO:** SÍ. ¿A QUÉ HORA?
-- **ROBERTO:** 4 PM
+- **ROBERTO:** 3 PM
 
 ### Grupo de WhatsApp (**LAS AMIGAS**)
 
 - **[FOTO]:** (captura de la ficha de Roberto)
 - **SANTIAGO:** PLAN IDEAL? GOING OUT AND BLACKING OUT
-- **SANTIAGO:** TENGO DATE CON ÉL EL SÁBADO
 - **LAS AMIGAS:** * SOULMATES *
+- **SANTIAGO:** TENGO DATE CON ÉL EL SÁBADO
 - **SANTIAGO:** ESTÁ RARO. CASI NO HEMOS HABLADO
 - **SANTIAGO:** PERO SIENTO QUE ALGO IMPORTANTE VA A PASAR CON ÉL
 
@@ -71,7 +72,7 @@ Otros: **MATCH**, **¡ES MATCH!**, **ESCRÍBELE**
 ## 5. Roberto esperando en el club
 
 1. **ROBERTO:** TRES EN PUNTO. LLEGUÉ TEMPRANO.
-2. Cartel a pantalla completa (el de Bob Esponja): **ONE** / **ETERNITY** / **LATER**
+2. Cartel a pantalla completa (el de Bob Esponja): **ONE** / **ETERNITY** / **LATER** — se queda hasta que le piquen a A
 3. **ROBERTO:** TRES Y VEINTE.
 4. **SANTIAGO:** VOY TARDÍSIMO. PERDÓN.
 5. **SANTIAGO:** PERO TE JURO QUE VALGO LA PENA.
@@ -98,7 +99,7 @@ Avisos en pantalla: **ENTRAR** (para meterse al club) / **SEGUIR** (en los otros
 
 ### Adentro del club
 
-Avisos: **ESCOGE MESA** / **A = SENTARSE** · Cartel: **MÁS TARDE...**
+Avisos: **ESCOGE MESA** / **A = SENTARSE** · Cartel: **MÁS TARDE...** / **Y NINGUNA HACHA LANZADA.**
 
 1. **ROBERTO:** A VER QUÉ HAY DE TOMAR.
 2. **MESERA:** HOLA, BUENAS NOCHES. ¿LES PUEDO TOM...
@@ -213,8 +214,8 @@ La casa es abierta: pilares rojos en vez de pared, con la playa detrás.
 ### El love meter
 
 - Anuncio antes: **PARA ESE MOMENTO** / **EL LOVE METER DE** / **SANTIAGO ESTABA** / **ASÍ:**
-- **LOVE METER** · barras de **ROBERTO** y **SANTIAGO** · la de Santiago se sale de
-  la caja y explota · **SE ROMPIÓ**
+- **LOVE METER** · sólo sale la barra de **SANTIAGO**: se llena, se sale de la caja
+  y explota · **SE ROMPIÓ**
 
 ### La pregunta
 
