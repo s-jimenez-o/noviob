@@ -322,10 +322,8 @@ const HISTORIA = {
 
   meses: [
     { escena:"patio", pareja:104, acto:true, charla:[
-      { q:"roberto",  t:"HOLA. OYE... QUÉ HORROR LA CANGURERA." },
-      { q:"santiago", t:"ES VERDE NEÓN. FUE A PROPÓSITO." },
-      { q:"roberto",  t:"PEOR." },
-      { q:"santiago", t:"MES 1. PRIMERA CITA EN EL CLUB DEL PATIO ROMA." }
+      { q:"roberto",  t:"HOLA. ¿ENTRAMOS?" },
+      { q:"roberto",  t:"(QUÉ FEA CANGURERA.)" }
     ]},
     { escena:"cine",   texto:"MES 2. FUIMOS AL CINE. NO ME ACUERDO DE LA PELÍCULA." },
     { escena:"lluvia", texto:"MES 3. NOS AGARRÓ LA LLUVIA SIN PARAGUAS Y NOS FUIMOS CAMINANDO." },
@@ -461,6 +459,23 @@ function drawTextS(x, y, str, c, sombra) {
   drawText(x, y, str, c);
 }
 function textW(s) { return (s || '').length * 6 - 1; }
+/* El mismo tipo de letra pero a lo grande, para los carteles */
+function drawTextG(x, y, str, c, esc) {
+  str = (str || '').toUpperCase();
+  ctx.fillStyle = c;
+  for (let i = 0; i < str.length; i++) {
+    const rows = glyph(str[i]);
+    for (let r = 0; r < 7; r++)
+      for (let col = 0; col < 5; col++)
+        if ((rows[r] >> (4 - col)) & 1)
+          ctx.fillRect((x + i * 6 * esc + col * esc)|0, (y + r * esc)|0, esc, esc);
+  }
+}
+function centerTextG(y, s, c, sombra, esc) {
+  const x = Math.round((160 - (s.length * 6 * esc - esc)) / 2);
+  if (sombra) drawTextG(x + esc, y + esc, s, sombra, esc);
+  drawTextG(x, y, s, c, esc);
+}
 function centerText(y, s, c, sombra) { drawTextS(Math.round((160 - textW(s)) / 2), y, s, c, sombra); }
 
 
@@ -731,6 +746,7 @@ function drawSpriteEsc(spr, x, y, flip, map, e) {
 
 /* La cangurera verde neón: temporal, solo la trae en la primera cita */
 let cangurera = false;
+let maleta = false;
 function pintaCangurera(x, y, flip) {
   R(x + 1, y + 19, 14, 4, '#5cff3a');
   R(x + 1, y + 19, 14, 1, '#b6ff9e');
@@ -742,6 +758,18 @@ function pintaCangurera(x, y, flip) {
   R(bx + 1, y + 20, 3, 1, '#0d3d06');
 }
 
+/* La maleta, en la mano de Santi */
+function pintaMaleta(x, y, flip) {
+  const bx = x + (flip ? -6 : 12);
+  R(bx, y + 19, 10, 9, '#8a4a2c');
+  R(bx, y + 19, 10, 1, '#b06a44');
+  R(bx, y + 22, 10, 1, '#5c2f18');
+  R(bx, y + 27, 10, 1, '#4a2412');
+  R(bx + 3, y + 16, 4, 3, '#5c2f18');
+  R(bx + 4, y + 17, 2, 2, '#c8a070');
+  R(bx + 7, y + 24, 2, 2, '#e8c060');
+}
+
 /* Dibuja a un personaje con su sombra en el piso */
 function persona(quien, x, y, flip, caminando, t) {
   const p = PERSONAJES[quien] || PERSONAJES.santiago;
@@ -749,6 +777,7 @@ function persona(quien, x, y, flip, caminando, t) {
   const spr = (caminando && (t / 7 | 0) % 2) ? p.paso : p.quieto;
   drawSprite(spr, Math.round(x), y, flip, p.color);
   if (cangurera && quien === 'santiago') pintaCangurera(Math.round(x), y, flip);
+  if (maleta && quien === 'santiago') pintaMaleta(Math.round(x), y, flip);
 }
 function busto(cab, tor) { return cab.concat(tor.slice(0, 1)); }
 
@@ -1655,7 +1684,7 @@ function coche(cx, cy, t, parado, vacio) {
 }
 
 function fondoViaje(tema, t) {
-  const s = t * 2.2;
+  const s = t * 1.35;
   if (tema === 'ciudad') {
     vgrad(0, 0, 160, VIA_H, ['#f7c86a','#f0a066','#d9707e','#8a4a7a']);
     disco(122, 76, 15, 'rgba(255,233,168,.35)');
@@ -1825,6 +1854,34 @@ function bgCasaR(t) {
   vgrad(0, GROUND, 160, 144 - GROUND, ['#6a6474','#5e5866','#514c5a']);
   R(0, GROUND, 160, 1, '#8a8296');
   for (let x = 6; x < 160; x += 34) R(x, 136, 18, 2, 'rgba(255,255,255,.35)');
+}
+
+/* ---- 16. LA TARJETA DE "ONE ETERNITY LATER" ---- */
+function fondoTiki(t) {
+  const cols = ['#e8a648','#d9c07a','#8fae3c','#f2d89a','#c98f3a','#a8c45a','#e0b45c','#7fa235'];
+  R(0, 0, 160, 144, '#f6e6c0');
+  for (let gy = 0; gy < 5; gy++) for (let gx = 0; gx < 6; gx++) {
+    const i = gx * 5 + gy * 3;
+    const x = gx * 27 + 1, y = gy * 29 + 1, w = 25, h = 27;
+    R(x, y, w, h, cols[i % cols.length]);
+    R(x, y, w, 1, 'rgba(255,255,255,.22)');
+    const m = (gx * 7 + gy * 11) % 4;
+    if (m === 0) {
+      for (let k = 0; k < 4; k++)
+        elipse(x + 3 + (k % 2) * 19, y + 4 + (k > 1 ? 19 : 0), 7, 7, '#faf0d4');
+    } else if (m === 1) {
+      for (let k = 0; k < 4; k++) for (let px = 0; px < w; px++)
+        P(x + px, y + 5 + k * 7 + Math.round(Math.sin(px / 3 + k) * 2), '#faf0d4');
+    } else if (m === 2) {
+      R(x + 3, y + 4, w - 6, h - 8, '#faf0d4');
+      R(x + 6, y + 7, w - 12, h - 14, cols[(i + 3) % cols.length]);
+      R(x + 10, y + 11, w - 20, h - 22, '#faf0d4');
+    } else {
+      for (let k = 0; k < 5; k++) for (let px = 0; px < w; px++)
+        P(x + px, y + 3 + k * 5 + (px % 6 < 3 ? px % 3 : 2 - (px % 3)), '#faf0d4');
+    }
+  }
+  for (let i = 0; i < 40; i++) P((i * 53) % 160, (i * 37) % 144, 'rgba(255,255,255,.12)');
 }
 
 const ESCENAS = { patio:bgPatio, cuarto:bgCuarto, interior:bgInterior, drags:bgDrags,
@@ -2059,6 +2116,14 @@ const CUADROS = {
     frCuarto(tt);
   },
 
+  eternidad: (tt) => {
+    fondoTiki(tt);
+    const w = (tt / 5 | 0) % 2;
+    centerTextG(20 + w, 'ONE', '#12234c', 'rgba(255,255,255,.30)', 3);
+    centerTextG(56, 'ETERNITY', '#12234c', 'rgba(255,255,255,.30)', 3);
+    centerTextG(94 + w, 'LATER', '#12234c', 'rgba(255,255,255,.30)', 3);
+  },
+
   /* --- Roberto esperando en el club --- */
   esperaPatio: (tt) => {
     bgPatio(tt);
@@ -2115,6 +2180,7 @@ const INTRO = [
 /* Roberto llegó temprano y lleva un rato ahí parado */
 const ESPERA = [
   { e:'esperaPatio', a:{}, q:'roberto', t:'TRES EN PUNTO. LLEGUÉ TEMPRANO.' },
+  { e:'eternidad',   a:{}, dur:86 },
   { e:'esperaReloj', a:{}, q:'roberto', t:'TRES Y VEINTE.' },
   { e:'esperaBuzz',  a:{}, dur:26 },
   { e:'esperaChat',  a:{n:1}, q:'santiago', t:'VOY TARDÍSIMO. PERDÓN.' },
@@ -2223,7 +2289,7 @@ const NOCHE = [
   { e:'llegaMesera', a:{}, dur:34 },
   { e:'conMesera', a:{}, q:'mesera',  t:'HOLA, BUENAS NOCHES. ¿LES PUEDO TOM...' },
   { e:'conMesera', a:{}, q:'roberto', t:'YA ÓRALE PUES NECIA, TRÁEME LA CAGUAMA.' },
-  { e:'conMesera', a:{}, q:'santiago', t:'PERDÓNALO. YO UNA IGUAL, POR FAVOR.' },
+  { e:'conMesera', a:{}, q:'santiago', t:'YO UNA CUBA, POR FAVOR.' },
   { e:'anochece', a:{}, dur:70 },
   { e:'mesa', a:{carta:false}, q:'santiago', t:'OYE, TENGO UN CUMPLEAÑOS. ¿ME ACOMPAÑAS?' },
   { e:'mesa', a:{carta:false}, q:'roberto',  t:'VAMOS.' },
@@ -2247,7 +2313,7 @@ Object.assign(CUADROS, CUADROS_NOCHE);
 /* ---- De vuelta en casa, la casa del amigo, y Puerto Escondido ---- */
 const MSG_CASA = [
   { mio:true,  t:'GRACIAS POR HOY' },
-  { mio:true,  t:'¿VIENES A CASA DE UN AMIGO EL VIERNES?' },
+  { mio:true,  t:'¿VIENES A CASA DE UN AMIGO EL SÁBADO?' },
   { mio:false, t:'AHÍ ESTARÉ' }
 ];
 function sentadosAmigo(t, juntos) {
@@ -2287,7 +2353,7 @@ Object.assign(CUADROS, {
   aeroSolo: (tt) => {
     bgAero(tt);
     const x = Math.min(6 + tt * 1.1, 130);
-    persona('santiago', x, GROUND - 30, false, x < 130, tt);
+    persona('roberto', x, GROUND - 30, false, x < 130, tt);
     frAero(tt);
   },
   vuelo: (tt) => {
@@ -2312,10 +2378,11 @@ Object.assign(CUADROS, {
   },
   viaje: (tt, a) => {
     fondoViaje(a.tema, tt);
-    coche(52, 90, tt);
+    const cx = a.para ? Math.min(52, -64 + tt * 1.7) : -64 + tt * 2.2;
+    coche(cx, 90, tt);
     if (a.tema === 'mar') for (let i = 0; i < 4; i++) {
       const b = ((tt * 1.6 + i * 9) % 34);
-      R(50 - b * 0.7, 104 - b, 2, 2, 'rgba(210,245,255,.55)');
+      R(cx - 2 - b * 0.7, 104 - b, 2, 2, 'rgba(210,245,255,.55)');
     }
     if (a.r) rotulo(a.r);
   },
@@ -2324,7 +2391,7 @@ Object.assign(CUADROS, {
     persona('roberto', 108, GROUND - 30, true, false, tt);
     if (a.ve) {
       coche(2, GROUND - 27, tt, true, true);
-      persona('santiago', 64, GROUND - 30, false, false, tt);
+      persona('santiago', 62, GROUND - 30, false, false, tt);
       for (let i = 0; i < 3; i++)
         corazon(80 + i * 8, GROUND - 34 - (((tt / 3 + i * 8) % 22) | 0), (tt / 9 | 0) % 2);
     } else {
@@ -2358,20 +2425,20 @@ const CASA = [
   { e:'casaChat', a:{n:0}, q:'santiago', hacer:() => { cuartoNoche = true; },
     t:'TODAVÍA TRAIGO LA CANGURERA PUESTA Y AUN ASÍ SE ME CAYÓ TODO.' },
   { e:'casaChat', a:{n:1}, q:'santiago', t:'GRACIAS POR HOY.' },
-  { e:'casaChat', a:{n:2}, q:'santiago', t:'¿VIENES A CASA DE UN AMIGO EL VIERNES?' },
+  { e:'casaChat', a:{n:2}, q:'santiago', t:'¿VIENES A CASA DE UN AMIGO EL SÁBADO?' },
   { e:'casaChat', a:{n:3}, q:'roberto',  t:'AHÍ ESTARÉ.' }
 ];
 
 const AMIGO = [
   { e:'sofa',  a:{}, q:'santiago', hacer:() => { cuartoNoche = false; },
-    t:'VIERNES. CASA DE UN AMIGO, EN LA MESA DE LA COCINA.' },
+    t:'SÁBADO. CASA DE UN AMIGO, EN LA MESA DEL COMEDOR.' },
   { e:'manos', a:{}, dur:70 },
   { e:'sofa',  a:{manos:true}, q:'santiago', t:'LLEVAMOS UNA HORA ASÍ Y NO ME QUIERO MOVER.' }
 ];
 
 /* Si Roberto se queda callado */
 const AVION_MALO = [
-  { e:'aeroSolo', a:{}, q:'santiago', t:'ME VOY SOLO A PUERTO ESCONDIDO. TAMPOCO PASA NADA.' },
+  { e:'aeroSolo', a:{}, q:'roberto', t:'ME VOY SOLO A PUERTO ESCONDIDO. TAMPOCO PASA NADA.' },
   { e:'vuelo',    a:{}, dur:40 },
   { e:'boom',     a:{}, dur:56 }
 ];
@@ -2381,14 +2448,19 @@ const PUERTO = [
   { e:'sofa', a:{manos:true}, q:'roberto',  t:'ME VOY A PUERTO ESCONDIDO. VENTE CONMIGO.' },
   { e:'sofa', a:{manos:true}, q:'santiago', t:'¿ESTÁS HABLANDO EN SERIO?' },
   { e:'sofa', a:{manos:true}, q:'roberto',  t:'MUY EN SERIO.' },
-  { e:'semana', a:{}, dur:66 },
-  { e:'viaje', a:{tema:'ciudad',    r:'LA CIUDAD' },        dur:66 },
-  { e:'viaje', a:{tema:'carretera', r:'LA CARRETERA' },     dur:66 },
-  { e:'viaje', a:{tema:'desierto',  r:'EL DESIERTO' },      dur:66 },
-  { e:'viaje', a:{tema:'antartida', r:'LA ANTÁRTIDA' },     dur:66 },
-  { e:'viaje', a:{tema:'mar',       r:'EL FONDO DEL MAR' }, dur:66 },
-  { e:'viaje', a:{tema:'mar'}, q:'santiago', t:'¿PODRÉ HACER ESTO PARA SIEMPRE?' },
-  { e:'llegada', a:{}, dur:80 },
+  { e:'semana', a:{}, dur:74 }
+];
+
+/* Ese día, ya con la maleta en la mano: el viaje hasta Zona Esmeralda
+   y de ahí a Puerto Escondido */
+const VIAJE = [
+  { e:'viaje', a:{tema:'ciudad',    r:'LA CIUDAD' },        dur:106 },
+  { e:'viaje', a:{tema:'carretera', r:'LA CARRETERA' },     dur:106 },
+  { e:'viaje', a:{tema:'desierto',  r:'EL DESIERTO' },      dur:106 },
+  { e:'viaje', a:{tema:'antartida', r:'LA ANTÁRTIDA' },     dur:106 },
+  { e:'viaje', a:{tema:'mar', r:'EL FONDO DEL MAR', para:true }, dur:106 },
+  { e:'viaje', a:{tema:'mar', para:true}, q:'santiago', t:'¿PODRÉ HACER ESTO PARA SIEMPRE?' },
+  { e:'llegada', a:{}, dur:96 },
   { e:'llegada', a:{ve:true}, q:'santiago', t:'SÍ. SÍ PODRÍA.' },
   { e:'aeroJuntos', a:{}, dur:70 },
   { e:'vueloBien',  a:{}, dur:60 },
@@ -2607,7 +2679,7 @@ function reiniciar() {
   baileTipo = 'salsa'; baileT = 0; interiorNoche = false; mesaElegida = 1;
   saltoSel = 0; saltoTop = 0; saltoVuelve = 'titulo'; repite = 0;
   mes = 0; jug.x = 6; jug.mirando = 1;
-  corazonTomado = false; cangurera = false;
+  corazonTomado = false; cangurera = false; maleta = false; cuartoNoche = false;
   charla = []; charlaIdx = 0; pages = []; page = 0; revealed = 0; textTimer = 0;
   fade = 0; fadeDir = 0; pendiente = null;
   for (const k in keys) keys[k] = false;
@@ -2863,6 +2935,22 @@ function cangureraSuelo(x, y, t) {
     if (a < 7) destello(x - 1 + i * 5, y + b - 4 - (a >> 1), i % 2 ? '#b6ff9e' : '#ffffff');
   }
 }
+/* La maleta esperando junto a la cama, una semana después */
+const MAL_X = 24, MAL_Y = 66;
+function maletaSuelo(x, y, t) {
+  const b = (Math.sin(t / 14) * 2) | 0;
+  R(x, y + b, 18, 15, '#8a4a2c');
+  R(x, y + b, 18, 2, '#b06a44');
+  R(x, y + b + 5, 18, 1, '#5c2f18');
+  R(x, y + b + 13, 18, 2, '#4a2412');
+  R(x + 6, y + b - 4, 6, 4, '#5c2f18');
+  R(x + 7, y + b - 3, 4, 3, '#c8a070');
+  R(x + 13, y + b + 8, 3, 3, '#e8c060');
+  for (let i = 0; i < 4; i++) {
+    const a = ((t / 4 | 0) + i * 3) % 14;
+    if (a < 7) destello(x + i * 6, y + b - 7 - (a >> 1), i % 2 ? '#ffe9a8' : '#ffffff');
+  }
+}
 function flechaSalida(x, y) {
   for (let i = 0; i < 6; i++) R(x, y + i, 6 - i, 1, '#fff3ae');
   R(x, y + 6, 9, 1, '#fff3ae');
@@ -2890,7 +2978,7 @@ const SALTOS = [
   { n:'INTRO: ¡ES MATCH!',f:() => { cangurera = false; irGuion(INTRO, 7, finIntro); } },
   { n:'INTRO: EL CHAT',   f:() => { cangurera = false; irGuion(INTRO, 8, finIntro); } },
   { n:'INTRO: WHATSAPP',  f:() => { cangurera = false; irGuion(INTRO, 12, finIntro); } },
-  { n:'EL CUARTO',        f:() => { cangurera = false; estado = 'cuarto'; jug.x = 46; jug.mirando = -1; } },
+  { n:'EL CUARTO',        f:() => { cangurera = false; maleta = false; estado = 'cuarto'; jug.x = 46; jug.mirando = -1; } },
   { n:'LA CITA',          f:() => { cangurera = true; mes = 0; corazonTomado = false;
                                     jug.x = 6; jug.mirando = 1; estado = 'juego'; } },
   { n:'ROBERTO ESPERA',   f:() => { cangurera = true; correrGuion(ESPERA, menuEspera); } },
@@ -2911,10 +2999,11 @@ const SALTOS = [
                                     correrGuion(CASA, () => correrGuion(AMIGO, menuPuerto)); } },
   { n:'CASA DEL AMIGO',   f:() => { cuartoNoche = false; correrGuion(AMIGO, menuPuerto); } },
   { n:'¿LO INVITAS?',     f:() => { menuPuerto(); } },
-  { n:'EL AVIÓN (MALO)',  f:() => { correrGuion(AVION_MALO, () => { estado = 'explotado'; }); } },
-  { n:'ME LO LLEVO',      f:() => { correrGuion(PUERTO, finActo); } },
-  { n:'EL VIAJE',         f:() => { irGuion(PUERTO, 3, finActo); } },
-  { n:'LLEGO POR ÉL',     f:() => { irGuion(PUERTO, 10, finActo); } },
+  { n:'EL AVIÓN (MALO)',  f:() => { maleta = false; correrGuion(AVION_MALO, () => { estado = 'explotado'; }); } },
+  { n:'ME LO LLEVO',      f:() => { cangurera = true; correrGuion(PUERTO, empezarMaleta); } },
+  { n:'LA MALETA',        f:() => { cangurera = true; empezarMaleta(); } },
+  { n:'EL VIAJE',         f:() => { cangurera = true; maleta = true; correrGuion(VIAJE, finActo); } },
+  { n:'LLEGO POR ÉL',     f:() => { cangurera = true; maleta = true; irGuion(VIAJE, 6, finActo); } },
   { n:'MES 2: CINE',      f:() => irMes(1) },
   { n:'MES 3: LLUVIA',    f:() => irMes(2) },
   { n:'MES 4: AZOTEA',    f:() => irMes(3) },
@@ -2990,7 +3079,7 @@ function fondoAmigo(t) { bgAmigo(t); sentadosAmigo(t, true); frAmigo(t); }
 function menuPuerto() {
   abrirMenu('PUERTO ESCONDIDO', ['INVITARLO', 'NO INVITARLO'], 'roberto', fondoAmigo, i => {
     if (i === 1) transicionar(() => correrGuion(AVION_MALO, () => { estado = 'explotado'; }));
-    else transicionar(() => correrGuion(PUERTO, finActo));
+    else transicionar(() => correrGuion(PUERTO, empezarMaleta));
   });
 }
 function menuBaile() {
@@ -3008,9 +3097,16 @@ function empezarNoche() {
 }
 function finActo() {
   mes = 1; estado = 'juego'; jug.x = 8; jug.mirando = 1;
-  corazonTomado = false; cangurera = false; interiorNoche = false; cuartoNoche = false;
+  corazonTomado = false; cangurera = false; maleta = false;
+  interiorNoche = false; cuartoNoche = false;
 }
 function finBeso() { correrGuion(CASA, () => correrGuion(AMIGO, menuPuerto)); }
+/* Una semana después: se despierta y no sale del cuarto sin la maleta */
+function empezarMaleta() {
+  cuartoNoche = false; maleta = false;
+  jug.x = 64; jug.mirando = -1;
+  abrirCharla([{ q:'santiago', t:'PUES YA NOS VAMOS A CASA DE ROBERTO.' }], 'dialogo', 'maleta');
+}
 /* Dibuja la caja y devuelve true si el jugador acaba de cerrar la charla */
 function charlaEnPantalla() {
   correrTexto();
@@ -3106,6 +3202,37 @@ function loop() {
         else {
           jug.x = 96;
           abrirCharla([{ q:'santiago', t:'ESPERA. NO ME VOY SIN LA CANGURERA.' }], 'dialogo', 'cuarto');
+        }
+      }
+    }
+    if (hablando && charlaEnPantalla()) estado = volverA;
+    pasoFade();
+    requestAnimationFrame(loop); return;
+  }
+
+  /* --- El cuarto una semana después: sin maleta no hay viaje --- */
+  if (estado === 'maleta' || (hablando && volverA === 'maleta')) {
+    bgCuarto(t);
+    if (!maleta) maletaSuelo(MAL_X, MAL_Y, t);
+    const anda = (estado === 'maleta') && (keys.left || keys.right);
+    persona('santiago', jug.x, GROUND - 30, jug.mirando < 0, anda, t);
+    frCuarto(t);
+    if (maleta && (t / 20 | 0) % 2) flechaSalida(112, GROUND - 44);
+
+    if (estado === 'maleta') {
+      if (keys.left)  { jug.x -= 0.9; jug.mirando = -1; }
+      if (keys.right) { jug.x += 0.9; jug.mirando = 1; }
+      jug.x = Math.max(2, Math.min(106, jug.x));
+
+      if (!maleta && Math.abs(jug.x - MAL_X) < 14) {
+        maleta = true;
+        abrirCharla([{ q:'santiago', t:'A VER CUÁNTO TIEMPO HARÉ. NUNCA HE IDO A ZONA ESMERALDA.' }],
+                    'dialogo', 'maleta');
+      } else if (jug.x >= 105) {
+        if (maleta) transicionar(() => correrGuion(VIAJE, finActo));
+        else {
+          jug.x = 96;
+          abrirCharla([{ q:'santiago', t:'SIN MALETA NO ME VOY A NINGÚN LADO.' }], 'dialogo', 'maleta');
         }
       }
     }

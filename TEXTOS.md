@@ -70,10 +70,11 @@ Otros: **MATCH**, **¡ES MATCH!**, **ESCRÍBELE**
 ## 5. Roberto esperando en el club
 
 1. **ROBERTO:** TRES EN PUNTO. LLEGUÉ TEMPRANO.
-2. **ROBERTO:** TRES Y VEINTE.
-3. **SANTIAGO:** VOY TARDÍSIMO. PERDÓN.
-4. **SANTIAGO:** PERO TE JURO QUE VALGO LA PENA.
-5. **ROBERTO:** ...
+2. Cartel a pantalla completa (el de Bob Esponja): **ONE** / **ETERNITY** / **LATER**
+3. **ROBERTO:** TRES Y VEINTE.
+4. **SANTIAGO:** VOY TARDÍSIMO. PERDÓN.
+5. **SANTIAGO:** PERO TE JURO QUE VALGO LA PENA.
+6. **ROBERTO:** ...
 
 Los mensajes que le llegan:
 
@@ -89,10 +90,8 @@ Los mensajes que le llegan:
 
 ### Afuera del club
 
-- **ROBERTO:** HOLA. OYE... QUÉ HORROR LA CANGURERA.
-- **SANTIAGO:** ES VERDE NEÓN. FUE A PROPÓSITO.
-- **ROBERTO:** PEOR.
-- **SANTIAGO:** MES 1. PRIMERA CITA EN EL CLUB DEL PATIO ROMA.
+- **ROBERTO:** HOLA. ¿ENTRAMOS?
+- **ROBERTO:** (QUÉ FEA CANGURERA.) ← lo piensa, no lo dice
 
 Avisos en pantalla: **ENTRAR** (para meterse al club) / **SEGUIR** (en los otros meses)
 
@@ -104,7 +103,7 @@ Avisos: **ESCOGE MESA** / **A = SENTARSE** · Cartel: **MÁS TARDE...**
 2. **ROBERTO:** A VER QUÉ HAY DE TOMAR.
 3. **MESERA:** HOLA, BUENAS NOCHES. ¿LES PUEDO TOM...
 4. **ROBERTO:** YA ÓRALE PUES NECIA, TRÁEME LA CAGUAMA.
-5. **SANTIAGO:** PERDÓNALO. YO UNA IGUAL, POR FAVOR.
+5. **SANTIAGO:** YO UNA CUBA, POR FAVOR.
 6. **SANTIAGO:** OYE, TENGO UN CUMPLEAÑOS. ¿ME ACOMPAÑAS?
 7. **ROBERTO:** VAMOS.
 
@@ -124,27 +123,27 @@ Avisos: **ESCOGE MESA** / **A = SENTARSE** · Cartel: **MÁS TARDE...**
 
 1. **SANTIAGO:** TODAVÍA TRAIGO LA CANGURERA PUESTA Y AUN ASÍ SE ME CAYÓ TODO.
 2. **SANTIAGO:** GRACIAS POR HOY.
-3. **SANTIAGO:** ¿VIENES A CASA DE UN AMIGO EL VIERNES?
+3. **SANTIAGO:** ¿VIENES A CASA DE UN AMIGO EL SÁBADO?
 4. **ROBERTO:** AHÍ ESTARÉ.
 
 Mensajes del chat:
 
 - **SANTIAGO:** GRACIAS POR HOY
-- **SANTIAGO:** ¿VIENES A CASA DE UN AMIGO EL VIERNES?
+- **SANTIAGO:** ¿VIENES A CASA DE UN AMIGO EL SÁBADO?
 - **ROBERTO:** AHÍ ESTARÉ
 
 ## 9. Casa del amigo
 
-1. **SANTIAGO:** VIERNES. CASA DE UN AMIGO, EN LA MESA DE LA COCINA.
+1. **SANTIAGO:** SÁBADO. CASA DE UN AMIGO, EN LA MESA DEL COMEDOR.
 2. **SANTIAGO:** LLEVAMOS UNA HORA ASÍ Y NO ME QUIERO MOVER.
 
 Prompt (los prompts ya no llevan nombre arriba):
 
 - **PUERTO ESCONDIDO** · **INVITARLO** / **NO INVITARLO**
 
-### Si no lo invita
+### Si no lo invita (el que se va solo es Roberto)
 
-1. **SANTIAGO:** ME VOY SOLO A PUERTO ESCONDIDO. TAMPOCO PASA NADA.
+1. **ROBERTO:** ME VOY SOLO A PUERTO ESCONDIDO. TAMPOCO PASA NADA.
 
 - Pantalla final: **NO LE DIJO.** · **FINAL MALO** · **A = OTRA VEZ**
 
@@ -156,8 +155,16 @@ Prompt (los prompts ya no llevan nombre arriba):
 
 Cartel: **UNA SEMANA** / **DESPUÉS...**
 
-Rótulos del viaje en coche (uno por escena): **LA CIUDAD** · **LA CARRETERA** ·
-**EL DESIERTO** · **LA ANTÁRTIDA** · **EL FONDO DEL MAR**
+### Ese día, en su cuarto (jugable: hay que agarrar la maleta para poder salir)
+
+- **SANTIAGO:** PUES YA NOS VAMOS A CASA DE ROBERTO.
+- Al agarrar la maleta — **SANTIAGO:** A VER CUÁNTO TIEMPO HARÉ. NUNCA HE IDO A ZONA ESMERALDA.
+- Si intenta salir sin ella — **SANTIAGO:** SIN MALETA NO ME VOY A NINGÚN LADO.
+
+### El viaje en coche
+
+Rótulos (uno por escena, el coche cruza la pantalla en cada una): **LA CIUDAD** ·
+**LA CARRETERA** · **EL DESIERTO** · **LA ANTÁRTIDA** · **EL FONDO DEL MAR**
 
 4. **SANTIAGO:** ¿PODRÉ HACER ESTO PARA SIEMPRE?
 
@@ -185,4 +192,4 @@ Y ya se van al aeropuerto juntos:
 ## 12. Consola y selector
 
 - **REINICIAR**, **SONIDO: ON/OFF**, **ESCENAS**, **MES 1/6**
-- Selector (SELECT o botón ESCENAS): **IR A...** con 33 secciones, pie **A = IR    B = SALIR**
+- Selector (SELECT o botón ESCENAS): **IR A...** con 34 secciones, pie **A = IR    B = SALIR**
