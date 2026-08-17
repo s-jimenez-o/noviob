@@ -596,7 +596,7 @@ const PERSONAJES = {
 
 /* Los amigos de Roberto en Puerto */
 PERSONAJES.amigoP1 = {
-  nombre: 'LOS AMIGOS', tinta: '#eafff8',
+  nombre: 'LECHE', tinta: '#eafff8',
   quieto: armar(CAB_ROBERTO, TOR_ROBERTO, CUERPO_QUIETO),
   paso:   armar(CAB_ROBERTO, TOR_ROBERTO, CUERPO_PASO),
   color: {
@@ -1816,6 +1816,24 @@ function fondoViaje(tema, t) {
       P(x, VIA_H + ((i * 37) % 40), 'rgba(255,255,255,.75)');
     }
 
+  } else if (tema === 'costa') {
+    vgrad(0, 0, 160, VIA_H, ['#f2a05a','#f6bd72','#f9d68f','#fbe8b0']);
+    disco(126, 30, 13, 'rgba(255,244,180,.35)'); disco(126, 30, 9, '#fff3ae');
+    vgrad(0, VIA_H - 44, 160, 26, ['#2f7fa8','#3f97bd','#54b0cc','#7ecad8']);
+    for (let i = 0; i < 4; i++) {
+      const y = VIA_H - 40 + i * 5, off = ((s * (0.4 + i * 0.2) | 0) % 24);
+      for (let x = -24; x < 176; x += 24) R(x + off, y, 11, 1, 'rgba(255,255,255,.45)');
+    }
+    vgrad(0, VIA_H - 18, 160, 18, ['#e8d39a','#dcc287']);
+    for (let i = 0; i < 6; i++) {
+      const x = ciclo(i, 39, 234, s * 0.8 | 0);
+      R(x + 4, VIA_H - 34, 3, 34, '#6b4526');
+      for (let a = 0; a < 5; a++)
+        elipse(x + 5 + Math.cos(Math.PI + a * 0.63) * 9, VIA_H - 34 + Math.sin(Math.PI + a * 0.63) * 5,
+               7, 3, a % 2 ? '#2f7b45' : '#3f9a52');
+    }
+    pista(['#e0c090','#d0ae7c','#bd9a68'], '#f6e2b0', s);
+
   } else {
     /* el fondo del mar */
     vgrad(0, 0, 160, VIA_H, ['#0d2a52','#12426c','#1a6288','#2481a4']);
@@ -1924,10 +1942,8 @@ function fondoTiki(t) {
 
 /* Ojos enormes de anime, encima de la cabeza del sprite */
 function ojosAnime(x, y, t) {
-  const br = (t / 12 | 0) % 8 === 0;
   for (let i = 0; i < 2; i++) {
     const ex = x + 3 + i * 6;
-    if (br) { R(ex - 1, y + 9, 6, 1, '#1b1226'); continue; }
     elipse(ex + 1, y + 9, 3, 5, '#ffffff');
     elipse(ex + 1, y + 10, 2, 4, '#4a2f7a');
     elipse(ex + 1, y + 11, 2, 3, '#8a5ad8');
@@ -1936,6 +1952,23 @@ function ojosAnime(x, y, t) {
   }
   if ((t / 6 | 0) % 2) { destello(x - 3, y + 4, '#ffffff'); destello(x + 15, y + 7, '#ffe9f4'); }
 }
+
+/* Kimono encima del sprite, del cuello a los pies */
+function kimono(x, y, c1, c2) {
+  R(x + 2, y + 14, 12, 16, c1);
+  R(x + 2, y + 14, 12, 1, '#ffffff');
+  R(x, y + 15, 3, 9, c1); R(x + 13, y + 15, 3, 9, c1);
+  R(x, y + 23, 3, 1, c2); R(x + 13, y + 23, 3, 1, c2);
+  for (let i = 0; i < 5; i++) { P(x + 4 + i, y + 14 + i, c2); P(x + 11 - i, y + 14 + i, c2); }
+  R(x + 2, y + 20, 12, 3, c2); R(x + 2, y + 20, 12, 1, '#ffffff');
+  R(x + 7, y + 20, 2, 3, '#f6efdc');
+  R(x + 2, y + 28, 12, 1, c2);
+  R(x + 3, y + 29, 4, 1, '#f6efdc'); R(x + 9, y + 29, 4, 1, '#f6efdc');
+}
+const KIMONOS = [['#e8506a','#f6efdc'], ['#3a5aa8','#f2c14e'],
+                 ['#2f8f6a','#f6efdc'], ['#7a4aa8','#f2c14e']];
+/* Los cuatro caminando a la playa: quién y dónde acaba parado */
+const GRUPO = [['santiago', 22], ['roberto', 42], ['amigoP1', 62], ['amigoP2', 82]];
 
 function bgJapon(t) {
   vgrad(0, 0, 160, 88, ['#ffd0e2','#ffbcd6','#ffaecc','#ffd8c4']);
@@ -1967,28 +2000,37 @@ function bgJapon(t) {
 
 /* La casa de Roberto en Puerto: casi toda roja y con el mar en la ventana */
 function bgCasaRoja(t) {
-  vgrad(0, 0, 160, GROUND - 8, ['#c9382f','#b8302a','#a52822']);
-  for (let x = 0; x < 160; x += 8) R(x, 0, 1, GROUND - 8, 'rgba(255,255,255,.05)');
-  R(0, GROUND - 8, 160, 3, '#7a1c18'); R(0, GROUND - 8, 160, 1, '#e8604c');
-  R(0, GROUND - 5, 160, 5, '#8f221c');
-  /* ventanal al mar */
-  R(10, 12, 62, 44, '#f2e2c0'); R(12, 14, 58, 40, '#7ec8e8');
-  vgrad(12, 14, 58, 18, ['#ffd08a','#ffb27a','#ff9a86']);
-  disco(56, 24, 7, '#fff3ae');
-  vgrad(12, 32, 58, 22, ['#2f7fa8','#3f97bd','#54b0cc']);
+  /* la casa es abierta: entre los pilares se ve la playa */
+  vgrad(0, 0, 160, 34, ['#f2a05a','#f6bd72','#f9d68f','#fbe8b0']);
+  disco(128, 28, 11, 'rgba(255,244,180,.35)'); disco(128, 28, 7, '#fff3ae');
+  vgrad(0, 34, 160, 26, ['#2f7fa8','#3f97bd','#54b0cc','#7ecad8']);
   for (let i = 0; i < 4; i++) {
-    const off = ((t * (0.4 + i * 0.2) | 0) % 18);
-    for (let x = 12; x < 70; x += 18) R(x + off - 18, 36 + i * 5, 9, 1, 'rgba(255,255,255,.5)');
+    const y = 38 + i * 5, off = ((t * (0.4 + i * 0.2) | 0) % 24);
+    for (let x = -24; x < 176; x += 24) R(x + off, y, 11, 1, 'rgba(255,255,255,.45)');
   }
-  R(40, 14, 2, 40, '#f2e2c0'); R(12, 32, 58, 2, '#f2e2c0');
-  R(10, 12, 62, 3, '#fff6e2'); R(10, 53, 62, 3, '#c9b48a');
-  /* adornos: un pez de pared y unos platos */
-  elipse(100, 22, 11, 6, '#f2b04c'); R(110, 19, 6, 7, '#e08a34'); P(94, 20, '#1b1226');
-  for (let i = 0; i < 3; i++) { disco(126 + i * 12, 34 + (i % 2) * 8, 6, '#f6efdc'); disco(126 + i * 12, 34 + (i % 2) * 8, 4, '#e8a0b8'); }
-  /* piso de mosaico */
-  vgrad(0, GROUND, 160, 144 - GROUND, ['#e8c6ac','#dcb69a','#cea88c']);
-  for (let y = GROUND; y < 144; y += 12) R(0, y, 160, 1, 'rgba(120,70,50,.35)');
-  for (let x = 0; x < 160; x += 12) R(x, GROUND, 1, 52, 'rgba(120,70,50,.25)');
+  vgrad(0, 60, 160, 24, ['#e8d39a','#dcc287','#cfb277']);
+  R(0, 60, 160, 1, '#f2e2b8');
+  for (let i = 0; i < 2; i++) {
+    const px = 24 + i * 106;
+    R(px, 46, 2, 16, '#6b4526');
+    for (let a = 0; a < 5; a++)
+      elipse(px + 1 + Math.cos(Math.PI + a * 0.63) * 8, 46 + Math.sin(Math.PI + a * 0.63) * 5,
+             6, 2, a % 2 ? '#2f7b45' : '#3f9a52');
+  }
+  /* piso de barro */
+  vgrad(0, 84, 160, 60, ['#c96a4a','#b85c40','#a85038']);
+  R(0, 84, 160, 1, '#e08a64');
+  for (let y = 84; y < 144; y += 13) R(0, y, 160, 1, 'rgba(90,30,20,.32)');
+  for (let x = 0; x < 160; x += 16) R(x, 84, 1, 60, 'rgba(90,30,20,.24)');
+  /* la viga y los pilares, rojos */
+  R(0, 0, 160, 13, '#c9382f'); R(0, 0, 160, 2, '#e8604c'); R(0, 11, 160, 2, '#8f221c');
+  for (let i = 0; i < 4; i++) {
+    const px = [2, 38, 112, 146][i];
+    R(px, 13, 12, 72, '#c9382f');
+    R(px, 13, 3, 72, '#e8604c'); R(px + 9, 13, 3, 72, '#8f221c');
+    R(px - 2, 13, 16, 3, '#e8604c');
+    R(px - 3, 80, 18, 5, '#b0302a'); R(px - 3, 80, 18, 1, '#e8604c');
+  }
 }
 function mesaRoja(cx, tapa) {
   for (let i = 0; i < 2; i++) {
@@ -2568,27 +2610,48 @@ Object.assign(CUADROS, {
     }
   },
   /* ---- Puerto Escondido de verdad ---- */
-  calle: (tt) => {
+  calle: (tt, a) => {
     bgPlaya(tt);
     frPlaya(tt);
-    coche(4, 65, tt, true, true);
-    persona('santiago', 72, 62, false, false, tt);
-    persona('roberto',  90, 62, false, false, tt);
-    persona('amigoP1', 112, 62, true, false, tt);
-    persona('amigoP2', 130, 62, true, false, tt + 7);
+    coche(102, 65, tt, true, true);
+    const p = (a && a.fin) ? 1 : Math.min(1, tt / 66);
+    for (let i = 0; i < 4; i++)
+      persona(GRUPO[i][0], GRUPO[i][1] - (1 - p) * 130, 62, false, p < 1, tt + i * 7);
   },
   anime: (tt) => {
     bgJapon(tt);
     for (let i = 0; i < 18; i++) P((i * 37) % 160, 126 + (i % 4) * 5, i % 3 ? '#d9b08a' : '#fff0e0');
-    coche(4, 65, tt, true, true);
-    const gente = [['santiago', 72, false], ['roberto', 90, false],
-                   ['amigoP1', 112, true], ['amigoP2', 130, true]];
-    for (const g of gente) persona(g[0], g[1], 62, g[2], false, tt);
-    for (const g of gente) ojosAnime(g[1], 62, tt + g[1]);
+    coche(102, 65, tt, true, true);
+    for (let i = 0; i < 4; i++) {
+      persona(GRUPO[i][0], GRUPO[i][1], 62, false, false, tt);
+      kimono(GRUPO[i][1], 62, KIMONOS[i][0], KIMONOS[i][1]);
+    }
+    for (let i = 0; i < 4; i++) ojosAnime(GRUPO[i][1], 62, tt + i * 9);
+  },
+  subir: (tt) => {
+    bgPlaya(tt);
+    frPlaya(tt);
+    const yendo = tt > 48;
+    coche(102 + (yendo ? (tt - 48) * 2.6 : 0), 65, tt, !yendo, !yendo);
+    for (let i = 0; i < 4; i++) {
+      const q = Math.min(1, Math.max(0, (tt - i * 7) / 30));
+      const x = GRUPO[i][1] + (100 - GRUPO[i][1]) * q;
+      if (q < 1) persona(GRUPO[i][0], x, 62, false, true, tt + i * 5);
+    }
   },
   casaRoja: (tt, a) => {
     bgCasaRoja(tt);
     const s = PERSONAJES.santiago, r = PERSONAJES.roberto;
+    /* entrando a la casa y caminando a la cocina */
+    if (a.llegan || a.aMesa) {
+      mesaRoja(76);
+      const p = a.aMesa ? Math.min(1, tt / 54) : (a.fin ? 1 : Math.min(1, tt / 62));
+      const x0s = a.aMesa ? 14 : -30, x1s = a.aMesa ? 58 : 14;
+      const x0r = a.aMesa ? 34 : -50, x1r = a.aMesa ? 78 : 34;
+      persona('santiago', x0s + (x1s - x0s) * p, 62, false, p < 1, tt);
+      persona('roberto',  x0r + (x1r - x0r) * p, 62, false, p < 1, tt + 9);
+      return;
+    }
     if (a.swap) {
       drawSprite(s.quieto.slice(14, 21), 58, 72, false, s.color);
       cabezaPez(58, 58);
@@ -2604,7 +2667,28 @@ Object.assign(CUADROS, {
     drawSprite(r.quieto.slice(0, 21), 78, 58, true, r.color);
     mesaRoja(76);
     if (a.plato) platoPescado(76, 76);
+    /* Leche trae el pescado y se va */
+    if (a.sirve) {
+      const llego = tt >= 44;
+      const mx = !llego ? Math.max(100, 186 - tt * 2)
+                        : (tt > 54 ? 100 + (tt - 54) * 2.2 : 100);
+      persona('amigoP1', mx, 62, true, !llego || tt > 54, tt);
+      if (!llego) platoPescado(mx + 2, 76); else platoPescado(76, 76);
+    }
     if (a.swap) pezConCara(100, 56, tt);
+  },
+  /* lo avienta, y a medio vuelo vuelven las caras */
+  tiraPez: (tt) => {
+    bgCasaRoja(tt);
+    const s = PERSONAJES.santiago, r = PERSONAJES.roberto, vuelto = tt > 28;
+    if (vuelto) drawSprite(s.quieto.slice(0, 21), 58, 58, false, s.color);
+    else { drawSprite(s.quieto.slice(14, 21), 58, 72, false, s.color); cabezaPez(58, 58); }
+    drawSprite(r.quieto.slice(0, 21), 78, 58, true, r.color);
+    mesaRoja(76);
+    const px = 96 + tt * 1.0, py = 54 - tt * 2.0 + tt * tt * 0.055;
+    if (vuelto) pescado(px, py, true); else pezConCara(px, py, tt);
+    if (tt > 26 && tt < 34) for (let i = 0; i < 5; i++)
+      destello(px - 6 + i * 6, py - 5 + (i % 2) * 8, i % 2 ? '#ffffff' : '#ffe9a8');
   },
   mesaBaile: (tt) => {
     bgCasaRoja(tt);
@@ -2694,9 +2778,9 @@ const PUERTO = [
 const VIAJE = [
   { e:'viaje', a:{tema:'ciudad' },                          dur:130 },
   { e:'viaje', a:{tema:'carretera' },                       dur:130 },
-  { e:'viaje', a:{tema:'desierto',  r:'EL DESIERTO' },      dur:130 },
+  { e:'viaje', a:{tema:'desierto' },                        dur:130 },
   { e:'viaje', a:{tema:'antartida' },                       dur:130 },
-  { e:'viaje', a:{tema:'mar', r:'EL FONDO DEL MAR', para:true }, dur:130 },
+  { e:'viaje', a:{tema:'mar', para:true },                  dur:130 },
   { e:'viaje', a:{tema:'mar', para:true}, q:'santiago', t:'¿PODRÉ HACER ESTO PARA SIEMPRE?' },
   { e:'llegada', a:{}, dur:96 },
   { e:'llegada', a:{ve:true}, q:'santiago', t:'SÍ. SÍ PODRÍA.' },
@@ -2710,20 +2794,27 @@ const PUERTO2 = [
   { e:'playa', a:{quietos:true}, q:'santiago', hacer:() => { maleta = false; },
     t:'LA ÚLTIMA VEZ QUE VINE A PUERTO ESCONDIDO LA PASÉ FATAL.' },
   { e:'playa', a:{quietos:true}, q:'santiago', t:'ME DABA UN POCO DE PTSD VOLVER.' },
-  /* los amigos y el anime */
-  { e:'calle', a:{}, dur:56 },
-  { e:'calle', a:{}, q:'amigoP1',  t:'ONICHAN.' },
-  { e:'calle', a:{}, q:'santiago', t:'¿AY, LES GUSTA EL ANIME?' },
+  /* llegan los amigos y caminan todos al coche */
+  { e:'calle', a:{}, dur:74 },
+  { e:'calle', a:{fin:true}, q:'amigoP1', t:'UMMM...' },
+  { e:'calle', a:{fin:true}, q:'amigoP1', t:'ONICHAN.' },
   { e:'anime', a:{}, dur:84 },
+  { e:'anime', a:{}, q:'santiago', t:'AYY, ¿LES GUSTA EL ANIME?' },
   { e:'anime', a:{}, q:'amigoP2',  t:'NO.' },
-  { e:'calle', a:{}, dur:46 },
-  /* la casa roja y el pescado */
-  { e:'casaRoja', a:{}, q:'santiago', t:'SU CASA ESTÁ ENFRENTE DE LA PLAYA Y ES TODA ROJA.' },
-  { e:'casaRoja', a:{plato:true}, dur:62 },
+  { e:'calle', a:{fin:true}, dur:44 },
+  /* se suben todos y navegan hasta la casa */
+  { e:'subir', a:{}, dur:88 },
+  { e:'viaje', a:{tema:'costa'}, dur:126 },
+  { e:'casaRoja', a:{llegan:true}, dur:70 },
+  { e:'casaRoja', a:{llegan:true, fin:true}, q:'santiago', t:'QUÉ HAMBRE.' },
+  { e:'casaRoja', a:{aMesa:true}, dur:62 },
+  /* les llevan el pescado */
+  { e:'casaRoja', a:{sirve:true}, dur:92 },
   { e:'casaRoja', a:{plato:true, asco:true}, q:'santiago', t:'...' },
   { e:'casaRoja', a:{swap:true}, dur:80 },
   { e:'casaRoja', a:{swap:true}, q:'roberto',  t:'¿QUÉ HACES?' },
-  { e:'casaRoja', a:{swap:true}, q:'santiago', t:'NADA.' },
+  { e:'casaRoja', a:{swap:true}, q:'santiago', t:'NADA. UN FACESWAP.' },
+  { e:'tiraPez', a:{}, dur:74 },
   /* superestrella */
   { e:'mesaBaile', a:{}, q:'roberto', t:'PONLE SUPERESTRELLA.' },
   { e:'mesaBaile', a:{}, dur:124 },
@@ -3311,9 +3402,11 @@ const SALTOS = [
   { n:'LLEGO POR ÉL',     f:() => { cangurera = true; maleta = true; irGuion(VIAJE, 6, finViaje); } },
   { n:'LA PLAYA',         f:() => { maleta = false; correrGuion(PUERTO2, empezarMedidor); } },
   { n:'ONICHAN',          f:() => { maleta = false; irGuion(PUERTO2, 3, empezarMedidor); } },
-  { n:'LA CASA ROJA',     f:() => { maleta = false; irGuion(PUERTO2, 9, empezarMedidor); } },
-  { n:'SUPERESTRELLA',    f:() => { maleta = false; irGuion(PUERTO2, 15, empezarMedidor); } },
-  { n:'LOVE METER',       f:() => { maleta = false; irGuion(PUERTO2, 17, empezarMedidor); } },
+  { n:'SE SUBEN AL COCHE', f:() => { maleta = false; irGuion(PUERTO2, 9, empezarMedidor); } },
+  { n:'LA CASA ROJA',     f:() => { maleta = false; irGuion(PUERTO2, 11, empezarMedidor); } },
+  { n:'EL PESCADO',       f:() => { maleta = false; irGuion(PUERTO2, 14, empezarMedidor); } },
+  { n:'SUPERESTRELLA',    f:() => { maleta = false; irGuion(PUERTO2, 20, empezarMedidor); } },
+  { n:'LOVE METER',       f:() => { maleta = false; irGuion(PUERTO2, 22, empezarMedidor); } },
   { n:'¿Y TÚ CÓMO?',      f:() => { maleta = false; empezarMedidor(); } },
   { n:'EL AEROPUERTO',    f:() => { maleta = false; correrGuion(CIERRE, finActo); } },
   { n:'MES 2: CINE',      f:() => irMes(1) },

@@ -162,9 +162,8 @@ Cartel: **UNA SEMANA** / **DESPUÉS...**
 
 ### El viaje en coche
 
-Cinco tramos (el coche cruza la pantalla en cada uno): la ciudad, la carretera,
-el desierto, la Antártida y el fondo del mar. Sólo llevan rótulo dos:
-**EL DESIERTO** y **EL FONDO DEL MAR**.
+Cinco tramos sin rótulo, el coche cruza la pantalla en cada uno: la ciudad,
+la carretera, el desierto, la Antártida y el fondo del mar.
 
 4. **SANTIAGO:** ¿PODRÉ HACER ESTO PARA SIEMPRE?
 
@@ -181,22 +180,30 @@ Y ya se van al aeropuerto juntos:
 1. **SANTIAGO:** LA ÚLTIMA VEZ QUE VINE A PUERTO ESCONDIDO LA PASÉ FATAL.
 2. **SANTIAGO:** ME DABA UN POCO DE PTSD VOLVER.
 
-### Los amigos de Roberto, junto al coche
+### Llegan los amigos y caminan todos al coche
 
-1. **LOS AMIGOS:** ONICHAN.
-2. **SANTIAGO:** ¿AY, LES GUSTA EL ANIME?
-3. (todo se vuelve japonés y les salen ojos enormes de anime)
-4. **LOS AMIGOS:** NO.
-5. (y todo vuelve a la normalidad)
+1. **LECHE:** UMMM...
+2. **LECHE:** ONICHAN.
+3. (todo se vuelve Japón: torii, el Fuji, pétalos; todos con kimono y ojos enormes)
+4. **SANTIAGO:** AYY, ¿LES GUSTA EL ANIME?
+5. **LOS AMIGOS:** NO.
+6. (y todo vuelve a la normalidad)
+
+### Se suben al coche y navegan hasta la casa
+
+1. **SANTIAGO:** QUÉ HAMBRE.
+2. (caminan a la cocina)
 
 ### La casa roja y el pescado
 
-1. **SANTIAGO:** SU CASA ESTÁ ENFRENTE DE LA PLAYA Y ES TODA ROJA.
-2. (llega el pescado frito completo; cara de asco, pero no dice nada)
-3. **SANTIAGO:** ...
-4. (faceswap: Santi con cabeza de pescado y el pescado con cara de Santi)
-5. **ROBERTO:** ¿QUÉ HACES?
-6. **SANTIAGO:** NADA.
+La casa es abierta: pilares rojos en vez de pared, con la playa detrás.
+
+1. (Leche les lleva el pescado frito completo)
+2. (cara de asco, pero no dice nada) — **SANTIAGO:** ...
+3. (faceswap: Santi con cabeza de pescado y el pescado con cara de Santi)
+4. **ROBERTO:** ¿QUÉ HACES?
+5. **SANTIAGO:** NADA. UN FACESWAP.
+6. (avienta el pescado y a medio vuelo vuelven las caras normales)
 
 ### Superestrella
 
@@ -234,4 +241,4 @@ Y ya se van al aeropuerto juntos:
 ## 13. Consola y selector
 
 - **REINICIAR**, **SONIDO: ON/OFF**, **ESCENAS**, **MES 1/6**
-- Selector (SELECT o botón ESCENAS): **IR A...** con 41 secciones, pie **A = IR    B = SALIR**
+- Selector (SELECT o botón ESCENAS): **IR A...** con 43 secciones, pie **A = IR    B = SALIR**
