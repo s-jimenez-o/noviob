@@ -1720,7 +1720,7 @@ function coche(cx, cy, t, parado, vacio) {
 }
 
 function fondoViaje(tema, t) {
-  const s = t * 1.35;
+  const s = t * 1.1;
   if (tema === 'ciudad') {
     vgrad(0, 0, 160, VIA_H, ['#f7c86a','#f0a066','#d9707e','#8a4a7a']);
     disco(122, 76, 15, 'rgba(255,233,168,.35)');
@@ -2547,7 +2547,7 @@ Object.assign(CUADROS, {
   },
   viaje: (tt, a) => {
     fondoViaje(a.tema, tt);
-    const cx = a.para ? Math.min(52, -64 + tt * 1.7) : -64 + tt * 2.2;
+    const cx = a.para ? Math.min(52, -64 + tt * 1.35) : -64 + tt * 1.78;
     coche(cx, 90, tt);
     if (a.tema === 'mar') for (let i = 0; i < 4; i++) {
       const b = ((tt * 1.6 + i * 9) % 34);
@@ -2571,20 +2571,20 @@ Object.assign(CUADROS, {
   calle: (tt) => {
     bgPlaya(tt);
     frPlaya(tt);
-    coche(6, 103, tt, true, true);
-    persona('santiago', 74, 100, false, false, tt);
-    persona('roberto',  92, 100, false, false, tt);
-    persona('amigoP1', 116, 100, true, false, tt);
-    persona('amigoP2', 134, 100, true, false, tt + 7);
+    coche(4, 65, tt, true, true);
+    persona('santiago', 72, 62, false, false, tt);
+    persona('roberto',  90, 62, false, false, tt);
+    persona('amigoP1', 112, 62, true, false, tt);
+    persona('amigoP2', 130, 62, true, false, tt + 7);
   },
   anime: (tt) => {
     bgJapon(tt);
     for (let i = 0; i < 18; i++) P((i * 37) % 160, 126 + (i % 4) * 5, i % 3 ? '#d9b08a' : '#fff0e0');
-    coche(6, 103, tt, true, true);
-    const gente = [['santiago', 74, false], ['roberto', 92, false],
-                   ['amigoP1', 116, true], ['amigoP2', 134, true]];
-    for (const g of gente) persona(g[0], g[1], 100, g[2], false, tt);
-    for (const g of gente) ojosAnime(g[1], 100, tt + g[1]);
+    coche(4, 65, tt, true, true);
+    const gente = [['santiago', 72, false], ['roberto', 90, false],
+                   ['amigoP1', 112, true], ['amigoP2', 130, true]];
+    for (const g of gente) persona(g[0], g[1], 62, g[2], false, tt);
+    for (const g of gente) ojosAnime(g[1], 62, tt + g[1]);
   },
   casaRoja: (tt, a) => {
     bgCasaRoja(tt);
@@ -2651,11 +2651,11 @@ Object.assign(CUADROS, {
   playa: (tt, a) => {
     bgPlaya(tt);
     const x = a && a.quietos ? 60 : Math.min(-14 + tt * 1.1, 60);
-    persona('santiago', x, 100, false, x < 60, tt);
-    persona('roberto', x + 22, 100, false, x < 60, tt + 11);
+    persona('santiago', x, 62, false, x < 60, tt);
+    persona('roberto', x + 22, 62, false, x < 60, tt + 11);
     if (a && a.quietos)
       for (let i = 0; i < 3; i++)
-        corazon(70 + i * 8, 92 - (((tt / 3 + i * 9) % 22) | 0), (tt / 9 | 0) % 2);
+        corazon(70 + i * 8, 56 - (((tt / 3 + i * 9) % 22) | 0), (tt / 9 | 0) % 2);
     frPlaya(tt);
   }
 });
@@ -2693,18 +2693,17 @@ const PUERTO = [
 /* Ese día, ya con la maleta en la mano: el viaje hasta Zona Esmeralda
    y de ahí a Puerto Escondido */
 const VIAJE = [
-  { e:'viaje', a:{tema:'ciudad',    r:'LA CIUDAD' },        dur:106 },
-  { e:'viaje', a:{tema:'carretera', r:'LA CARRETERA' },     dur:106 },
-  { e:'viaje', a:{tema:'desierto',  r:'EL DESIERTO' },      dur:106 },
-  { e:'viaje', a:{tema:'antartida', r:'LA ANTÁRTIDA' },     dur:106 },
-  { e:'viaje', a:{tema:'mar', r:'EL FONDO DEL MAR', para:true }, dur:106 },
+  { e:'viaje', a:{tema:'ciudad' },                          dur:130 },
+  { e:'viaje', a:{tema:'carretera' },                       dur:130 },
+  { e:'viaje', a:{tema:'desierto',  r:'EL DESIERTO' },      dur:130 },
+  { e:'viaje', a:{tema:'antartida' },                       dur:130 },
+  { e:'viaje', a:{tema:'mar', r:'EL FONDO DEL MAR', para:true }, dur:130 },
   { e:'viaje', a:{tema:'mar', para:true}, q:'santiago', t:'¿PODRÉ HACER ESTO PARA SIEMPRE?' },
   { e:'llegada', a:{}, dur:96 },
   { e:'llegada', a:{ve:true}, q:'santiago', t:'SÍ. SÍ PODRÍA.' },
   { e:'aeroJuntos', a:{}, dur:70 },
   { e:'vueloBien',  a:{}, dur:60 },
-  { e:'playa', a:{}, dur:70 },
-  { e:'playa', a:{quietos:true}, q:'santiago', t:'PUERTO ESCONDIDO. NO LLEVÁBAMOS NI UN MES.' }
+  { e:'playa', a:{}, dur:76 }
 ];
 
 /* Ya en Puerto: la playa, los amigos, la casa roja y el medidor */
@@ -2712,7 +2711,6 @@ const PUERTO2 = [
   { e:'playa', a:{quietos:true}, q:'santiago', hacer:() => { maleta = false; },
     t:'LA ÚLTIMA VEZ QUE VINE A PUERTO ESCONDIDO LA PASÉ FATAL.' },
   { e:'playa', a:{quietos:true}, q:'santiago', t:'ME DABA UN POCO DE PTSD VOLVER.' },
-  { e:'playa', a:{quietos:true}, q:'roberto',  t:'ESTA VEZ VIENES CONMIGO.' },
   /* los amigos y el anime */
   { e:'calle', a:{}, dur:56 },
   { e:'calle', a:{}, q:'amigoP1',  t:'ONICHAN.' },

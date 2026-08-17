@@ -163,8 +163,9 @@ Cartel: **UNA SEMANA** / **DESPUÉS...**
 
 ### El viaje en coche
 
-Rótulos (uno por escena, el coche cruza la pantalla en cada una): **LA CIUDAD** ·
-**LA CARRETERA** · **EL DESIERTO** · **LA ANTÁRTIDA** · **EL FONDO DEL MAR**
+Cinco tramos (el coche cruza la pantalla en cada uno): la ciudad, la carretera,
+el desierto, la Antártida y el fondo del mar. Sólo llevan rótulo dos:
+**EL DESIERTO** y **EL FONDO DEL MAR**.
 
 4. **SANTIAGO:** ¿PODRÉ HACER ESTO PARA SIEMPRE?
 
@@ -174,15 +175,12 @@ Llega a casa de Roberto y lo ve:
 
 Y ya se van al aeropuerto juntos:
 
-6. **SANTIAGO:** PUERTO ESCONDIDO. NO LLEVÁBAMOS NI UN MES.
-
 ## 10. Ya en Puerto Escondido
 
 ### En la playa
 
 1. **SANTIAGO:** LA ÚLTIMA VEZ QUE VINE A PUERTO ESCONDIDO LA PASÉ FATAL.
 2. **SANTIAGO:** ME DABA UN POCO DE PTSD VOLVER.
-3. **ROBERTO:** ESTA VEZ VIENES CONMIGO.
 
 ### Los amigos de Roberto, junto al coche
 
