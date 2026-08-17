@@ -222,7 +222,7 @@
                0 calc(.8*var(--u)) 0 rgba(255,255,255,.20);
   }
 
-  .mute, .reset {
+  .mute, .reset, .escenas {
     position:fixed; z-index:5;
     top:  calc(env(safe-area-inset-top,   0px) + 8px);
     right:calc(env(safe-area-inset-right, 0px) + 10px);
@@ -240,11 +240,21 @@
     border-color:rgba(255,191,208,.35);
   }
   .reset:active { background:rgba(232,53,92,.34); }
+  /* Selector de escenas: quítalo antes de regalarlo si no lo quieres */
+  .escenas {
+    right:auto;
+    left:calc(env(safe-area-inset-left, 0px) + 10px);
+    top:calc(env(safe-area-inset-top, 0px) + 56px);
+    background:rgba(120,200,255,.14); color:#bfe4ff;
+    border-color:rgba(191,228,255,.35);
+  }
+  .escenas:active { background:rgba(120,200,255,.32); }
 </style>
 </head>
 <body>
 
 <button class="reset" id="reset">REINICIAR</button>
+<button class="escenas" id="escenas">ESCENAS</button>
 <button class="mute" id="mute">SONIDO: OFF</button>
 
 <div id="stage">
@@ -416,8 +426,8 @@ const FONT = {
   'O':'0E11111111110E','P':'1E11111E101010','Q':'0E11111115120D','R':'1E11111E141211',
   'S':'0F10100E01011E','T':'1F040404040404','U':'1111111111110E','V':'11111111110A04',
   'W':'11111115151B11','X':'11110A040A1111','Y':'11110A04040404','Z':'1F01020408101F',
-  'Á':'020E111F111111','É':'021F101E10101F','Í':'020E040404040E','Ó':'020E111111110E',
-  'Ú':'0211111111110E',
+  'Á':'060E111F111111','É':'061F101E10101F','Í':'060E040404040E','Ó':'060E111111110E',
+  'Ú':'0611111111110E',
   '0':'0E13151515190E','1':'040C040404040E','2':'0E11010204081F','3':'1F02040201110E',
   '4':'02060A121F0202','5':'1F101E0101110E','6':'0608101E11110E','7':'1F010204080808',
   '8':'0E11110E11110E','9':'0E11110F01020C',
@@ -1874,6 +1884,10 @@ function ensureAudio() {
 }
 
 document.getElementById('reset').onclick = () => { ensureAudio(); reiniciar(); };
+document.getElementById('escenas').onclick = () => {
+  ensureAudio();
+  if (estado === 'saltos') estado = saltoVuelve; else abrirSaltos();
+};
 
 muteBtn.onclick = () => {
   ensureAudio();
@@ -1924,6 +1938,7 @@ let charla = [], charlaIdx = 0, volverA = 'juego';
 let guion = null, gPaso = 0, gT = 0, gFin = null;
 let menu = null, pianoT = 0;
 let baileTipo = 'salsa', baileT = 0;
+let saltoSel = 0, saltoTop = 0, saltoVuelve = 'titulo', repite = 0;
 let fade = 0, fadeDir = 0, pendiente = null;
 
 /* Una "charla" es una lista de {q:quién, t:qué dice}. Así una misma escena
@@ -1967,6 +1982,7 @@ function reiniciar() {
   guion = null; gPaso = 0; gT = 0; gFin = null;
   menu = null; pianoT = 0; volverA = 'juego';
   baileTipo = 'salsa'; baileT = 0; interiorNoche = false; mesaElegida = 1;
+  saltoSel = 0; saltoTop = 0; saltoVuelve = 'titulo'; repite = 0;
   mes = 0; jug.x = 6; jug.mirando = 1;
   corazonTomado = false; cangurera = false;
   charla = []; charlaIdx = 0; pages = []; page = 0; revealed = 0; textTimer = 0;
@@ -2213,6 +2229,94 @@ function flechaSalida(x, y) {
 }
 
 
+
+/* =========================================================================
+   SELECTOR DE ESCENAS
+   Para revisar cambios sin jugar todo desde el principio. Se abre con
+   SELECT (o el botón ESCENAS) y se cierra con B.
+   Para quitarlo del regalo final: borra el botón .escenas del HTML y el
+   bloque de 'saltos' de aquí abajo.
+   ========================================================================= */
+function irGuion(lista, paso, fin) { correrGuion(lista, fin); gPaso = paso; gT = 0; }
+function irMes(m) {
+  mes = m; corazonTomado = false; cangurera = false;
+  jug.x = 8; jug.mirando = 1; estado = 'juego';
+}
+const SALTOS = [
+  { n:'ENCENDIDO',        f:() => { estado = 'boot'; bootT = 0; } },
+  { n:'TÍTULO',           f:() => { estado = 'titulo'; } },
+  { n:'INTRO: LA APP',    f:() => { cangurera = false; irGuion(INTRO, 0, finIntro); } },
+  { n:'INTRO: ¡ES MATCH!',f:() => { cangurera = false; irGuion(INTRO, 7, finIntro); } },
+  { n:'INTRO: EL CHAT',   f:() => { cangurera = false; irGuion(INTRO, 8, finIntro); } },
+  { n:'INTRO: WHATSAPP',  f:() => { cangurera = false; irGuion(INTRO, 12, finIntro); } },
+  { n:'EL CUARTO',        f:() => { cangurera = false; estado = 'cuarto'; jug.x = 46; jug.mirando = -1; } },
+  { n:'LA CITA',          f:() => { cangurera = true; mes = 0; corazonTomado = false;
+                                    jug.x = 6; jug.mirando = 1; estado = 'juego'; } },
+  { n:'ROBERTO ESPERA',   f:() => { cangurera = true; correrGuion(ESPERA, menuEspera); } },
+  { n:'LA DECISIÓN',      f:() => { cangurera = true; menuEspera(); } },
+  { n:'EL PIANO',         f:() => { pianoT = 0; estado = 'piano'; } },
+  { n:'FINAL MALO',       f:() => { estado = 'gameover'; } },
+  { n:'ESCOGER MESA',     f:() => { cangurera = true; mes = 0; interiorNoche = false;
+                                    estado = 'sentarse'; jug.x = 6; jug.mirando = 1; } },
+  { n:'LA MESERA',        f:() => { interiorNoche = false; mesaElegida = 1;
+                                    irGuion(NOCHE, 2, () => correrGuion(ANTRO, menuBaile)); } },
+  { n:'SE HACE NOCHE',    f:() => { interiorNoche = false; mesaElegida = 1;
+                                    irGuion(NOCHE, 6, () => correrGuion(ANTRO, menuBaile)); } },
+  { n:'EL ANTRO',         f:() => { correrGuion(ANTRO, menuBaile); } },
+  { n:'¿CÓMO BAILAS?',    f:() => { menuBaile(); } },
+  { n:'BAILANDO',         f:() => { baileT = 0; estado = 'baile'; } },
+  { n:'EL BESO',          f:() => { irGuion(BESO, 0, finActo); } },
+  { n:'MES 2: CINE',      f:() => irMes(1) },
+  { n:'MES 3: LLUVIA',    f:() => irMes(2) },
+  { n:'MES 4: AZOTEA',    f:() => irMes(3) },
+  { n:'MES 5: CASA',      f:() => irMes(4) },
+  { n:'MES 6: CABAÑA',    f:() => irMes(5) },
+  { n:'EL FINAL',         f:() => { mes = HISTORIA.meses.length; estado = 'final';
+                                    jug.x = 8; jug.mirando = 1; corazonTomado = false; } },
+  { n:'CRÉDITOS',         f:() => { estado = 'creditos'; } }
+];
+const SALTOS_VIS = 11;
+
+function abrirSaltos() {
+  if (estado === 'saltos') return;
+  saltoVuelve = estado;
+  fade = 0; fadeDir = 0; pendiente = null;
+  estado = 'saltos';
+}
+function saltarA(i) {
+  fade = 0; fadeDir = 0; pendiente = null;
+  charla = []; charlaIdx = 0; pages = []; page = 0; revealed = 0; textTimer = 0;
+  for (const k in keys) keys[k] = false;
+  for (const k in pressed) pressed[k] = false;
+  SALTOS[i].f();
+}
+function pantallaSaltos(t) {
+  vgrad(0, 0, 160, 144, ['#1a0f2e','#22143c','#2a1848','#331d54']);
+  R(0, 0, 160, 13, '#5f34a0'); R(0, 0, 160, 1, '#8f63d6'); R(0, 12, 160, 1, '#2a1550');
+  drawText(4, 3, 'IR A...', '#ffffff');
+  drawText(110, 3, (saltoSel + 1) + '/' + SALTOS.length, '#d9c2ff');
+  for (let i = 0; i < SALTOS_VIS; i++) {
+    const idx = saltoTop + i;
+    if (idx >= SALTOS.length) break;
+    const y = 17 + i * 10;
+    if (idx === saltoSel) {
+      R(2, y - 2, 156, 10, '#f6efdc');
+      corazon(4, y - 1, (t / 12 | 0) % 2);
+    }
+    drawText(15, y, SALTOS[idx].n, idx === saltoSel ? '#5f34a0' : '#bda6e4');
+  }
+  /* barra de desplazamiento */
+  if (SALTOS.length > SALTOS_VIS) {
+    const alto = Math.max(8, Math.round(114 * SALTOS_VIS / SALTOS.length));
+    const arr = Math.round(114 * saltoTop / SALTOS.length);
+    R(157, 15, 2, 114, '#3a2560');
+    R(157, 15 + arr, 2, alto, '#a882e8');
+  }
+  R(0, 131, 160, 13, '#2a1550'); R(0, 131, 160, 1, '#5f34a0');
+  drawText(4, 134, 'A = IR    B = SALIR', '#bda6e4');
+}
+
+
 /* ---------- Bucle principal ---------- */
 function correrGuion(lista, alTerminar) {
   guion = lista; gPaso = 0; gT = 0; gFin = alTerminar; estado = 'guion';
@@ -2241,6 +2345,7 @@ function menuBaile() {
   });
 }
 function empezarEspera() { correrGuion(ESPERA, menuEspera); }
+function finIntro() { estado = 'cuarto'; jug.x = 46; jug.mirando = -1; }
 /* Toda la noche: escoger mesa -> la mesera -> se hace tarde -> el antro */
 function empezarNoche() {
   estado = 'sentarse'; jug.x = 6; jug.mirando = 1;
@@ -2261,6 +2366,28 @@ function loop() {
   ctx.clearRect(0, 0, 160, 144);
   const hablando = (estado === 'dialogo' || estado === 'dialogoFinal');
 
+  /* SELECT abre y cierra el selector de escenas desde donde sea */
+  if (consumed('select')) { if (estado === 'saltos') estado = saltoVuelve; else abrirSaltos(); }
+
+  if (estado === 'saltos') {
+    pantallaSaltos(t);
+    if (keys.up || keys.down) repite++; else repite = 0;
+    const rep = repite > 16 && repite % 4 === 0;
+    let d = 0;
+    if (consumed('up')   || (keys.up   && rep)) d = -1;
+    if (consumed('down') || (keys.down && rep)) d = 1;
+    if (consumed('left'))  d = -SALTOS_VIS;
+    if (consumed('right')) d = SALTOS_VIS;
+    if (d) {
+      saltoSel = Math.max(0, Math.min(SALTOS.length - 1, saltoSel + d));
+      saltoTop = Math.max(saltoSel - SALTOS_VIS + 1, Math.min(saltoTop, saltoSel));
+      saltoTop = Math.max(0, Math.min(SALTOS.length - SALTOS_VIS, saltoTop));
+    }
+    if (consumed('a') || consumed('start')) { ensureAudio(); saltarA(saltoSel); }
+    else if (consumed('b')) estado = saltoVuelve;
+    requestAnimationFrame(loop); return;
+  }
+
   if (estado === 'boot') {
     bootT++;
     pantallaBoot();
@@ -2278,7 +2405,7 @@ function loop() {
       if (!musicOn) muteBtn.click();
       transicionar(() => {
         mes = 0; corazonTomado = false; cangurera = false;
-        correrGuion(INTRO, () => { estado = 'cuarto'; jug.x = 46; jug.mirando = -1; });
+        correrGuion(INTRO, finIntro);
       });
     }
     pasoFade();

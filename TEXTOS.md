@@ -137,4 +137,10 @@ Avisos: **ESCOGE MESA** / **A = SENTARSE** · Cartel: **MÁS TARDE...**
 
 ## 10. Textos de la consola
 
-- **REINICIAR**, **SONIDO: ON/OFF**, **MES 1/6**, **GAME BOY COLOR**, **NOSOTROS**
+- **REINICIAR**, **SONIDO: ON/OFF**, **ESCENAS**, **MES 1/6**, **GAME BOY COLOR**, **NOSOTROS**
+
+## 11. Selector de escenas (solo para probar)
+
+Se abre con **SELECT** o con el botón **ESCENAS**. Muestra **IR A...** con la lista de
+las 26 secciones y el pie **A = IR    B = SALIR**. Bórralo antes de regalarlo si no
+lo quieres: es el botón `.escenas` del HTML y el bloque `SALTOS` del script.
