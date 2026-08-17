@@ -1401,11 +1401,22 @@ function frDrags(t) {
 
 
 /* ---- 12. CASA DEL AMIGO ---- */
-function sofaFrente(cx) {
-  R(cx - 34, 78, 68, 16, '#a8405f'); R(cx - 34, 78, 68, 1, '#c9607e');
-  R(cx - 34, 78, 8, 16, '#8a2f4b'); R(cx + 26, 78, 8, 16, '#8a2f4b');
-  R(cx - 24, 82, 20, 7, '#c9607e'); R(cx + 4, 82, 20, 7, '#c9607e');
-  R(cx - 30, 94, 5, 5, '#5c3a20'); R(cx + 25, 94, 5, 5, '#5c3a20');
+function mesaAmigoFrente(cx) {
+  /* los respaldos de las sillas, a los lados */
+  for (let i = 0; i < 2; i++) {
+    const x = cx - 33 + i * 63;
+    R(x, 66, 4, 30, '#7a5230'); R(x, 66, 4, 1, '#a3714a');
+    R(x - 4, 68, 12, 3, '#8a5c38'); R(x - 4, 74, 12, 3, '#8a5c38');
+  }
+  /* la mesa */
+  R(cx - 42, 78, 84, 4, '#a3714a'); R(cx - 42, 78, 84, 1, '#c99163');
+  R(cx - 42, 82, 84, 2, '#6b451f');
+  R(cx - 36, 84, 4, 14, '#7a5230'); R(cx + 32, 84, 4, 14, '#7a5230');
+  R(cx - 32, 88, 64, 2, '#6b451f');
+  /* dos vasos y un cenicero */
+  R(cx - 30, 71, 6, 7, '#a8d8ff'); R(cx - 30, 71, 6, 2, '#dff0ff');
+  R(cx + 24, 72, 6, 6, '#e8a0b8'); R(cx + 24, 72, 6, 2, '#f6cad8');
+  elipse(cx + 6, 77, 6, 2, '#5c5666');
 }
 function bgAmigo(t) {
   vgrad(0, 0, 160, GROUND, ['#4a3350','#413048','#392a41']);
@@ -1438,10 +1449,6 @@ function bgAmigo(t) {
     elipse(cx, GROUND - 34 + bob, 5, 6, '#2a1f34');
     R(cx - 7, GROUND - 29 + bob, 14, 29, '#2a1f34');
   }
-  /* mesita con vasos */
-  R(46, GROUND - 12, 28, 3, '#7a5230'); R(46, GROUND - 12, 28, 1, '#a3714a');
-  R(50, GROUND - 9, 2, 9, '#5c3a20'); R(68, GROUND - 9, 2, 9, '#5c3a20');
-  R(52, GROUND - 17, 5, 5, '#a8d8ff'); R(62, GROUND - 17, 5, 5, '#e8a0b8');
   vgrad(0, GROUND, 160, 144 - GROUND, ['#7a5a3a','#6b4e32','#5c422a']);
   R(0, GROUND, 160, 1, '#9c7550');
   for (let y = GROUND + 10; y < 144; y += 12) R(0, y, 160, 1, 'rgba(50,32,18,.40)');
@@ -1565,6 +1572,259 @@ function frPlaya(t) {
   }
   R(126, 118, 22, 3, '#e8433c'); R(126, 118, 22, 1, '#ff7a6a');
   R(128, 121, 2, 8, '#8a5c34'); R(144, 121, 2, 8, '#8a5c34');
+}
+
+/* ---- 15. EL VIAJE A PUERTO ESCONDIDO ----
+   Un solo fondo con cinco temas: la ciudad, la carretera, el desierto,
+   la Antártida y el fondo del mar. Todo se desplaza a la izquierda para
+   que parezca que el coche avanza. */
+const VIA_H = 104;                 /* línea del suelo del viaje */
+
+function ciclo(i, paso, total, margen) {
+  return ((i * paso - margen) % total + total) % total - 44;
+}
+function cerro(cx, base, w, h, c, nieve) {
+  for (let i = 0; i <= h; i++) {
+    const half = Math.round(w / 2 * i / h);
+    R(cx - half, base - h + i, half * 2 + 1, 1, (nieve && i < h * 0.28) ? nieve : c);
+  }
+}
+function pista(cols, marca, s) {
+  vgrad(0, VIA_H, 160, 144 - VIA_H, cols);
+  R(0, VIA_H, 160, 1, 'rgba(255,255,255,.20)');
+  for (let i = 0; i < 9; i++) {
+    const x = (((i * 30 - (s * 2.6 | 0)) % 270) + 270) % 270 - 44;
+    R(x, 134, 17, 3, marca);
+  }
+  for (let i = 0; i < 11; i++) {
+    const x = (((i * 21 - (s * 1.7 | 0)) % 231) + 231) % 231 - 44;
+    R(x, 124, 9, 1, 'rgba(255,255,255,.16)');
+  }
+}
+function rotulo(txt) {
+  const w = textW(txt) + 9;
+  R(5, 7, w, 13, 'rgba(18,10,30,.70)');
+  R(5, 7, w, 1, 'rgba(255,255,255,.28)');
+  R(5, 19, w, 1, 'rgba(0,0,0,.45)');
+  drawText(9, 10, txt, '#ffe9a8');
+}
+
+/* Cabeza chiquita para asomarse por la ventanilla */
+function cabecita(quien, x, y) {
+  const c = PERSONAJES[quien].color;
+  R(x, y + 2, 10, 8, c.s);
+  R(x, y + 7, 10, 3, c.S);
+  R(x, y + 2, 10, 2, c['2']);
+  R(x + 1, y, 8, 2, c['1']);
+  R(x, y + 1, 2, 5, c['1']); R(x + 8, y + 1, 2, 5, c['1']);
+  R(x + 2, y + 5, 2, 1, c.e); R(x + 6, y + 5, 2, 1, c.e);
+  if (quien === 'roberto') R(x + 2, y + 8, 6, 2, c.b);
+  R(x + 4, y + 8, 3, 1, c.m);
+}
+
+/* El coche de perfil, con Santi manejando */
+function coche(cx, cy, t, parado, vacio) {
+  const bob = parado ? 0 : ((t / 5 | 0) % 2);
+  const y = cy + bob;
+  elipse(cx + 27, cy + 27, 27, 3, 'rgba(20,10,30,.28)');
+  /* ruedas */
+  for (let w = 0; w < 2; w++) {
+    const wx = cx + 12 + w * 30;
+    disco(wx, y + 21, 6, '#1b1226');
+    disco(wx, y + 21, 3, '#9a90a8');
+    const a = parado ? 0.7 : t * 0.45;
+    P(Math.round(wx + Math.cos(a) * 4), Math.round(y + 21 + Math.sin(a) * 4), '#e8e0f0');
+    P(Math.round(wx - Math.cos(a) * 4), Math.round(y + 21 - Math.sin(a) * 4), '#e8e0f0');
+  }
+  /* carrocería */
+  R(cx + 1, y + 12, 53, 9, '#d94f6a');
+  R(cx + 1, y + 12, 53, 1, '#ff8fa3');
+  R(cx + 1, y + 19, 53, 2, '#a83350');
+  R(cx + 12, y, 30, 13, '#d94f6a');
+  R(cx + 12, y, 30, 1, '#ff8fa3');
+  /* ventanilla */
+  R(cx + 14, y + 2, 26, 11, '#2a3a54');
+  R(cx + 14, y + 2, 26, 1, '#6a86a8');
+  if (!vacio) cabecita('santiago', cx + 25, y + 3);
+  R(cx + 27, y + 2, 1, 11, 'rgba(255,255,255,.18)');
+  /* faros, defensa y detalles */
+  R(cx + 52, y + 14, 3, 3, '#ffe08a');
+  R(cx - 1, y + 15, 3, 3, '#e8b0c0');
+  R(cx + 6, y + 18, 43, 1, 'rgba(0,0,0,.22)');
+  R(cx + 44, y + 6, 8, 2, '#a83350');
+}
+
+function fondoViaje(tema, t) {
+  const s = t * 2.2;
+  if (tema === 'ciudad') {
+    vgrad(0, 0, 160, VIA_H, ['#f7c86a','#f0a066','#d9707e','#8a4a7a']);
+    disco(122, 76, 15, 'rgba(255,233,168,.35)');
+    disco(122, 76, 11, '#ffe9a8');
+    for (let i = 0; i < 12; i++) {
+      const x = ciclo(i, 31, 372, s * 0.22 | 0);
+      const h = 26 + ((i * 13) % 5) * 8;
+      R(x, VIA_H - h, 24, h, '#7a4a70');
+      R(x, VIA_H - h, 24, 1, '#a86a94');
+      for (let wy = VIA_H - h + 5; wy < VIA_H - 5; wy += 7)
+        for (let wx = x + 3; wx < x + 21; wx += 6)
+          R(wx, wy, 3, 4, ((wx * 7 + wy * 3 + i) % 4) ? '#5c3355' : '#ffd07a');
+    }
+    for (let i = 0; i < 6; i++) {
+      const x = ciclo(i, 47, 282, s * 0.7 | 0);
+      R(x, VIA_H - 34, 2, 34, '#3a2f48');
+      R(x, VIA_H - 36, 10, 2, '#3a2f48');
+      R(x + 7, VIA_H - 34, 3, 2, '#ffe08a');
+      disco(x + 8, VIA_H - 32, 8, 'rgba(255,224,138,.09)');
+    }
+    R(0, VIA_H - 2, 160, 2, '#4a2c46');
+    pista(['#4a3f52','#413648','#38303f'], '#d8c8e8', s);
+
+  } else if (tema === 'carretera') {
+    vgrad(0, 0, 160, VIA_H, ['#5cb0e8','#8ccdf0','#bde4f2','#e2f2ee']);
+    disco(30, 24, 10, 'rgba(255,246,200,.35)');
+    disco(30, 24, 7, '#fff6c8');
+    for (let i = 0; i < 5; i++) {
+      const x = ciclo(i, 45, 225, s * 0.1 | 0), cy = 16 + (i % 3) * 10;
+      elipse(x, cy, 12, 4, '#ffffff'); elipse(x + 10, cy - 2, 9, 4, '#ffffff');
+      elipse(x + 20, cy + 1, 7, 3, '#ffffff');
+    }
+    for (let i = 0; i < 7; i++)
+      cerro(ciclo(i, 43, 301, s * 0.28 | 0) + 22, VIA_H, 62 + (i % 3) * 14, 34 + (i % 4) * 8, '#6a86a0', '#e6f0f4');
+    for (let i = 0; i < 9; i++) {
+      const x = ciclo(i, 27, 243, s * 0.85 | 0);
+      R(x + 3, VIA_H - 16, 3, 16, '#6b4526');
+      elipse(x + 4, VIA_H - 20, 8, 7, '#2f7b45');
+      elipse(x + 7, VIA_H - 23, 5, 4, '#3f9a52');
+    }
+    R(0, VIA_H - 2, 160, 2, '#4f7a44');
+    pista(['#5a5560','#4e4a56','#43404b'], '#f2e8c8', s);
+
+  } else if (tema === 'desierto') {
+    vgrad(0, 0, 160, VIA_H, ['#f5b95c','#f6cf82','#f8e2ac','#fbeec6']);
+    disco(120, 28, 16, 'rgba(255,240,168,.30)');
+    disco(120, 28, 11, '#fff0a8');
+    for (let i = 0; i < 6; i++)
+      cerro(ciclo(i, 51, 306, s * 0.2 | 0) + 24, VIA_H, 76, 26 + (i % 3) * 9, '#d98f5a');
+    for (let i = 0; i < 6; i++)
+      cerro(ciclo(i, 39, 234, s * 0.45 | 0) + 18, VIA_H, 58, 18 + (i % 2) * 7, '#c97a49');
+    for (let i = 0; i < 7; i++) {
+      const x = ciclo(i, 35, 245, s * 0.9 | 0), h = 20 + (i % 3) * 6;
+      R(x + 5, VIA_H - h, 5, h, '#3f8f52');
+      R(x + 5, VIA_H - h, 2, h, '#57ab66');
+      R(x + 1, VIA_H - h + 6, 4, 2, '#3f8f52'); R(x + 1, VIA_H - h + 2, 2, 6, '#3f8f52');
+      R(x + 10, VIA_H - h + 11, 4, 2, '#3f8f52'); R(x + 12, VIA_H - h + 5, 2, 8, '#3f8f52');
+    }
+    for (let i = 0; i < 5; i++) {
+      const x = ciclo(i, 43, 215, s * 1.2 | 0);
+      R(x, VIA_H - 3, 13, 3, '#b8703f');
+    }
+    pista(['#e0b06a','#d09a58','#bd8449'], '#f6e2b0', s);
+    if ((t / 9 | 0) % 2) for (let x = 0; x < 160; x += 6) P(x, VIA_H - 6, 'rgba(255,255,255,.20)');
+
+  } else if (tema === 'antartida') {
+    vgrad(0, 0, 160, VIA_H, ['#141c46','#26356e','#4a6aa0','#9cc4dc']);
+    for (let i = 0; i < 3; i++) {
+      const a = ['rgba(120,255,200,.16)','rgba(150,220,255,.13)','rgba(200,160,255,.11)'][i];
+      for (let x = 0; x < 160; x += 2)
+        R(x, 12 + i * 9 + Math.round(Math.sin(x / 15 + t / 22 + i) * 5), 2, 9, a);
+    }
+    for (let i = 0; i < 22; i++) {
+      const x = (((i * 47 - (s * 0.05 | 0)) % 160) + 160) % 160;
+      P(x, 6 + ((i * 29) % 46), '#f2f8ff');
+    }
+    for (let i = 0; i < 6; i++)
+      cerro(ciclo(i, 49, 294, s * 0.3 | 0) + 22, VIA_H, 66, 30 + (i % 3) * 12, '#7ea8c8', '#ffffff');
+    for (let i = 0; i < 5; i++)
+      cerro(ciclo(i, 41, 205, s * 0.6 | 0) + 18, VIA_H, 44, 18 + (i % 2) * 8, '#a8cde4', '#ffffff');
+    /* pingüinos parados en el hielo */
+    for (let i = 0; i < 4; i++) {
+      const x = ciclo(i, 53, 212, s * 1.1 | 0), bob = ((t / 14 + i) | 0) % 2;
+      R(x, VIA_H - 11 + bob, 7, 9, '#1b1226');
+      R(x + 2, VIA_H - 8 + bob, 4, 6, '#f2f8ff');
+      R(x + 1, VIA_H - 13 + bob, 5, 3, '#1b1226');
+      R(x + 6, VIA_H - 12 + bob, 2, 1, '#f2a03c');
+      R(x + 1, VIA_H - 2 + bob, 2, 1, '#f2a03c'); R(x + 4, VIA_H - 2 + bob, 2, 1, '#f2a03c');
+    }
+    pista(['#eaf5fb','#d2e7f3','#b6d5e8'], '#8fbcd8', s);
+    for (let i = 0; i < 26; i++) {
+      const x = (((i * 61 - (s * 1.4 | 0)) % 176) + 176) % 176 - 8;
+      P(x, VIA_H + ((i * 37) % 40), 'rgba(255,255,255,.75)');
+    }
+
+  } else {
+    /* el fondo del mar */
+    vgrad(0, 0, 160, VIA_H, ['#0d2a52','#12426c','#1a6288','#2481a4']);
+    for (let i = 0; i < 4; i++) {
+      const x = 16 + i * 38;
+      for (let k = 0; k < VIA_H; k += 2) R(x + (k >> 1), k, 9, 2, 'rgba(180,240,255,.05)');
+    }
+    for (let i = 0; i < 7; i++) {
+      const x = ciclo(i, 33, 231, s * 1.3 | 0), y = 26 + ((i * 23) % 54), f = ((t / 7 + i) | 0) % 2;
+      const c = ['#f2c14e','#e8724c','#8fd0c8','#e8a0c0'][i % 4];
+      elipse(x + 4, y, 5, 3, c);
+      R(x + 9, y - 2 + f, 4, 4, c);
+      P(x + 2, y - 1, '#1b1226');
+    }
+    for (let i = 0; i < 14; i++) {
+      const bx = (((i * 41) % 160)), by = ((VIA_H + 40 - (t * 1.3 + i * 17)) % 150 + 150) % 150 - 6;
+      R(bx, by, 2, 2, 'rgba(210,245,255,.55)');
+    }
+    for (let i = 0; i < 9; i++) {
+      const x = ciclo(i, 27, 243, s * 0.9 | 0);
+      for (let k = 0; k < 26; k += 2)
+        R(x + Math.round(Math.sin(k / 4 + t / 9 + i) * 3), VIA_H - 26 + k, 3, 2, k % 4 ? '#2f8f6a' : '#3fa87c');
+    }
+    for (let i = 0; i < 5; i++) {
+      const x = ciclo(i, 47, 235, s * 1.15 | 0);
+      elipse(x + 6, VIA_H - 4, 8, 5, '#d9686a'); elipse(x + 12, VIA_H - 7, 5, 4, '#e8909a');
+    }
+    pista(['#2a5f6e','#245361','#1d4553'], '#6ab0a8', s);
+    for (let i = 0; i < 10; i++) {
+      const bx = (((i * 53 - (s | 0)) % 176) + 176) % 176 - 8;
+      P(bx, VIA_H + 6 + ((i * 31) % 32), 'rgba(200,240,255,.35)');
+    }
+  }
+}
+
+/* La casa de Roberto, ya de tarde */
+function bgCasaR(t) {
+  vgrad(0, 0, 160, GROUND - 12, ['#f7c86a','#f2a06a','#d9707e']);
+  disco(26, 34, 15, 'rgba(255,233,168,.30)');
+  disco(26, 34, 10, '#ffeeb0');
+  for (let i = 0; i < 3; i++) {
+    const x = ((i * 57 - (t * 0.16 | 0)) % 228 + 228) % 228 - 40;
+    elipse(x, 16 + i * 7, 13, 4, 'rgba(255,236,200,.75)');
+    elipse(x + 10, 14 + i * 7, 9, 3, 'rgba(255,236,200,.75)');
+  }
+  /* casa */
+  R(46, 34, 76, GROUND - 46, '#e8c9a0');
+  R(46, 34, 76, 2, '#f6e0c0');
+  R(46, 34, 2, GROUND - 46, '#f2d8b4');
+  /* techo */
+  for (let i = 0; i < 16; i++) R(42 + i * 2.7, 33 - i, 84 - i * 5.4, 1, i < 3 ? '#a8543f' : '#8a4030');
+  R(42, 33, 84, 2, '#6b3226');
+  /* puerta */
+  R(76, GROUND - 34, 20, 34, '#7a4a2c');
+  R(76, GROUND - 34, 20, 1, '#a8703f');
+  R(78, GROUND - 31, 16, 12, '#5c3620');
+  P(92, GROUND - 17, '#f2d35a'); R(91, GROUND - 18, 2, 2, '#f2d35a');
+  /* ventanas */
+  for (let i = 0; i < 2; i++) {
+    const wx = 54 + i * 52;
+    R(wx, 46, 18, 16, '#5c3620');
+    R(wx + 1, 47, 16, 14, '#9fd0e8');
+    R(wx + 1, 47, 16, 5, '#c8e6f2');
+    R(wx + 8, 47, 1, 14, '#5c3620'); R(wx + 1, 53, 16, 1, '#5c3620');
+  }
+  /* macetas y arbusto */
+  R(126, GROUND - 16, 12, 16, '#b06a44'); R(125, GROUND - 19, 14, 3, '#c9825a');
+  elipse(132, GROUND - 24, 10, 8, '#3f8f4f'); elipse(129, GROUND - 27, 6, 5, '#57ab66');
+  /* banqueta y calle */
+  R(0, GROUND - 12, 160, 12, '#c8b89c'); R(0, GROUND - 12, 160, 1, '#e2d4b8');
+  for (let x = 0; x < 160; x += 20) R(x, GROUND - 12, 1, 12, '#a89a80');
+  vgrad(0, GROUND, 160, 144 - GROUND, ['#6a6474','#5e5866','#514c5a']);
+  R(0, GROUND, 160, 1, '#8a8296');
+  for (let x = 6; x < 160; x += 34) R(x, 136, 18, 2, 'rgba(255,255,255,.35)');
 }
 
 const ESCENAS = { patio:bgPatio, cuarto:bgCuarto, interior:bgInterior, drags:bgDrags,
@@ -1973,11 +2233,11 @@ const NOCHE = [
 const ANTRO = [
   { e:'santiBaila', a:{}, q:'santiago', t:'¡FELICIDADES MASOL!' },
   { e:'llegaRoberto', a:{}, dur:38 },
-  { e:'losDos', a:{}, q:'roberto', t:'TE SEGUÍ HASTA ACÁ. NO ME PIENSO IR.' }
+  { e:'losDos', a:{}, q:'roberto', t:'NADA MÁS TE ACOMPAÑO. NO PIENSO BAILAR.' }
 ];
 
 const BESO = [
-  { e:'bailePausa', a:{}, q:'drag',     t:"WOW. SHE'S REALLY GOOD." },
+  { e:'bailePausa', a:{}, q:'santiago', t:"WOW. SHE'S REALLY GOOD." },
   { e:'beso', a:{}, dur:80 },
   { e:'beso', a:{ya:true}, q:'santiago', t:'Y ASÍ EMPEZÓ TODO.' }
 ];
@@ -1987,11 +2247,10 @@ Object.assign(CUADROS, CUADROS_NOCHE);
 /* ---- De vuelta en casa, la casa del amigo, y Puerto Escondido ---- */
 const MSG_CASA = [
   { mio:true,  t:'GRACIAS POR HOY' },
-  { mio:true,  t:'NO ME LA ESPERABA' },
   { mio:true,  t:'¿VIENES A CASA DE UN AMIGO EL VIERNES?' },
   { mio:false, t:'AHÍ ESTARÉ' }
 ];
-function sentadosSofa(t, juntos) {
+function sentadosAmigo(t, juntos) {
   const s = PERSONAJES.santiago, r = PERSONAJES.roberto;
   const sx = 58, rx = 78;
   drawSprite(s.quieto.slice(0, 21), sx, 58, false, s.color);
@@ -2002,7 +2261,7 @@ function sentadosSofa(t, juntos) {
     R(sx + 13, 76, 8, 1, '#1b1226');
     R(sx + 12, 72, 1, 4, '#1b1226'); R(sx + 21, 72, 1, 4, '#1b1226');
   }
-  sofaFrente(76);
+  mesaAmigoFrente(76);
 }
 Object.assign(CUADROS, {
   casaChat: (tt, a) => {
@@ -2012,12 +2271,12 @@ Object.assign(CUADROS, {
   },
   sofa: (tt, a) => {
     bgAmigo(tt);
-    sentadosSofa(tt, a.manos);
+    sentadosAmigo(tt, a.manos);
     frAmigo(tt);
   },
   manos: (tt) => {
     bgAmigo(tt);
-    sentadosSofa(tt, true);
+    sentadosAmigo(tt, true);
     for (let i = 0; i < 3; i++) {
       const a = ((tt / 3 | 0) + i * 8) % 26;
       if (a < 13) corazon(66 + i * 9, 70 - a, (tt / 8 | 0) % 2);
@@ -2041,7 +2300,37 @@ Object.assign(CUADROS, {
     else explosion(80, 68, tt - 8);
     if (tt > 10 && tt < 22) R(0, 0, 160, 144, 'rgba(255,240,190,' + ((22 - tt) / 26).toFixed(2) + ')');
   },
-  /* ---- si le dice ---- */
+  /* ---- si lo invita: la semana que viene y el viaje ---- */
+  semana: (tt) => {
+    R(0, 0, 160, 144, '#141026');
+    for (let i = 0; i < 24; i++) {
+      const x = (((i * 43 - tt * 7) % 210) + 210) % 210 - 26;
+      R(x, 6 + ((i * 29) % 132), 12, 1, 'rgba(255,233,168,' + (0.08 + (i % 3) * 0.07).toFixed(2) + ')');
+    }
+    if (tt > 8) centerText(60, 'UNA SEMANA', '#ffe9a8', 'rgba(0,0,0,.6)');
+    if (tt > 20) centerText(74, 'DESPUÉS...', '#ffe9a8', 'rgba(0,0,0,.6)');
+  },
+  viaje: (tt, a) => {
+    fondoViaje(a.tema, tt);
+    coche(52, 90, tt);
+    if (a.tema === 'mar') for (let i = 0; i < 4; i++) {
+      const b = ((tt * 1.6 + i * 9) % 34);
+      R(50 - b * 0.7, 104 - b, 2, 2, 'rgba(210,245,255,.55)');
+    }
+    if (a.r) rotulo(a.r);
+  },
+  llegada: (tt, a) => {
+    bgCasaR(tt);
+    persona('roberto', 108, GROUND - 30, true, false, tt);
+    if (a.ve) {
+      coche(2, GROUND - 27, tt, true, true);
+      persona('santiago', 64, GROUND - 30, false, false, tt);
+      for (let i = 0; i < 3; i++)
+        corazon(80 + i * 8, GROUND - 34 - (((tt / 3 + i * 8) % 22) | 0), (tt / 9 | 0) % 2);
+    } else {
+      coche(Math.min(2, -76 + tt * 1.5), GROUND - 27, tt);
+    }
+  },
   aeroJuntos: (tt) => {
     bgAero(tt);
     const x = Math.min(6 + tt * 1.1, 110);
@@ -2067,18 +2356,17 @@ Object.assign(CUADROS, {
 
 const CASA = [
   { e:'casaChat', a:{n:0}, q:'santiago', hacer:() => { cuartoNoche = true; },
-    t:'YA EN MI CASA. TODAVÍA TRAIGO LA CANGURERA PUESTA.' },
-  { e:'casaChat', a:{n:2}, q:'santiago', t:'GRACIAS POR HOY. NO ME LA ESPERABA.' },
-  { e:'casaChat', a:{n:3}, q:'santiago', t:'¿VIENES A CASA DE UN AMIGO EL VIERNES?' },
-  { e:'casaChat', a:{n:4}, q:'roberto',  t:'AHÍ ESTARÉ.' }
+    t:'TODAVÍA TRAIGO LA CANGURERA PUESTA Y AUN ASÍ SE ME CAYÓ TODO.' },
+  { e:'casaChat', a:{n:1}, q:'santiago', t:'GRACIAS POR HOY.' },
+  { e:'casaChat', a:{n:2}, q:'santiago', t:'¿VIENES A CASA DE UN AMIGO EL VIERNES?' },
+  { e:'casaChat', a:{n:3}, q:'roberto',  t:'AHÍ ESTARÉ.' }
 ];
 
 const AMIGO = [
   { e:'sofa',  a:{}, q:'santiago', hacer:() => { cuartoNoche = false; },
-    t:'VIERNES. CASA DE MI AMIGO, EN EL SILLÓN DE SIEMPRE.' },
+    t:'VIERNES. CASA DE UN AMIGO, EN LA MESA DE LA COCINA.' },
   { e:'manos', a:{}, dur:70 },
-  { e:'sofa',  a:{manos:true}, q:'santiago', t:'LLEVAMOS UNA HORA ASÍ Y NO ME QUIERO MOVER.' },
-  { e:'sofa',  a:{manos:true}, q:'roberto',  t:'OYE... TENGO QUE DECIRTE ALGO.' }
+  { e:'sofa',  a:{manos:true}, q:'santiago', t:'LLEVAMOS UNA HORA ASÍ Y NO ME QUIERO MOVER.' }
 ];
 
 /* Si Roberto se queda callado */
@@ -2088,14 +2376,20 @@ const AVION_MALO = [
   { e:'boom',     a:{}, dur:56 }
 ];
 
-/* Si sí le dice.
-   ▼ AQUÍ VA LA ESCENA QUE ME VAS A CONTAR: mete los pasos que quieras
-     antes del aeropuerto, con el mismo formato { e:..., q:..., t:... } */
+/* Si sí lo invita: se adelanta la semana y arranca el viaje. */
 const PUERTO = [
   { e:'sofa', a:{manos:true}, q:'roberto',  t:'ME VOY A PUERTO ESCONDIDO. VENTE CONMIGO.' },
   { e:'sofa', a:{manos:true}, q:'santiago', t:'¿ESTÁS HABLANDO EN SERIO?' },
   { e:'sofa', a:{manos:true}, q:'roberto',  t:'MUY EN SERIO.' },
-  /* ▲ FIN DEL HUECO PARA LA ESCENA NUEVA */
+  { e:'semana', a:{}, dur:66 },
+  { e:'viaje', a:{tema:'ciudad',    r:'LA CIUDAD' },        dur:66 },
+  { e:'viaje', a:{tema:'carretera', r:'LA CARRETERA' },     dur:66 },
+  { e:'viaje', a:{tema:'desierto',  r:'EL DESIERTO' },      dur:66 },
+  { e:'viaje', a:{tema:'antartida', r:'LA ANTÁRTIDA' },     dur:66 },
+  { e:'viaje', a:{tema:'mar',       r:'EL FONDO DEL MAR' }, dur:66 },
+  { e:'viaje', a:{tema:'mar'}, q:'santiago', t:'¿PODRÉ HACER ESTO PARA SIEMPRE?' },
+  { e:'llegada', a:{}, dur:80 },
+  { e:'llegada', a:{ve:true}, q:'santiago', t:'SÍ. SÍ PODRÍA.' },
   { e:'aeroJuntos', a:{}, dur:70 },
   { e:'vueloBien',  a:{}, dur:60 },
   { e:'playa', a:{}, dur:70 },
@@ -2443,7 +2737,7 @@ function pantallaCreditos(t) {
 
 
 /* ---------- Elegir, y las consecuencias de elegir mal ---------- */
-function cajaBase(quien) {
+function cajaBase(quien, sinNombre) {
   const p = PERSONAJES[quien];
   R(5, BOX_Y + 2, 152, BOX_H, 'rgba(12,6,28,.40)');
   R(4, BOX_Y, 152, BOX_H, '#f6efdc');
@@ -2453,15 +2747,16 @@ function cajaBase(quien) {
   R(4, BOX_Y, 152, 1, '#241a3c'); R(4, BOX_Y + BOX_H - 1, 152, 1, '#241a3c');
   R(4, BOX_Y, 1, BOX_H, '#241a3c'); R(155, BOX_Y, 1, BOX_H, '#241a3c');
   R(5, BOX_Y + 10, 150, 1, 'rgba(255,255,255,.85)');
+  if (sinNombre) return;
   const claro = (p.tinta === '#2a2438');
   drawTextS(10, BOX_Y + 2, p.nombre, p.tinta, claro ? 'rgba(255,255,255,.45)' : 'rgba(0,0,0,.45)');
 }
 /* ---------- Menús de decisión (sirven para cualquier pregunta) ---------- */
 function pantallaMenu(t) {
   menu.fondo(t);
-  cajaBase(menu.quien);
+  cajaBase(menu.quien, true);
   const p = PERSONAJES[menu.quien];
-  drawTextS(62, BOX_Y + 2, menu.pregunta, p.tinta, 'rgba(0,0,0,.35)');
+  centerText(BOX_Y + 2, menu.pregunta, p.tinta, 'rgba(0,0,0,.35)');
   for (let i = 0; i < menu.ops.length; i++) {
     const oy = BOX_Y + 14 + i * 10;
     if (menu.sel === i) { R(8, oy - 2, 144, 10, '#e8d9b8'); corazon(11, oy - 1, (t / 12 | 0) % 2); }
@@ -2615,9 +2910,11 @@ const SALTOS = [
   { n:'VUELVE A CASA',    f:() => { cangurera = true; cuartoNoche = true;
                                     correrGuion(CASA, () => correrGuion(AMIGO, menuPuerto)); } },
   { n:'CASA DEL AMIGO',   f:() => { cuartoNoche = false; correrGuion(AMIGO, menuPuerto); } },
-  { n:'¿LE DICES?',       f:() => { menuPuerto(); } },
+  { n:'¿LO INVITAS?',     f:() => { menuPuerto(); } },
   { n:'EL AVIÓN (MALO)',  f:() => { correrGuion(AVION_MALO, () => { estado = 'explotado'; }); } },
-  { n:'PUERTO ESCONDIDO', f:() => { correrGuion(PUERTO, finActo); } },
+  { n:'ME LO LLEVO',      f:() => { correrGuion(PUERTO, finActo); } },
+  { n:'EL VIAJE',         f:() => { irGuion(PUERTO, 3, finActo); } },
+  { n:'LLEGO POR ÉL',     f:() => { irGuion(PUERTO, 10, finActo); } },
   { n:'MES 2: CINE',      f:() => irMes(1) },
   { n:'MES 3: LLUVIA',    f:() => irMes(2) },
   { n:'MES 4: AZOTEA',    f:() => irMes(3) },
@@ -2689,9 +2986,9 @@ function menuEspera() {
     });
   });
 }
-function fondoSofa(t) { bgAmigo(t); sentadosSofa(t, true); frAmigo(t); }
+function fondoAmigo(t) { bgAmigo(t); sentadosAmigo(t, true); frAmigo(t); }
 function menuPuerto() {
-  abrirMenu('¿LE DICES?', ['SÍ, LE DIGO', 'MEJOR NO'], 'roberto', fondoSofa, i => {
+  abrirMenu('PUERTO ESCONDIDO', ['INVITARLO', 'NO INVITARLO'], 'roberto', fondoAmigo, i => {
     if (i === 1) transicionar(() => correrGuion(AVION_MALO, () => { estado = 'explotado'; }));
     else transicionar(() => correrGuion(PUERTO, finActo));
   });

@@ -111,49 +111,63 @@ Avisos: **ESCOGE MESA** / **A = SENTARSE** · Cartel: **MÁS TARDE...**
 ### El cumpleaños en el lugar de drags
 
 1. **SANTIAGO:** ¡FELICIDADES MASOL!
-2. **ROBERTO:** TE SEGUÍ HASTA ACÁ. NO ME PIENSO IR.
+2. **ROBERTO:** NADA MÁS TE ACOMPAÑO. NO PIENSO BAILAR.
 
 - **¿CÓMO BAILAS?** · **LA MACARENA** / **PAYASO DE RODEO** / **SALSA**
 
 
 
-1. **LA DRAG:** WOW. SHE'S REALLY GOOD.
+1. **SANTIAGO:** WOW. SHE'S REALLY GOOD.
 2. **SANTIAGO:** Y ASÍ EMPEZÓ TODO.
 
 ## 8. De vuelta en su casa
 
-1. **OTRO:** YA EN MI CASA. TODAVÍA TRAIGO LA CANGURERA PUESTA.
-2. **SANTIAGO:** GRACIAS POR HOY. NO ME LA ESPERABA.
+1. **SANTIAGO:** TODAVÍA TRAIGO LA CANGURERA PUESTA Y AUN ASÍ SE ME CAYÓ TODO.
+2. **SANTIAGO:** GRACIAS POR HOY.
 3. **SANTIAGO:** ¿VIENES A CASA DE UN AMIGO EL VIERNES?
 4. **ROBERTO:** AHÍ ESTARÉ.
 
 Mensajes del chat:
 
 - **SANTIAGO:** GRACIAS POR HOY
-- **SANTIAGO:** NO ME LA ESPERABA
 - **SANTIAGO:** ¿VIENES A CASA DE UN AMIGO EL VIERNES?
 - **ROBERTO:** AHÍ ESTARÉ
 
 ## 9. Casa del amigo
 
-1. **OTRO:** VIERNES. CASA DE MI AMIGO, EN EL SILLÓN DE SIEMPRE.
+1. **SANTIAGO:** VIERNES. CASA DE UN AMIGO, EN LA MESA DE LA COCINA.
 2. **SANTIAGO:** LLEVAMOS UNA HORA ASÍ Y NO ME QUIERO MOVER.
-3. **ROBERTO:** OYE... TENGO QUE DECIRTE ALGO.
 
-- **¿LE DICES?** · **SÍ, LE DIGO** / **MEJOR NO**
+Prompt (los prompts ya no llevan nombre arriba):
 
-### Si no le dice
+- **PUERTO ESCONDIDO** · **INVITARLO** / **NO INVITARLO**
+
+### Si no lo invita
 
 1. **SANTIAGO:** ME VOY SOLO A PUERTO ESCONDIDO. TAMPOCO PASA NADA.
 
 - Pantalla final: **NO LE DIJO.** · **FINAL MALO** · **A = OTRA VEZ**
 
-### Si sí le dice (los tres primeros pasos son el hueco para tu escena)
+### Si sí lo invita
 
 1. **ROBERTO:** ME VOY A PUERTO ESCONDIDO. VENTE CONMIGO.
 2. **SANTIAGO:** ¿ESTÁS HABLANDO EN SERIO?
 3. **ROBERTO:** MUY EN SERIO.
-4. **SANTIAGO:** PUERTO ESCONDIDO. NO LLEVÁBAMOS NI UN MES.
+
+Cartel: **UNA SEMANA** / **DESPUÉS...**
+
+Rótulos del viaje en coche (uno por escena): **LA CIUDAD** · **LA CARRETERA** ·
+**EL DESIERTO** · **LA ANTÁRTIDA** · **EL FONDO DEL MAR**
+
+4. **SANTIAGO:** ¿PODRÉ HACER ESTO PARA SIEMPRE?
+
+Llega a casa de Roberto y lo ve:
+
+5. **SANTIAGO:** SÍ. SÍ PODRÍA.
+
+Y ya se van al aeropuerto juntos:
+
+6. **SANTIAGO:** PUERTO ESCONDIDO. NO LLEVÁBAMOS NI UN MES.
 
 ## 10. Meses 2 al 6
 
@@ -171,4 +185,4 @@ Mensajes del chat:
 ## 12. Consola y selector
 
 - **REINICIAR**, **SONIDO: ON/OFF**, **ESCENAS**, **MES 1/6**
-- Selector (SELECT o botón ESCENAS): **IR A...** con 31 secciones, pie **A = IR    B = SALIR**
+- Selector (SELECT o botón ESCENAS): **IR A...** con 33 secciones, pie **A = IR    B = SALIR**
