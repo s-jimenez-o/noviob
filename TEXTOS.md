@@ -50,6 +50,7 @@ Edita lo que quieras y mándamelo de vuelta. Reglas de la fuente:
 ### Grupo de WhatsApp (**LAS AMIGAS**)
 
 - **[FOTO]:** (captura de la ficha de Roberto)
+- **SANTIAGO:** MIREN LO QUE TIENE EN LA DESCRIPCIÓN
 - **SANTIAGO:** PLAN IDEAL? GOING OUT AND BLACKING OUT
 - **LAS AMIGAS:** * SOULMATES *
 - **SANTIAGO:** TENGO DATE CON ÉL EL SÁBADO
@@ -60,9 +61,11 @@ Edita lo que quieras y mándamelo de vuelta. Reglas de la fuente:
 
 - **ALEX, 26** · 3 KM · _A VER TUS UBRES_
 - **JUAN P, 31** · 8 KM · _PLAN IDEAL? / NO SÉ, TÚ DIME_
-- **ROBERTO, 22** · 2 KM · _PLAN IDEAL? / GOING OUT AND / BLACKING OUT_
+- **ROBERTO, 22** · ∞ KM · _PLAN IDEAL? / GOING OUT AND / BLACKING OUT_
 
 Otros: **MATCH**, **¡ES MATCH!**, **ESCRÍBELE**
+
+La distancia de Roberto es el signo de infinito: **∞ KM**
 
 ## 4. El cuarto (jugable, de día)
 
@@ -99,7 +102,8 @@ Avisos en pantalla: **ENTRAR** (para meterse al club) / **SEGUIR** (en los otros
 
 ### Adentro del club
 
-Avisos: **ESCOGE MESA** / **A = SENTARSE** · Cartel: **MÁS TARDE...** / **Y NINGUNA HACHA LANZADA.**
+Avisos: **ESCOGE MESA** / **A = SENTARSE**
+Cartel: **MÁS TARDE...** / **Y NINGUNA HACHA LANZADA.** — se queda hasta que le piquen a A
 
 1. **ROBERTO:** A VER QUÉ HAY DE TOMAR.
 2. **MESERA:** HOLA, BUENAS NOCHES. ¿LES PUEDO TOM...
@@ -112,6 +116,7 @@ Avisos: **ESCOGE MESA** / **A = SENTARSE** · Cartel: **MÁS TARDE...** / **Y NI
 
 1. **SANTIAGO:** ¡FELICIDADES MASOL!
 2. **ROBERTO:** NADA MÁS TE ACOMPAÑO. NO PIENSO BAILAR.
+3. **SANTIAGO:** ANDA, BAILAAAA.
 
 - **¿CÓMO BAILAS?** · **LA MACARENA** / **PAYASO DE RODEO** / **SALSA**
 
@@ -135,8 +140,11 @@ Mensajes del chat:
 
 ## 9. Casa del amigo
 
-1. **SANTIAGO:** SÁBADO. CASA DE UN AMIGO, EN LA MESA DEL COMEDOR.
-2. **SANTIAGO:** LLEVAMOS UNA HORA ASÍ Y NO ME QUIERO MOVER.
+Aquí nadie habla: todo lo cuentan carteles de narrador (sin nombre ni caja de
+diálogo), y cada uno se queda hasta que le piquen a A.
+
+1. Cartel: **SÁBADO.** / **CASA DE UN AMIGO.**
+2. Cartel: **\* NO SE DEJAN DE** / **AGARRAR LA MANO \***
 
 Prompt (los prompts ya no llevan nombre arriba):
 

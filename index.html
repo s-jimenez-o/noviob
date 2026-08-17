@@ -425,7 +425,7 @@ const FONT = {
   'S':'0F10100E01011E','T':'1F040404040404','U':'1111111111110E','V':'11111111110A04',
   'W':'11111115151B11','X':'11110A040A1111','Y':'11110A04040404','Z':'1F01020408101F',
   'Á':'06000E111F1111','É':'06001F101E101F','Í':'06000E0404040E','Ó':'06000E1111110E',
-  'Ú':'0600111111110E',
+  'Ú':'0600111111110E','∞':'001B15151B0000',
   '0':'0E13151515190E','1':'040C040404040E','2':'0E11010204081F','3':'1F02040201110E',
   '4':'02060A121F0202','5':'1F101E0101110E','6':'0608101E11110E','7':'1F010204080808',
   '8':'0E11110E11110E','9':'0E11110F01020C',
@@ -858,7 +858,7 @@ const PERFILES = [
     busto: busto(CAB_SANTIAGO, TOR_SANTIAGO),
     color: { k:'#1b1226','1':'#181820','2':'#3c3c4c', s:'#c98a5e', S:'#a06840',
              e:'#231624', b:'#2a2a34', m:'#6b3a34', c:'#b5354a', C:'#8a2436', t:'#f2c9d0' } },
-  { nombre:'ROBERTO, 22', km:'2 KM', fondo:'#ffe7d4',
+  { nombre:'ROBERTO, 22', km:'∞ KM', fondo:'#ffe7d4',
     bio: ['PLAN IDEAL?', 'GOING OUT AND', 'BLACKING OUT'],
     busto: busto(CAB_ROBERTO, TOR_ROBERTO), color: PERSONAJES.roberto.color }
 ];
@@ -1911,6 +1911,24 @@ function bgCasaR(t) {
   for (let x = 6; x < 160; x += 34) R(x, 136, 18, 2, 'rgba(255,255,255,.35)');
 }
 
+/* La "A" parpadeando: avisa que la pantalla espera a que le piquen */
+function botonA() {
+  if ((t / 22 | 0) % 2 === 0) return;
+  R(139, 126, 15, 13, 'rgba(18,10,30,.75)');
+  R(139, 126, 15, 1, 'rgba(255,255,255,.25)');
+  drawText(144, 129, 'A', '#ffe9a8');
+}
+/* Cartel de narrador: sin nombre y sin caja de diálogo */
+function cartelEscena(lineas, y0) {
+  let w = 0;
+  for (const l of lineas) w = Math.max(w, textW(l));
+  const x = Math.round((160 - w - 12) / 2);
+  R(x, y0 - 4, w + 12, lineas.length * 11 + 6, 'rgba(18,10,30,.72)');
+  R(x, y0 - 4, w + 12, 1, 'rgba(255,255,255,.22)');
+  for (let i = 0; i < lineas.length; i++)
+    centerText(y0 + i * 11, lineas[i], '#ffe9a8', 'rgba(0,0,0,.5)');
+}
+
 /* ---- 16. LA TARJETA DE "ONE ETERNITY LATER" ---- */
 function fondoTiki(t) {
   const cols = ['#e8a648','#d9c07a','#8fae3c','#f2d89a','#c98f3a','#a8c45a','#e0b45c','#7fa235'];
@@ -2262,6 +2280,7 @@ const MSG_TARDE = [
 ];
 const MSG_WA = [
   { mio:true,  foto:true },
+  { mio:true,  t:'MIREN LO QUE TIENE EN LA DESCRIPCIÓN' },
   { mio:true,  t:'PLAN IDEAL? GOING OUT AND BLACKING OUT' },
   { mio:false, t:'* SOULMATES *', chispas:true },
   { mio:true,  t:'TENGO DATE CON ÉL EL SÁBADO' },
@@ -2403,11 +2422,11 @@ const INTRO = [
   { e:'chat',    a:{n:2}, q:'santiago', t:'LISTO. ENVIADO.' },
   { e:'chat',    a:{n:4}, q:'roberto',  t:'SÍ. ¿A QUÉ HORA?' },
   { e:'wa',      a:{n:1}, q:'santiago', t:'LE MANDO LA CAPTURA A LAS AMIGAS.' },
-  { e:'wa',      a:{n:2}, q:'santiago', t:'MIREN LO QUE TIENE EN LA DESCRIPCIÓN.' },
-  { e:'wa',      a:{n:3}, q:'amigas',   t:'SOULMATES.' },
-  { e:'wa',      a:{n:4}, q:'santiago', t:'TENGO DATE CON ÉL EL SÁBADO.' },
-  { e:'wa',      a:{n:5}, q:'santiago', t:'ESTÁ RARO: CASI NO HEMOS HABLADO Y NI LO CONOZCO.' },
-  { e:'wa',      a:{n:6}, q:'santiago', t:'PERO SIENTO QUE ALGO IMPORTANTE VA A PASAR CON ÉL.' },
+  { e:'wa',      a:{n:3}, q:'santiago', t:'MIREN LO QUE TIENE EN LA DESCRIPCIÓN.' },
+  { e:'wa',      a:{n:4}, q:'amigas',   t:'SOULMATES.' },
+  { e:'wa',      a:{n:5}, q:'santiago', t:'TENGO DATE CON ÉL EL SÁBADO.' },
+  { e:'wa',      a:{n:6}, q:'santiago', t:'ESTÁ RARO: CASI NO HEMOS HABLADO Y NI LO CONOZCO.' },
+  { e:'wa',      a:{n:7}, q:'santiago', t:'PERO SIENTO QUE ALGO IMPORTANTE VA A PASAR CON ÉL.' },
   { e:'guarda',  a:{}, dur:24 }
 ];
 
@@ -2465,6 +2484,7 @@ const CUADROS_NOCHE = {
     if (tt > 46) centerText(16, 'MÁS TARDE...', '#ffe9a8', 'rgba(10,4,20,.9)');
     if (tt > 56) centerText(28, 'Y NINGUNA HACHA', '#ffe9a8', 'rgba(10,4,20,.9)');
     if (tt > 56) centerText(38, 'LANZADA.', '#ffe9a8', 'rgba(10,4,20,.9)');
+    if (tt > 74) botonA();
   },
   seVan: (tt) => {
     bgInterior(tt);
@@ -2526,7 +2546,7 @@ const NOCHE = [
   { e:'conMesera', a:{}, q:'mesera',  t:'HOLA, BUENAS NOCHES. ¿LES PUEDO TOM...' },
   { e:'conMesera', a:{}, q:'roberto', t:'YA ÓRALE PUES NECIA, TRÁEME LA CAGUAMA.' },
   { e:'conMesera', a:{}, q:'santiago', t:'YO UNA CUBA, POR FAVOR.' },
-  { e:'anochece', a:{}, dur:70 },
+  { e:'anochece', a:{}, espera:true },
   { e:'mesa', a:{carta:false}, q:'santiago', t:'OYE, TENGO UN CUMPLEAÑOS. ¿ME ACOMPAÑAS?' },
   { e:'mesa', a:{carta:false}, q:'roberto',  t:'VAMOS.' },
   { e:'seVan', a:{}, dur:70 }
@@ -2535,7 +2555,8 @@ const NOCHE = [
 const ANTRO = [
   { e:'santiBaila', a:{}, q:'santiago', t:'¡FELICIDADES MASOL!' },
   { e:'llegaRoberto', a:{}, dur:38 },
-  { e:'losDos', a:{}, q:'roberto', t:'NADA MÁS TE ACOMPAÑO. NO PIENSO BAILAR.' }
+  { e:'losDos', a:{}, q:'roberto',  t:'NADA MÁS TE ACOMPAÑO. NO PIENSO BAILAR.' },
+  { e:'losDos', a:{}, q:'santiago', t:'ANDA, BAILAAAA.' }
 ];
 
 const BESO = [
@@ -2575,8 +2596,10 @@ Object.assign(CUADROS, {
     bgAmigo(tt);
     sentadosAmigo(tt, a.manos);
     frAmigo(tt);
+    if (a.cartel) cartelEscena(a.cartel, 14);
+    if (a.espera && tt > 26) botonA();
   },
-  manos: (tt) => {
+  manos: (tt, a) => {
     bgAmigo(tt);
     sentadosAmigo(tt, true);
     for (let i = 0; i < 3; i++) {
@@ -2584,6 +2607,8 @@ Object.assign(CUADROS, {
       if (a < 13) corazon(66 + i * 9, 70 - a, (tt / 8 | 0) % 2);
     }
     frAmigo(tt);
+    if (a && a.cartel) cartelEscena(a.cartel, 14);
+    if (a && a.espera && tt > 26) botonA();
   },
   /* ---- si no le dice ---- */
   aeroSolo: (tt) => {
@@ -2791,10 +2816,9 @@ const CASA = [
 ];
 
 const AMIGO = [
-  { e:'sofa',  a:{}, q:'santiago', hacer:() => { cuartoNoche = false; },
-    t:'SÁBADO. CASA DE UN AMIGO, EN LA MESA DEL COMEDOR.' },
-  { e:'manos', a:{}, dur:70 },
-  { e:'sofa',  a:{manos:true}, q:'santiago', t:'LLEVAMOS UNA HORA ASÍ Y NO ME QUIERO MOVER.' }
+  { e:'sofa',  a:{cartel:['SÁBADO.', 'CASA DE UN AMIGO.'], espera:true},
+    hacer:() => { cuartoNoche = false; }, espera:true },
+  { e:'manos', a:{cartel:['* NO SE DEJAN DE', 'AGARRAR LA MANO *'], espera:true}, espera:true }
 ];
 
 /* Si Roberto se queda callado */
@@ -3029,7 +3053,7 @@ let jug = { x: 16, mirando: 1 };
 let corazonTomado = false;
 let pages = [], page = 0, revealed = 0, textTimer = 0, hablante = 'santiago';
 let charla = [], charlaIdx = 0, volverA = 'juego';
-let guion = null, gPaso = 0, gT = 0, gFin = null;
+let guion = null, gPaso = 0, gT = 0, gFin = null, gSinFade = false;
 let menu = null, pianoT = 0;
 let baileTipo = 'salsa', baileT = 0;
 let saltoSel = 0, saltoTop = 0, saltoVuelve = 'titulo', repite = 0;
@@ -3073,7 +3097,7 @@ function avanzarTexto() {
 /* Deja todo como recién encendido. Lo usa el botón REINICIAR. */
 function reiniciar() {
   estado = 'boot'; bootT = 0;
-  guion = null; gPaso = 0; gT = 0; gFin = null;
+  guion = null; gPaso = 0; gT = 0; gFin = null; gSinFade = false;
   menu = null; pianoT = 0; volverA = 'juego';
   baileTipo = 'salsa'; baileT = 0; interiorNoche = false; mesaElegida = 1;
   saltoSel = 0; saltoTop = 0; saltoVuelve = 'titulo'; repite = 0;
@@ -3268,7 +3292,7 @@ function pantallaMedidor(t) {
   }
 }
 function empezarMedidor() { medX = MED_MIN; medMsg = 0; estado = 'medidor'; }
-function finViaje() { correrGuion(PUERTO2, empezarMedidor); }
+function finViaje() { correrGuion(PUERTO2, empezarMedidor, true); }
 
 function fondoEspera(t) {
   bgPatio(t);
@@ -3401,7 +3425,7 @@ function flechaSalida(x, y) {
    Para quitarlo del regalo final: borra el botón .escenas del HTML y el
    bloque de 'saltos' de aquí abajo.
    ========================================================================= */
-function irGuion(lista, paso, fin) { correrGuion(lista, fin); gPaso = paso; gT = 0; }
+function irGuion(lista, paso, fin, sinFade) { correrGuion(lista, fin, sinFade); gPaso = paso; gT = 0; }
 function irMes(m) {
   mes = m; corazonTomado = false; cangurera = false;
   jug.x = 8; jug.mirando = 1; estado = 'juego';
@@ -3409,43 +3433,43 @@ function irMes(m) {
 const SALTOS = [
   { n:'ENCENDIDO',        f:() => { estado = 'boot'; bootT = 0; } },
   { n:'TÍTULO',           f:() => { estado = 'titulo'; } },
-  { n:'INTRO: LA APP',    f:() => { cangurera = false; irGuion(INTRO, 0, finIntro); } },
-  { n:'INTRO: ¡ES MATCH!',f:() => { cangurera = false; irGuion(INTRO, 7, finIntro); } },
-  { n:'INTRO: EL CHAT',   f:() => { cangurera = false; irGuion(INTRO, 8, finIntro); } },
-  { n:'INTRO: WHATSAPP',  f:() => { cangurera = false; irGuion(INTRO, 12, finIntro); } },
+  { n:'INTRO: LA APP',    f:() => { cangurera = false; irGuion(INTRO, 0, finIntro, true); } },
+  { n:'INTRO: ¡ES MATCH!',f:() => { cangurera = false; irGuion(INTRO, 7, finIntro, true); } },
+  { n:'INTRO: EL CHAT',   f:() => { cangurera = false; irGuion(INTRO, 8, finIntro, true); } },
+  { n:'INTRO: WHATSAPP',  f:() => { cangurera = false; irGuion(INTRO, 12, finIntro, true); } },
   { n:'EL CUARTO',        f:() => { cangurera = false; maleta = false; estado = 'cuarto'; jug.x = 46; jug.mirando = -1; } },
   { n:'LA CITA',          f:() => { cangurera = true; mes = 0; corazonTomado = false;
                                     jug.x = 6; jug.mirando = 1; estado = 'juego'; } },
-  { n:'ROBERTO ESPERA',   f:() => { cangurera = true; correrGuion(ESPERA, menuEspera); } },
+  { n:'ROBERTO ESPERA',   f:() => { cangurera = true; correrGuion(ESPERA, menuEspera, true); } },
   { n:'LA DECISIÓN',      f:() => { cangurera = true; menuEspera(); } },
   { n:'EL PIANO',         f:() => { pianoT = 0; estado = 'piano'; } },
   { n:'FINAL MALO',       f:() => { estado = 'gameover'; } },
   { n:'ESCOGER MESA',     f:() => { cangurera = true; mes = 0; interiorNoche = false;
                                     estado = 'sentarse'; jug.x = 6; jug.mirando = 1; } },
   { n:'LA MESERA',        f:() => { interiorNoche = false; mesaElegida = 1;
-                                    irGuion(NOCHE, 2, () => correrGuion(ANTRO, menuBaile)); } },
+                                    irGuion(NOCHE, 2, () => correrGuion(ANTRO, menuBaile, true)); } },
   { n:'SE HACE NOCHE',    f:() => { interiorNoche = false; mesaElegida = 1;
-                                    irGuion(NOCHE, 6, () => correrGuion(ANTRO, menuBaile)); } },
-  { n:'EL ANTRO',         f:() => { correrGuion(ANTRO, menuBaile); } },
+                                    irGuion(NOCHE, 6, () => correrGuion(ANTRO, menuBaile, true)); } },
+  { n:'EL ANTRO',         f:() => { correrGuion(ANTRO, menuBaile, true); } },
   { n:'¿CÓMO BAILAS?',    f:() => { menuBaile(); } },
   { n:'BAILANDO',         f:() => { baileT = 0; estado = 'baile'; } },
   { n:'EL BESO',          f:() => { irGuion(BESO, 0, finActo); } },
   { n:'VUELVE A CASA',    f:() => { cangurera = true; cuartoNoche = true;
-                                    correrGuion(CASA, () => correrGuion(AMIGO, menuPuerto)); } },
-  { n:'CASA DEL AMIGO',   f:() => { cuartoNoche = false; correrGuion(AMIGO, menuPuerto); } },
+                                    correrGuion(CASA, () => correrGuion(AMIGO, menuPuerto, true)); } },
+  { n:'CASA DEL AMIGO',   f:() => { cuartoNoche = false; correrGuion(AMIGO, menuPuerto, true); } },
   { n:'¿LO INVITAS?',     f:() => { menuPuerto(); } },
   { n:'EL AVIÓN (MALO)',  f:() => { maleta = false; correrGuion(AVION_MALO, () => { estado = 'explotado'; }); } },
   { n:'ME LO LLEVO',      f:() => { cangurera = true; correrGuion(PUERTO, empezarMaleta); } },
   { n:'LA MALETA',        f:() => { empezarMaleta(); } },
-  { n:'EL VIAJE',         f:() => { cangurera = false; maleta = true; correrGuion(VIAJE, finViaje); } },
-  { n:'LLEGO POR ÉL',     f:() => { cangurera = false; maleta = true; irGuion(VIAJE, 6, finViaje); } },
-  { n:'LA PLAYA',         f:() => { maleta = false; correrGuion(PUERTO2, empezarMedidor); } },
-  { n:'ONICHAN',          f:() => { maleta = false; irGuion(PUERTO2, 3, empezarMedidor); } },
-  { n:'SE SUBEN AL COCHE', f:() => { maleta = false; irGuion(PUERTO2, 9, empezarMedidor); } },
-  { n:'LA CASA ROJA',     f:() => { maleta = false; irGuion(PUERTO2, 11, empezarMedidor); } },
-  { n:'EL PESCADO',       f:() => { maleta = false; irGuion(PUERTO2, 14, empezarMedidor); } },
-  { n:'SUPERESTRELLA',    f:() => { maleta = false; irGuion(PUERTO2, 20, empezarMedidor); } },
-  { n:'LOVE METER',       f:() => { maleta = false; irGuion(PUERTO2, 22, empezarMedidor); } },
+  { n:'EL VIAJE',         f:() => { cangurera = false; maleta = true; correrGuion(VIAJE, finViaje, true); } },
+  { n:'LLEGO POR ÉL',     f:() => { cangurera = false; maleta = true; irGuion(VIAJE, 6, finViaje, true); } },
+  { n:'LA PLAYA',         f:() => { maleta = false; correrGuion(PUERTO2, empezarMedidor, true); } },
+  { n:'ONICHAN',          f:() => { maleta = false; irGuion(PUERTO2, 3, empezarMedidor, true); } },
+  { n:'SE SUBEN AL COCHE', f:() => { maleta = false; irGuion(PUERTO2, 9, empezarMedidor, true); } },
+  { n:'LA CASA ROJA',     f:() => { maleta = false; irGuion(PUERTO2, 11, empezarMedidor, true); } },
+  { n:'EL PESCADO',       f:() => { maleta = false; irGuion(PUERTO2, 14, empezarMedidor, true); } },
+  { n:'SUPERESTRELLA',    f:() => { maleta = false; irGuion(PUERTO2, 20, empezarMedidor, true); } },
+  { n:'LOVE METER',       f:() => { maleta = false; irGuion(PUERTO2, 22, empezarMedidor, true); } },
   { n:'¿Y TÚ CÓMO?',      f:() => { maleta = false; empezarMedidor(); } },
   { n:'EL AEROPUERTO',    f:() => { maleta = false; correrGuion(CIERRE, finActo); } },
   { n:'MES 2: CINE',      f:() => irMes(1) },
@@ -3500,12 +3524,18 @@ function pantallaSaltos(t) {
 
 
 /* ---------- Bucle principal ---------- */
-function correrGuion(lista, alTerminar) {
-  guion = lista; gPaso = 0; gT = 0; gFin = alTerminar; estado = 'guion';
+/* sinFade sirve cuando la escena que sigue usa el mismo fondo:
+   el barrido ahí sólo estorba. */
+function correrGuion(lista, alTerminar, sinFade) {
+  guion = lista; gPaso = 0; gT = 0; gFin = alTerminar; gSinFade = !!sinFade;
+  estado = 'guion';
 }
 function pasoGuion() {
-  if (gPaso >= guion.length - 1) { const f = gFin; transicionar(() => { if (f) f(); }); }
-  else { gPaso++; gT = 0; }
+  if (gPaso >= guion.length - 1) {
+    const f = gFin;
+    if (gSinFade) { gSinFade = false; if (f) f(); }
+    else transicionar(() => { if (f) f(); });
+  } else { gPaso++; gT = 0; }
 }
 function abrirMenu(pregunta, ops, quien, fondo, fn) {
   menu = { pregunta: pregunta, ops: ops, quien: quien, fondo: fondo, fn: fn, sel: 0 };
@@ -3514,26 +3544,24 @@ function abrirMenu(pregunta, ops, quien, fondo, fn) {
 function menuEspera() {
   abrirMenu('¿LO ESPERAS?', ['ME ESPERO', 'ME VOY'], 'roberto', fondoEspera, i => {
     if (i === 1) { pianoT = 0; estado = 'piano'; }
-    else transicionar(() => {
-      estado = 'juego'; mes = 0; jug.x = 6; jug.mirando = 1; corazonTomado = false;
-    });
+    else { estado = 'juego'; mes = 0; jug.x = 6; jug.mirando = 1; corazonTomado = false; }
   });
 }
 function fondoAmigo(t) { bgAmigo(t); sentadosAmigo(t, true); frAmigo(t); }
 function menuPuerto() {
   abrirMenu('PUERTO ESCONDIDO', ['INVITARLO', 'NO INVITARLO'], 'roberto', fondoAmigo, i => {
     if (i === 1) transicionar(() => correrGuion(AVION_MALO, () => { estado = 'explotado'; }));
-    else transicionar(() => correrGuion(PUERTO, empezarMaleta));
+    else correrGuion(PUERTO, empezarMaleta);
   });
 }
 function menuBaile() {
   abrirMenu('¿CÓMO BAILAS?', ['LA MACARENA', 'PAYASO DE RODEO', 'SALSA'], 'santiago', fondoAntro, i => {
     baileTipo = ['macarena', 'payaso', 'salsa'][i];
     baileT = 0;
-    transicionar(() => { estado = 'baile'; });
+    estado = 'baile';
   });
 }
-function empezarEspera() { correrGuion(ESPERA, menuEspera); }
+function empezarEspera() { correrGuion(ESPERA, menuEspera, true); }
 function finIntro() { estado = 'cuarto'; jug.x = 46; jug.mirando = -1; }
 /* Toda la noche: escoger mesa -> la mesera -> se hace tarde -> el antro */
 function empezarNoche() {
@@ -3544,7 +3572,7 @@ function finActo() {
   corazonTomado = false; cangurera = false; maleta = false;
   interiorNoche = false; cuartoNoche = false;
 }
-function finBeso() { correrGuion(CASA, () => correrGuion(AMIGO, menuPuerto)); }
+function finBeso() { correrGuion(CASA, () => correrGuion(AMIGO, menuPuerto, true)); }
 /* Una semana después: se despierta y no sale del cuarto sin la maleta */
 function empezarMaleta() {
   cuartoNoche = false; maleta = false; cangurera = false;
@@ -3674,7 +3702,7 @@ function loop() {
         abrirCharla([{ q:'santiago', t:'A VER CUÁNTO TIEMPO HARÉ. NUNCA HE IDO A ZONA ESMERALDA.' }],
                     'dialogo', 'maleta');
       } else if (jug.x >= 105) {
-        if (maleta) transicionar(() => correrGuion(VIAJE, finViaje));
+        if (maleta) transicionar(() => correrGuion(VIAJE, finViaje, true));
         else {
           jug.x = 96;
           abrirCharla([{ q:'santiago', t:'SIN MALETA NO ME VOY A NINGÚN LADO.' }], 'dialogo', 'maleta');
@@ -3737,7 +3765,7 @@ function loop() {
     jug.x = Math.max(2, Math.min(142, jug.x));
     if (cerca >= 0 && (consumed('a') || consumed('start'))) {
       mesaElegida = cerca;
-      transicionar(() => correrGuion(NOCHE, () => correrGuion(ANTRO, menuBaile)));
+      correrGuion(NOCHE, () => correrGuion(ANTRO, menuBaile, true));
     }
     pasoFade();
     requestAnimationFrame(loop); return;
@@ -3752,7 +3780,7 @@ function loop() {
     frDrags(t);
     if ((t / 26 | 0) % 2) centerText(16, NOMBRE_BAILE[baileTipo], '#ffe08a', 'rgba(20,6,30,.85)');
     if (baileT > 170 || (baileT > 40 && (consumed('a') || consumed('start'))))
-      transicionar(() => correrGuion(BESO, finBeso));
+      correrGuion(BESO, finBeso);
     pasoFade();
     requestAnimationFrame(loop); return;
   }
