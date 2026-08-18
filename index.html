@@ -773,6 +773,7 @@ function drawSpriteEsc(spr, x, y, flip, map, e) {
 let cangurera = false;
 let maleta = false;
 let medX = 13, medMsg = 0;
+let ingr = 0, llevando = false;
 function pintaCangurera(x, y, flip) {
   R(x + 1, y + 19, 14, 4, '#5cff3a');
   R(x + 1, y + 19, 14, 1, '#b6ff9e');
@@ -1929,7 +1930,19 @@ function cartelEscena(lineas, y0) {
     centerText(y0 + i * 11, lineas[i], '#ffe9a8', 'rgba(0,0,0,.5)');
 }
 
-/* ---- 16. LA TARJETA DE "ONE ETERNITY LATER" ---- */
+/* ---- 16. LAS TARJETAS CON LA LETRA GORDA ---- */
+function tarjetaTiki(t2, lineas) {
+  fondoTiki(t2);
+  const w = (t2 / 5 | 0) % 2, n = lineas.length;
+  const sep = n >= 4 ? 29 : 37, y0 = n >= 4 ? 8 : 20;
+  for (let i = 0; i < n; i++)
+    centerTextG(y0 + i * sep + (i % 2 ? 0 : w), lineas[i], '#12234c', 'rgba(255,255,255,.30)', 3);
+  if (t2 > 40 && (t2 / 22 | 0) % 2) {
+    R(139, 126, 15, 13, 'rgba(18,35,76,.75)');
+    drawText(144, 129, 'A', '#f6e6c0');
+  }
+}
+
 function fondoTiki(t) {
   const cols = ['#e8a648','#d9c07a','#8fae3c','#f2d89a','#c98f3a','#a8c45a','#e0b45c','#7fa235'];
   R(0, 0, 160, 144, '#f6e6c0');
@@ -2114,11 +2127,107 @@ function barraAmor(y, etiq, p, fuera) {
   if (fuera > 0) for (let i = 0; i < fuera; i += 4) R(141 + i, y + 12, 3, 5, '#ff3a5a');
 }
 
-const ESCENAS = { patio:bgPatio, cuarto:bgCuarto, interior:bgInterior, drags:bgDrags,
+/* ---- 18. LA COCINA (dos semanas después) ---- */
+function bgCocina(t, olla) {
+  vgrad(0, 0, 160, GROUND, ['#8fb4dc','#7ea4cf','#6f95c2']);
+  for (let x = 0; x < 160; x += 12) R(x, 0, 1, GROUND - 12, 'rgba(255,255,255,.07)');
+  /* azulejo de la pared */
+  R(38, 38, 122, 18, '#e6eef2');
+  for (let x = 38; x <= 158; x += 10) R(x, 38, 1, 18, '#c0ccd6');
+  for (let y = 38; y <= 56; y += 9) R(38, y, 122, 1, '#c0ccd6');
+  R(38, 38, 122, 1, '#ffffff');
+  /* alacena de arriba */
+  R(38, 6, 122, 30, '#a86f42'); R(38, 6, 122, 2, '#c9905e'); R(38, 34, 122, 2, '#7a4d2e');
+  for (let i = 0; i < 4; i++) {
+    const x = 41 + i * 30;
+    R(x, 10, 27, 22, '#96603a'); R(x, 10, 27, 1, '#b98055'); R(x, 31, 27, 1, '#7a4d2e');
+    R(x + 23, 19, 2, 4, '#e8c34a');
+  }
+  /* refrigerador */
+  R(2, 18, 34, GROUND - 30, '#dfe6ec');
+  R(2, 18, 34, 2, '#f6fafd'); R(2, 18, 2, GROUND - 30, '#f6fafd');
+  R(34, 18, 2, GROUND - 30, '#a4b0ba'); R(2, GROUND - 14, 34, 2, '#a4b0ba');
+  R(2, 42, 34, 2, '#a4b0ba');
+  R(29, 28, 3, 11, '#8a97a2'); R(29, 48, 3, 22, '#8a97a2');
+  R(7, 24, 5, 5, '#e8506a'); R(15, 26, 4, 4, '#f2c14e'); R(22, 23, 4, 6, '#4a8a5c');
+  R(7, 24, 5, 1, '#ff8fa3');
+  /* barra y cajones */
+  R(38, 56, 122, 5, '#d8c9a0'); R(38, 56, 122, 2, '#f2e8cc'); R(38, 61, 122, 1, '#a89468');
+  R(38, 62, 122, GROUND - 74, '#8a5a38');
+  for (let i = 0; i < 4; i++) {
+    const x = 41 + i * 30;
+    R(x, 65, 27, 12, '#7a4d2e'); R(x, 65, 27, 1, '#a06a40');
+    R(x + 9, 69, 9, 2, '#e8c34a');
+  }
+  R(0, GROUND - 12, 160, 3, '#4d6a94'); R(0, GROUND - 12, 160, 1, '#b5cee8');
+  R(0, GROUND - 9, 160, 9, '#5f80a8');
+  /* estufa y olla encima de la barra */
+  R(96, 50, 34, 6, '#3a3440'); R(96, 50, 34, 1, '#5e5668');
+  for (let i = 0; i < 2; i++) disco(105 + i * 16, 53, 4, '#241f2a');
+  if (olla) {
+    for (let i = 0; i < 2; i++) disco(105 + i * 16, 53, 3, (t / 6 | 0) % 2 ? '#e8763a' : '#f2a24c');
+    /* la olla: cuerpo, asas, tapa y perilla */
+    R(96, 42, 5, 3, '#7e868f'); R(121, 42, 5, 3, '#7e868f');
+    R(100, 39, 22, 12, '#98a0ac'); R(100, 39, 22, 2, '#c8d0dc'); R(100, 49, 22, 2, '#6e767f');
+    R(98, 36, 26, 3, '#b4bcc8'); R(98, 36, 26, 1, '#e0e6ee');
+    R(108, 32, 6, 4, '#8a929e'); R(108, 32, 6, 1, '#c8d0dc');
+    for (let i = 0; i < 5; i++) {
+      const h = ((t * 0.8 + i * 7) % 32);
+      elipse(103 + i * 4 + Math.round(Math.sin((t + i * 9) / 11) * 3), 31 - h,
+             3 + (h / 13 | 0), 2, 'rgba(255,255,255,' + Math.max(0, 0.34 - h / 100).toFixed(2) + ')');
+    }
+  }
+  /* tabla, cuchillo y frutero */
+  R(44, 48, 18, 8, '#c9905e'); R(44, 48, 18, 1, '#e8b782'); R(60, 44, 2, 6, '#8a5a38');
+  R(66, 50, 3, 6, '#c8ccd4'); R(66, 44, 2, 7, '#8a97a2');
+  elipse(148, 52, 9, 4, '#c9a44a'); disco(145, 48, 3, '#d9362f'); disco(151, 49, 3, '#f2c14e');
+  /* trapo colgado */
+  R(80, 62, 8, 12, '#e8506a'); R(80, 62, 8, 1, '#ff8fa3');
+  /* el piso, igual que el del cuarto */
+  vgrad(0, GROUND, 160, 144 - GROUND, ['#8a6038','#7a5330','#6a4728','#5c3d22']);
+  R(0, GROUND, 160, 1, '#ac7c4c');
+  for (let y = GROUND + 10; y < 144; y += 13) R(0, y, 160, 1, 'rgba(60,34,14,.38)');
+  for (let x = 0; x < 160; x += 22) R(x, GROUND, 1, 52, 'rgba(60,34,14,.26)');
+}
+function frCocina(t) {
+  /* tapetito de cocina, al frente */
+  R(52, 124, 56, 12, '#c9436a'); R(52, 124, 56, 1, '#e8708c');
+  R(52, 135, 56, 1, '#9c2d4e');
+  for (let i = 0; i < 5; i++) R(58 + i * 11, 127, 6, 6, '#f2e8d8');
+}
+/* Los tres ingredientes que hay que sacar del refri */
+const INGREDIENTES = ['EL JITOMATE', 'EL QUESO', 'LA ALBAHACA'];
+function ingrediente(k, x, y) {
+  if (k === 0) {
+    disco(x + 4, y + 5, 4, '#c9302a'); disco(x + 3, y + 4, 2, '#e8574c');
+    R(x + 3, y, 2, 2, '#3f8a4b'); R(x + 5, y + 1, 3, 1, '#3f8a4b');
+  } else if (k === 1) {
+    R(x, y + 3, 10, 6, '#f2c14e'); R(x, y + 3, 10, 1, '#ffe08a');
+    R(x, y + 8, 10, 1, '#d9a52f'); P(x + 2, y + 5, '#d9a52f'); P(x + 6, y + 6, '#d9a52f');
+    R(x, y + 2, 10, 1, '#ffe08a');
+  } else {
+    for (let i = 0; i < 3; i++)
+      elipse(x + 2 + i * 3, y + 5 - (i % 2) * 2, 3, 2, i % 2 ? '#3f9a52' : '#57ab66');
+    R(x + 4, y + 6, 1, 3, '#2f7b45');
+  }
+}
+function flechaEntrada(x, y) {
+  for (let i = 0; i < 6; i++) R(x + 3 + i, y + i, 6 - i, 1, '#fff3ae');
+  R(x, y + 6, 9, 1, '#fff3ae');
+  for (let i = 0; i < 6; i++) R(x + 4 + i, y + 1 + i, 5 - i, 1, '#e8a94c');
+}
+function avisoArriba(txt, y) {
+  const w = textW(txt) + 8, x = Math.round((160 - w) / 2);
+  R(x, y, w, 12, 'rgba(20,10,30,.75)');
+  R(x, y, w, 1, 'rgba(255,255,255,.25)');
+  drawText(x + 4, y + 3, txt, '#ffe9a8');
+}
+
+const ESCENAS = { patio:bgPatio, cuarto:bgCuarto, interior:bgInterior, drags:bgDrags, cocina:bgCocina,
                   amigo:bgAmigo, aero:bgAero, cielo:bgCielo, playa:bgPlaya,
                   parque:bgParque, cine:bgCine, lluvia:bgLluvia, noche:bgNoche,
                   casa:bgCasa, cabana:bgCabana, ciudad:bgCiudad };
-const FRENTES = { patio:frPatio, cuarto:frCuarto, interior:frInterior, drags:frDrags,
+const FRENTES = { patio:frPatio, cuarto:frCuarto, interior:frInterior, drags:frDrags, cocina:frCocina,
                   amigo:frAmigo, aero:frAero, cielo:frPatio, playa:frPlaya,
                   parque:frParque, cine:frCine, lluvia:frLluvia, noche:frNoche,
                   casa:frCasa, cabana:frCabana, ciudad:frCiudad };
@@ -2363,17 +2472,9 @@ const CUADROS = {
     frCuarto(tt);
   },
 
-  eternidad: (tt) => {
-    fondoTiki(tt);
-    const w = (tt / 5 | 0) % 2;
-    centerTextG(20 + w, 'ONE', '#12234c', 'rgba(255,255,255,.30)', 3);
-    centerTextG(56, 'ETERNITY', '#12234c', 'rgba(255,255,255,.30)', 3);
-    centerTextG(94 + w, 'LATER', '#12234c', 'rgba(255,255,255,.30)', 3);
-    if (tt > 40 && (tt / 22 | 0) % 2) {
-      R(139, 126, 15, 13, 'rgba(18,35,76,.75)');
-      drawText(144, 129, 'A', '#f6e6c0');
-    }
-  },
+  eternidad:  (tt) => tarjetaTiki(tt, ['ONE', 'ETERNITY', 'LATER']),
+  dosSemanas: (tt) => tarjetaTiki(tt, ['DOS', 'SEMANAS', 'DESPUÉS']),
+  metros:     (tt) => tarjetaTiki(tt, ['18', 'METROS', 'SOBRE EL', 'CIELO']),
 
   /* --- Roberto esperando en el club --- */
   esperaPatio: (tt) => {
@@ -2807,6 +2908,43 @@ Object.assign(CUADROS, {
   }
 });
 
+const MSG_PASTA = [
+  { mio:true,  t:'¿VIENES A MI CASA? TE HAGO UNA PASTA' },
+  { mio:false, t:'VOY' }
+];
+Object.assign(CUADROS, {
+  chatPasta: (tt, a) => {
+    cuartoNoche = false;
+    bgCuarto(tt); velo();
+    telefono((sx, sy, sw, sh) => appChat(sx, sy, sw, sh, a.n, tt, 'ROBERTO', MSG_PASTA), tt);
+  },
+  olla: (tt, a) => {
+    bgCocina(tt, true);
+    persona('santiago', 58, GROUND - 30, false, false, tt);
+    persona('roberto',  82, GROUND - 30, true, false, tt);
+    if (a && a.rie) for (let i = 0; i < 3; i++) {
+      const h = ((tt * 1.1 + i * 9) % 26);
+      if (h < 13) drawTextS(88 + i * 8, GROUND - 34 - h, 'JA', '#ffe9a8', 'rgba(20,6,24,.7)');
+    }
+    frCocina(tt);
+  },
+  besoCocina: (tt, a) => {
+    bgCocina(tt, true);
+    const j = Math.min(tt, 22) * 0.25;
+    const s = PERSONAJES.santiago, r = PERSONAJES.roberto;
+    sombraPiso(Math.round(58 + j) + 8, GROUND); sombraPiso(Math.round(82 - j) + 8, GROUND);
+    drawSprite(s.quieto, Math.round(58 + j), GROUND - 30, false, s.color);
+    drawSprite(r.quieto, Math.round(82 - j), GROUND - 30, true, r.color);
+    if (tt > 20) {
+      corazon(68, GROUND - 44 - ((tt / 2) % 14 | 0), (tt / 6 | 0) % 2);
+      corazon(58, GROUND - 38 - ((tt / 3) % 12 | 0), (tt / 8 | 0) % 2);
+      corazon(80, GROUND - 40 - ((tt / 4) % 12 | 0), (tt / 7 | 0) % 2);
+    }
+    frCocina(tt);
+    if (a && a.banner) { cartelEscena(a.banner, 14); botonA(); }
+  }
+});
+
 const CASA = [
   { e:'casaChat', a:{n:0}, q:'santiago', hacer:() => { cuartoNoche = true; },
     t:'TODAVÍA TRAIGO LA CANGURERA PUESTA Y AUN ASÍ SE ME CAYÓ TODO.' },
@@ -2883,6 +3021,23 @@ const PUERTO2 = [
   /* y el medidor se rompe */
   { e:'anuncioAmor', a:{}, dur:140 },
   { e:'lovemeter', a:{}, dur:150 }
+];
+
+/* Dos semanas después: lo invita a cocinar y le pone a sacar del refri */
+const INVITA = [
+  { e:'dosSemanas', a:{}, espera:true },
+  { e:'chatPasta', a:{n:1}, q:'santiago', t:'¿VIENES A MI CASA? TE HAGO UNA PASTA DELICIOSA.' },
+  { e:'chatPasta', a:{n:2}, q:'roberto',  t:'VOY.' }
+];
+const PASTA = [
+  { e:'olla', a:{}, dur:80 },
+  { e:'olla', a:{}, q:'santiago',
+    t:'¿SABÍAS QUE CUANDO BESAS A ALGUIEN FORMAS UN INTESTINO CONTINUO DE 18 METROS?' },
+  { e:'olla', a:{rie:true}, q:'roberto', t:'JAJAJAJA.' },
+  { e:'besoCocina', a:{}, dur:54 },
+  { e:'besoCocina', a:{banner:['* SONIDO DE BESO *']}, espera:true },
+  { e:'besoCocina', a:{banner:['18 METROS...']}, espera:true },
+  { e:'metros', a:{}, espera:true }
 ];
 
 /* Después de contestar el medidor: el aeropuerto de Puerto Escondido */
@@ -3103,7 +3258,7 @@ function reiniciar() {
   saltoSel = 0; saltoTop = 0; saltoVuelve = 'titulo'; repite = 0;
   mes = 0; jug.x = 6; jug.mirando = 1;
   corazonTomado = false; cangurera = false; maleta = false; cuartoNoche = false;
-  medX = 13; medMsg = 0;
+  medX = 13; medMsg = 0; ingr = 0; llevando = false;
   charla = []; charlaIdx = 0; pages = []; page = 0; revealed = 0; textTimer = 0;
   fade = 0; fadeDir = 0; pendiente = null;
   for (const k in keys) keys[k] = false;
@@ -3292,6 +3447,15 @@ function pantallaMedidor(t) {
   }
 }
 function empezarMedidor() { medX = MED_MIN; medMsg = 0; estado = 'medidor'; }
+/* Dos semanas después: Roberto llega a la casa y hay que llevarlo a la cocina */
+function empezarCocina() {
+  cuartoNoche = false;
+  correrGuion(INVITA, () => { estado = 'aCocina'; jug.x = 130; jug.mirando = -1; }, true);
+}
+function empezarCocinar() {
+  ingr = 0; llevando = false;
+  estado = 'cocinar'; jug.x = 132; jug.mirando = -1;
+}
 function finViaje() { correrGuion(PUERTO2, empezarMedidor, true); }
 
 function fondoEspera(t) {
@@ -3471,7 +3635,12 @@ const SALTOS = [
   { n:'SUPERESTRELLA',    f:() => { maleta = false; irGuion(PUERTO2, 20, empezarMedidor, true); } },
   { n:'LOVE METER',       f:() => { maleta = false; irGuion(PUERTO2, 22, empezarMedidor, true); } },
   { n:'¿Y TÚ CÓMO?',      f:() => { maleta = false; empezarMedidor(); } },
-  { n:'EL AEROPUERTO',    f:() => { maleta = false; correrGuion(CIERRE, finActo); } },
+  { n:'EL AEROPUERTO',    f:() => { maleta = false; correrGuion(CIERRE, empezarCocina); } },
+  { n:'DOS SEMANAS...',   f:() => { maleta = false; cangurera = false; empezarCocina(); } },
+  { n:'LLEGA A MI CASA',  f:() => { maleta = false; cangurera = false; cuartoNoche = false;
+                                    estado = 'aCocina'; jug.x = 130; jug.mirando = -1; } },
+  { n:'LA COCINA',        f:() => { maleta = false; cangurera = false; empezarCocinar(); } },
+  { n:'18 METROS',        f:() => { irGuion(PASTA, 0, finActo); } },
   { n:'MES 2: CINE',      f:() => irMes(1) },
   { n:'MES 3: LLUVIA',    f:() => irMes(2) },
   { n:'MES 4: AZOTEA',    f:() => irMes(3) },
@@ -3714,6 +3883,54 @@ function loop() {
     requestAnimationFrame(loop); return;
   }
 
+  /* --- Roberto llega a la casa y hay que llevarlo a la cocina --- */
+  if (estado === 'aCocina') {
+    bgCuarto(t);
+    const anda = keys.left || keys.right;
+    persona('santiago', jug.x - 24, GROUND - 30, jug.mirando < 0, anda, t + 9);
+    persona('roberto', jug.x, GROUND - 30, jug.mirando < 0, anda, t);
+    frCuarto(t);
+    if ((t / 20 | 0) % 2) flechaEntrada(8, GROUND - 44);
+    avisoArriba('LA COCINA ESTÁ ALLÁ', 102);
+    if (keys.left)  { jug.x -= 0.9; jug.mirando = -1; }
+    if (keys.right) { jug.x += 0.9; jug.mirando = 1; }
+    jug.x = Math.max(26, Math.min(140, jug.x));
+    if (jug.x <= 27) transicionar(empezarCocinar);
+    pasoFade();
+    requestAnimationFrame(loop); return;
+  }
+
+  /* --- La cocina: Roberto le pasa los ingredientes del refri --- */
+  if (estado === 'cocinar') {
+    bgCocina(t, true);
+    persona('santiago', 126, GROUND - 30, true, false, t);
+    persona('roberto', jug.x, GROUND - 30, jug.mirando < 0, keys.left || keys.right, t);
+    if (llevando) ingrediente(ingr, Math.round(jug.x) + 3, GROUND - 44);
+    frCocina(t);
+
+    const enRefri  = jug.x < 34;
+    const enEstufa = jug.x > 96;
+    if (ingr < INGREDIENTES.length)
+      avisoArriba(llevando ? 'LLÉVASELO' : 'PÁSAME ' + INGREDIENTES[ingr], 102);
+    if ((t / 18 | 0) % 2) {
+      if (!llevando && enRefri)  avisoArriba('A = ABRIR EL REFRI', 118);
+      if (llevando && enEstufa)  avisoArriba('A = DÁRSELO', 118);
+    }
+
+    if (keys.left)  { jug.x -= 0.9; jug.mirando = -1; }
+    if (keys.right) { jug.x += 0.9; jug.mirando = 1; }
+    jug.x = Math.max(4, Math.min(118, jug.x));
+    if (consumed('a') || consumed('start')) {
+      if (!llevando && enRefri) llevando = true;
+      else if (llevando && enEstufa) {
+        llevando = false; ingr++;
+        if (ingr >= INGREDIENTES.length) correrGuion(PASTA, finActo);
+      }
+    }
+    pasoFade();
+    requestAnimationFrame(loop); return;
+  }
+
   /* --- El medidor: la respuesta sólo vale fuera de la barra --- */
   if (estado === 'medidor') {
     pantallaMedidor(t);
@@ -3723,7 +3940,7 @@ function loop() {
       if (keys.right) medX += 1.1;
       medX = Math.max(MED_MIN, Math.min(MED_MAX, medX));
       if (consumed('a') || consumed('start')) {
-        if (medX > MED_OK) transicionar(() => correrGuion(CIERRE, finActo));
+        if (medX > MED_OK) transicionar(() => correrGuion(CIERRE, empezarCocina));
         else medMsg = 76;
       }
     }

@@ -235,7 +235,35 @@ La casa es abierta: pilares rojos en vez de pared, con la playa detrás.
 
 1. **SANTIAGO:** QUÉ BONITO QUE PUDE SANAR MIS HERIDAS.
 
-## 11. Meses 2 al 6
+## 11. Dos semanas después: la pasta
+
+Cartel con la letra gorda: **DOS** / **SEMANAS** / **DESPUÉS** (se queda hasta que le piquen a A)
+
+### El chat
+
+1. **SANTIAGO:** ¿VIENES A MI CASA? TE HAGO UNA PASTA DELICIOSA.
+2. **ROBERTO:** VOY.
+
+Mensajes: **¿VIENES A MI CASA? TE HAGO UNA PASTA** / **VOY**
+
+### Llega a la casa (jugable: Roberto camina hacia la izquierda con Santi)
+
+Avisos: **LA COCINA ESTÁ ALLÁ**
+
+### La cocina (jugable: hay que sacar tres cosas del refri)
+
+Avisos: **PÁSAME EL JITOMATE** / **PÁSAME EL QUESO** / **PÁSAME LA ALBAHACA** ·
+**LLÉVASELO** · **A = ABRIR EL REFRI** · **A = DÁRSELO**
+
+### Mientras se cocina
+
+1. **SANTIAGO:** ¿SABÍAS QUE CUANDO BESAS A ALGUIEN FORMAS UN INTESTINO CONTINUO DE 18 METROS?
+2. **ROBERTO:** JAJAJAJA.
+3. (se besan) Cartel: **\* SONIDO DE BESO \***
+4. Cartel: **18 METROS...**
+5. Cartel con la letra gorda: **18** / **METROS** / **SOBRE EL** / **CIELO**
+
+## 12. Meses 2 al 6
 
 - **MES 2** (`cine`) — MES 2. FUIMOS AL CINE. NO ME ACUERDO DE LA PELÍCULA.
 - **MES 3** (`lluvia`) — MES 3. NOS AGARRÓ LA LLUVIA SIN PARAGUAS Y NOS FUIMOS CAMINANDO.
@@ -243,12 +271,12 @@ La casa es abierta: pilares rojos en vez de pared, con la playa detrás.
 - **MES 5** (`casa`) — MES 5. DOMINGO ENTERO EN EL SILLÓN SIN HACER NADA.
 - **MES 6** (`cabana`) — MES 6. HOY. SEGUIMOS AQUÍ.
 
-## 12. Final y créditos
+## 13. Final y créditos
 
 - **SANTIAGO:** SEIS MESES. NADA MAL PARA ALGUIEN CUYO PLAN IDEAL ERA GOING OUT AND BLACKING OUT.
 - Créditos: **FELICES** · **6 MESES** · **SANTIAGO & ROBERTO** · **A = OTRA VEZ**
 
-## 13. Consola y selector
+## 14. Consola y selector
 
 - **REINICIAR**, **SONIDO: ON/OFF**, **ESCENAS**, **MES 2/6** (el contador sale a partir del mes 2)
-- Selector (SELECT o botón ESCENAS): **IR A...** con 43 secciones, pie **A = IR    B = SALIR**
+- Selector (SELECT o botón ESCENAS): **IR A...** con 47 secciones, pie **A = IR    B = SALIR**
