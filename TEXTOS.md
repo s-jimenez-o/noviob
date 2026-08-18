@@ -235,25 +235,27 @@ La casa es abierta: pilares rojos en vez de pared, con la playa detrás.
 
 1. **SANTIAGO:** QUÉ BONITO QUE PUDE SANAR MIS HERIDAS.
 
-## 11. Dos semanas después: la pasta
+## 11. Dos semanas después: la pizza
 
 Cartel con la letra gorda: **DOS** / **SEMANAS** / **DESPUÉS** (se queda hasta que le piquen a A)
 
 ### El chat
 
-1. **SANTIAGO:** ¿VIENES A MI CASA? TE HAGO UNA PASTA DELICIOSA.
-2. **ROBERTO:** VOY.
+1. **SANTIAGO:** ¿POR QUÉ NO CENAMOS EN MI CASA?
+2. **SANTIAGO:** PUEDO INTENTAR HACER UNA PIZZA Y CHICKEN TENDERS.
+3. **ROBERTO:** VOY.
 
-Mensajes: **¿VIENES A MI CASA? TE HAGO UNA PASTA** / **VOY**
+Mensajes: **¿POR QUÉ NO CENAMOS EN MI CASA?** / **PUEDO INTENTAR HACER UNA PIZZA
+Y CHICKEN TENDERS** / **VOY**
 
 ### Llega a la casa (jugable: Roberto camina hacia la izquierda con Santi)
 
 Avisos: **LA COCINA ESTÁ ALLÁ**
 
-### La cocina (jugable: hay que sacar tres cosas del refri)
+### La cocina (jugable: hay que sacar dos cosas del refri)
 
-Avisos: **PÁSAME EL JITOMATE** / **PÁSAME EL QUESO** / **PÁSAME LA ALBAHACA** ·
-**LLÉVASELO** · **A = ABRIR EL REFRI** · **A = DÁRSELO**
+Avisos: **PÁSAME EL QUESO PORFA** / **PÁSAME LA SALSA PORFA** ·
+**LLÉVASELO PORFA** · **A = ABRIR EL REFRI** · **A = DÁRSELO**
 
 ### Mientras se cocina
 
@@ -262,6 +264,24 @@ Avisos: **PÁSAME EL JITOMATE** / **PÁSAME EL QUESO** / **PÁSAME LA ALBAHACA**
 3. (se besan) Cartel: **\* SONIDO DE BESO \***
 4. Cartel: **18 METROS...**
 5. Cartel con la letra gorda: **18** / **METROS** / **SOBRE EL** / **CIELO**
+
+### Ya está la pizza
+
+1. **SANTIAGO:** YA ESTÁ. VAMOS A LA SALA.
+2. (se van a sentar a la sala)
+
+- **¿QUIERES COMER?** · **SÍ** / **NO**
+- Si dice que sí: se la come y se muere. **SE LA COMIÓ.** · **FINAL MALO** · **A = OTRA VEZ**
+
+### Si dice que no, llegan las amigas
+
+1. **SANTIAGO:** EXCELENTE DECISIÓN. ESTABA MALA.
+2. (llegan las amigas y se sientan con ellos)
+3. **SANTIAGO:** ¿Y QUIÉN LE VA A LLEGAR A QUIÉN?
+4. **ROBERTO:** YO YA PODRÍA.
+5. **SANTIAGO:** YO TAMBIÉN.
+6. **ROBERTO:** ¿ENTONCES ESO NOS HACE NOVIOS?
+7. **LOS DOS:** SÍ.
 
 ## 12. Meses 2 al 6
 
@@ -279,4 +299,4 @@ Avisos: **PÁSAME EL JITOMATE** / **PÁSAME EL QUESO** / **PÁSAME LA ALBAHACA**
 ## 14. Consola y selector
 
 - **REINICIAR**, **SONIDO: ON/OFF**, **ESCENAS**, **MES 2/6** (el contador sale a partir del mes 2)
-- Selector (SELECT o botón ESCENAS): **IR A...** con 47 secciones, pie **A = IR    B = SALIR**
+- Selector (SELECT o botón ESCENAS): **IR A...** con 51 secciones, pie **A = IR    B = SALIR**
