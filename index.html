@@ -117,6 +117,7 @@
     display:block; image-rendering:pixelated; image-rendering:crisp-edges;
     background:#101a2c;
     width:calc(160*var(--u)); height:calc(144*var(--u));
+    filter:saturate(1.07) contrast(1.02);
   }
   /* rejilla de píxeles del LCD */
   .screen::after {
@@ -838,10 +839,11 @@ function pintaMaleta(x, y, flip) {
 function persona(quien, x, y, flip, caminando, t) {
   const p = PERSONAJES[quien] || PERSONAJES.santiago;
   sombraPiso(Math.round(x) + 8, y + 30);
-  const spr = (caminando && (t / 7 | 0) % 2) ? p.paso : p.quieto;
-  drawSprite(spr, Math.round(x), y, flip, p.color);
-  if (cangurera && quien === 'santiago') pintaCangurera(Math.round(x), y, flip);
-  if (maleta && quien === 'santiago') pintaMaleta(Math.round(x), y, flip);
+  const paso = caminando && (t / 7 | 0) % 2;
+  const yb = y + (paso ? 1 : 0);      /* brinquito al caminar */
+  drawSprite(paso ? p.paso : p.quieto, Math.round(x), yb, flip, p.color);
+  if (cangurera && quien === 'santiago') pintaCangurera(Math.round(x), yb, flip);
+  if (maleta && quien === 'santiago') pintaMaleta(Math.round(x), yb, flip);
 }
 function busto(cab, tor) { return cab.concat(tor.slice(0, 1)); }
 
@@ -1220,7 +1222,9 @@ function bgCuarto(t) {
   } else {
     vgrad(9, 15, 34, 28, ['#8fd4f2','#a8e0f5','#c9ecd6']);
     disco(38, 20, 4, '#fff6b8'); disco(38, 20, 6, 'rgba(255,246,184,.28)');
-    elipse(16, 18, 7, 3, '#ffffff'); elipse(28, 22, 6, 2, '#eef8ff');
+    const nb = (t * 0.08) % 22;
+    elipse(14 + nb, 18, 5, 2, '#ffffff');
+    elipse(36 - nb * 0.6, 22, 4, 2, '#eef8ff');
     for (let i = 0; i < 3; i++) {
       const cx = 13 + i * 12;
       R(cx - 1, 34, 2, 9, '#6b4a2c');
@@ -1321,8 +1325,10 @@ function bgPatio(t) {
   R(44, 26, 72, 22, '#2a3a54'); R(44, 26, 72, 1, '#6d8199'); R(44, 47, 72, 1, '#16202f');
   R(46, 28, 68, 18, '#39537c');
   drawText(56, 29, 'CLUB DEL', '#f2ead8');
-  drawText(50, 38, 'PATIO', '#f5c518');
-  drawText(86, 38, 'ROMA', '#e8433c');
+  const neon = (t / 34 | 0) % 2;
+  if (neon) disco(80, 40, 30, 'rgba(245,197,24,.06)');
+  drawText(50, 38, 'PATIO', neon ? '#ffd94a' : '#d9a818');
+  drawText(86, 38, 'ROMA', neon ? '#ff5a4c' : '#c93830');
 
   /* túnel de entrada */
   R(46, 50, 68, GROUND - 50, '#14141c');
@@ -3241,6 +3247,16 @@ function wrap(str) {
 /* Marco con relieve: borde oscuro, luz arriba, sombra abajo. */
 function drawBox(pages, page, revealed, blink, quien) {
   const p = PERSONAJES[quien];
+  /* retrato del hablante, asomado sobre la caja */
+  if (p && p.quieto) {
+    R(8, BOX_Y - 15, 22, 17, 'rgba(12,6,28,.40)');
+    R(6, BOX_Y - 17, 22, 18, '#f6efdc');
+    R(6, BOX_Y - 17, 22, 3, p.color.c);
+    R(6, BOX_Y - 17, 22, 1, '#241a3c'); R(6, BOX_Y - 17, 1, 18, '#241a3c');
+    R(27, BOX_Y - 17, 1, 18, '#241a3c');
+    R(7, BOX_Y - 16, 20, 1, 'rgba(255,255,255,.55)');
+    drawSprite(p.quieto.slice(0, 14), 9, BOX_Y - 14, false, p.color);
+  }
   R(5, BOX_Y + 2, 152, BOX_H, 'rgba(12,6,28,.40)');           // sombra proyectada
   R(4, BOX_Y, 152, BOX_H, '#f6efdc');                          // papel
   R(4, BOX_Y, 152, 10, p ? p.color.c : '#5f34a0');             // barra del nombre
@@ -3517,21 +3533,28 @@ function pantallaBoot() {
 
 function pantallaTitulo(t) {
   fondoMenu(t);
-  panel(10, 16, 140, 98);
-  centerText(22, HISTORIA.titulo, '#8a2f78', 'rgba(190,176,148,.8)');
-  corazon(34, 20, (t / 24 | 0) % 2);
-  corazon(118, 20, (t / 24 | 0) % 2);
-  centerText(36, HISTORIA.subtitulo, '#3a2a58');
-  centerText(46, HISTORIA.fecha, '#8a7a58');
+  /* el título en grande, con su propia sombra dura */
+  const w = (t / 26 | 0) % 2;
+  centerTextG(15 + w, HISTORIA.titulo, '#2a1040', 'rgba(0,0,0,.0)', 2);
+  centerTextG(14 + w, HISTORIA.titulo, '#ffe9a8', 'rgba(90,20,70,.85)', 2);
+  corazon(26, 16 + w, (t / 24 | 0) % 2);
+  corazon(126, 16 + w, (t / 24 | 0) % 2);
+  /* banda para el subtítulo y la fecha */
+  R(0, 34, 160, 24, 'rgba(18,8,36,.55)');
+  R(0, 34, 160, 1, 'rgba(255,255,255,.22)'); R(0, 57, 160, 1, 'rgba(0,0,0,.35)');
+  centerText(37, HISTORIA.subtitulo, '#ffd9ec', 'rgba(30,8,40,.8)');
+  centerText(47, HISTORIA.fecha, '#c9a8e8', 'rgba(30,8,40,.8)');
 
-  R(20, 88, 120, 1, '#d8cdb2');
-  persona('roberto', 38, 56, false, false, t);
-  persona('santiago', 102, 56, true, false, t);
-  corazon(74, 64 + (Math.sin(t / 18) * 2 | 0), (t / 16 | 0) % 2);
-  drawText(26, 92, 'ROBERTO',  '#3a2a58');
-  drawText(87, 92, 'SANTIAGO', '#3a2a58');
+  /* los dos parados en su lomita, ya de atardecer */
+  R(0, 106, 160, 38, 'rgba(16,6,30,.62)');
+  R(0, 106, 160, 1, 'rgba(255,190,140,.45)');
+  persona('roberto', 38, 76, false, false, t);
+  persona('santiago', 102, 76, true, false, t);
+  corazon(74, 84 + (Math.sin(t / 18) * 2 | 0), (t / 16 | 0) % 2);
+  drawTextS(26, 110, 'ROBERTO',  '#ffd9ec', 'rgba(20,6,26,.8)');
+  drawTextS(87, 110, 'SANTIAGO', '#ffd9ec', 'rgba(20,6,26,.8)');
 
-  if ((t / 30 | 0) % 2) centerText(120, "PRESIONA A", '#ffe9a8', 'rgba(60,10,50,.7)');
+  if ((t / 30 | 0) % 2) centerText(122, "PRESIONA A", '#ffe9a8', 'rgba(60,10,50,.85)');
   centerText(133, "-- LADO A --", 'rgba(255,255,255,.7)');
 }
 

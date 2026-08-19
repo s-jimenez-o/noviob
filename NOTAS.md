@@ -63,7 +63,7 @@ antes de tocar el código; el juego se rompe fácil si se ignoran.
 
 | Cosa | Función | Cuándo |
 |---|---|---|
-| Caja de diálogo | `abrirCharla` / pasos con `q`+`t` | Alguien habla. La barra toma el color del personaje. |
+| Caja de diálogo | `abrirCharla` / pasos con `q`+`t` | Alguien habla. La barra toma el color del personaje y el retrato del hablante se asoma arriba a la izquierda (solo si tiene sprite). |
 | Menú de decisión | `abrirMenu(pregunta, ops, quien, fondo, fn)` | Decisiones. Sin nombre arriba, pregunta centrada, corazón como cursor. |
 | Cartel de narrador | `cartelEscena([lineas], y)` | Texto sin voz ("SÁBADO.", "* NO SE DEJAN..."). Nunca caja de diálogo para esto. |
 | Aviso de juego | `avisoArriba(txt, y)` | Instrucciones jugables ("PÁSAME EL QUESO PORFA"). Abajo (y≈102/118) si arriba tapa la escena. |
@@ -146,5 +146,6 @@ regeneran fácil — el patrón está en el historial de la conversación):
   pixel art (la GBC morada con corazón) de 180×180.
 - Los textos de los **meses 2 a 6** siguen siendo relleno; faltan los recuerdos reales.
 - El `TEXTOS.md` se regenera a mano tras cada cambio de texto — mantenerlo al día.
-- Ideas guardadas: retrato del hablante en la caja de diálogo, ghosting sutil del
-  LCD, variaciones de la música por acto.
+- Ideas guardadas: ghosting sutil del LCD, variaciones de la música por acto.
+- Etiqueta `antes-pulido-visual`: la versión previa a la pasada visual grande,
+  por si hay que comparar o volver.
