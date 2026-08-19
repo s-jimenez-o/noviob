@@ -64,8 +64,16 @@
     mix-blend-mode:screen;
   }
 
-  /* fila superior: interruptor de encendido */
+  /* fila superior: interruptor de encendido y las ranuras de la GBC */
   .top { width:100%; display:flex; align-items:center; padding:0 calc(3*var(--u)); gap:calc(2*var(--u)); }
+  .vents {
+    margin-left:auto; width:calc(30*var(--u)); height:calc(5*var(--u));
+    background:repeating-linear-gradient(90deg,
+      rgba(0,0,0,.34) 0 calc(2.2*var(--u)),
+      rgba(255,255,255,.10) calc(2.2*var(--u)) calc(2.8*var(--u)),
+      rgba(0,0,0,0) calc(2.8*var(--u)) calc(6*var(--u)));
+    border-radius:calc(1*var(--u));
+  }
   .power {
     width:calc(17*var(--u)); height:calc(4.5*var(--u)); border-radius:calc(2.5*var(--u));
     background:linear-gradient(180deg,#efeaf5,#b6acc6);
@@ -103,7 +111,7 @@
     font-size:calc(2.2*var(--u)); color:#7f7a90; text-align:center; letter-spacing:0;
   }
 
-  .screen { position:relative; line-height:0; border-radius:calc(1*var(--u)); overflow:hidden;
+  .screen { position:relative; line-height:0; border-radius:calc(2*var(--u)); overflow:hidden;
             box-shadow:0 0 calc(6*var(--u)) rgba(120,190,255,.10); }
   canvas {
     display:block; image-rendering:pixelated; image-rendering:crisp-edges;
@@ -189,7 +197,8 @@
                inset 0 calc(-1.5*var(--u)) calc(1.5*var(--u)) rgba(0,0,0,.45);
     text-shadow:0 calc(.6*var(--u)) 0 rgba(0,0,0,.5);
   }
-  button:active { transform:translateY(calc(1.2*var(--u))); box-shadow:none !important; }
+  button { transition:transform .05s ease-out; }
+  button:active { transform:translateY(calc(1.2*var(--u))); box-shadow:none !important; filter:brightness(1.18); }
   .ab button:active { transform:translateY(calc(1.2*var(--u))); }
 
   .bottom {
@@ -226,11 +235,11 @@
     position:fixed; z-index:5;
     top:  calc(env(safe-area-inset-top,   0px) + 8px);
     right:calc(env(safe-area-inset-right, 0px) + 10px);
-    min-height:40px; padding:10px 13px;
-    background:rgba(148,99,214,.18); color:#d9c2ff;
-    border:1px solid rgba(217,194,255,.35);
-    border-radius:10px; font-size:11px; font-family:inherit; font-weight:700;
-    letter-spacing:.5px;
+    min-height:38px; padding:9px 12px;
+    background:rgba(148,99,214,.14); color:rgba(217,194,255,.85);
+    border:1px solid rgba(217,194,255,.25);
+    border-radius:10px; font-size:10px; font-family:inherit; font-weight:700;
+    letter-spacing:.5px; opacity:.85;
     backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
   }
   .reset {
@@ -263,6 +272,7 @@
   <div class="top">
     <div class="power"></div>
     <div class="powerlbl">OFF&nbsp;&#9679;&nbsp;ON</div>
+    <div class="vents"></div>
   </div>
 
   <div class="bezel">
@@ -3297,9 +3307,14 @@ function tick() {
   tone(N[LEAD[musicStep % 32]], 0.16, 0.05, 'square');
   tone(N[BASS[musicStep % 32]], 0.30, 0.04, 'triangle');
   musicStep++;
-  musicTimer = setTimeout(tick, 185);
+  const rapido = (estado === 'baile' || estado === 'muerde');
+  musicTimer = setTimeout(tick, rapido ? 148 : 185);
 }
-function blip() { if (musicOn) tone(880, 0.03, 0.03, 'square'); }
+function blip(freq) { if (musicOn) tone(freq || 880, 0.03, 0.03, 'square'); }
+function buzz() { if (musicOn) tone(150, 0.18, 0.05, 'square'); }
+/* Cada quien habla con su bip: Roberto grave, Santi agudo */
+const VOCES = { roberto: 560, santiago: 920, mesera: 760, drag: 700,
+                amigas: 990, amigoP1: 620, amigoP2: 660, losDos: 780 };
 function chime() { if (!musicOn) return; tone(N.G5, .09, .06); setTimeout(() => tone(N.C6, .16, .06), 95); }
 
 const muteBtn = document.getElementById('mute');
@@ -3396,11 +3411,16 @@ function charlaDeMes(m) {
   return d.charla ? d.charla : [{ q: HISTORIA.jugador, t: d.texto }];
 }
 /* Va destapando letra por letra */
+/* Mantener A o B presionado revela el texto al triple de velocidad */
 function correrTexto() {
   const total = (pages[page] || []).join('').length;
   if (revealed < total) {
     textTimer++;
-    if (textTimer % 2 === 0) { revealed++; if (revealed % 3 === 0) blip(); }
+    const paso = (keys.a || keys.b) ? 3 : (textTimer % 2 === 0 ? 1 : 0);
+    if (paso) {
+      revealed = Math.min(total, revealed + paso);
+      if (revealed % 3 === 0) blip(VOCES[hablante] || 720);
+    }
   }
 }
 /* Un toque de A: primero completa la línea, luego pasa de página, luego de
@@ -3440,7 +3460,7 @@ function transicionar(fn) {
    (título y créditos también salen por su propio return). */
 function pasoFade() {
   if (fadeDir === 0) return;
-  fade += fadeDir * 5;
+  fade += fadeDir * 8;
   if (fadeDir === 1 && fade >= 160) {
     fade = 160; fadeDir = -1;
     if (pendiente) { pendiente(); pendiente = null; }
@@ -4016,7 +4036,7 @@ function loop() {
       jug.x = Math.max(2, Math.min(106, jug.x));
 
       if (!cangurera && Math.abs(jug.x - CANG_X) < 13) {
-        cangurera = true;
+        cangurera = true; chime();
         abrirCharla([{ q:'santiago', t:'LA CANGURERA VERDE. AHORA SÍ.' }], 'dialogo', 'cuarto');
       } else if (jug.x >= 105) {
         if (cangurera) transicionar(empezarEspera);
@@ -4046,7 +4066,7 @@ function loop() {
       jug.x = Math.max(2, Math.min(106, jug.x));
 
       if (!maleta && Math.abs(jug.x - MAL_X) < 14) {
-        maleta = true;
+        maleta = true; chime();
         abrirCharla([{ q:'santiago', t:'A VER CUÁNTO TIEMPO HARÉ. NUNCA HE IDO A ZONA ESMERALDA.' }],
                     'dialogo', 'maleta');
       } else if (jug.x >= 105) {
@@ -4100,9 +4120,9 @@ function loop() {
     if (keys.right) { jug.x += 0.9; jug.mirando = 1; }
     jug.x = Math.max(4, Math.min(118, jug.x));
     if (consumed('a') || consumed('start')) {
-      if (!llevando && enRefri) llevando = true;
+      if (!llevando && enRefri) { llevando = true; blip(720); }
       else if (llevando && enEstufa) {
-        llevando = false; ingr++;
+        llevando = false; ingr++; chime();
         if (ingr >= INGREDIENTES.length) correrGuion(PASTA, () => correrGuion(A_LA_SALA, menuPizza, true));
       }
     }
@@ -4119,8 +4139,8 @@ function loop() {
       if (keys.right) medX += 1.1;
       medX = Math.max(MED_MIN, Math.min(MED_MAX, medX));
       if (consumed('a') || consumed('start')) {
-        if (medX > MED_OK) transicionar(() => correrGuion(CIERRE, empezarCocina));
-        else medMsg = 76;
+        if (medX > MED_OK) { chime(); transicionar(() => correrGuion(CIERRE, empezarCocina)); }
+        else { buzz(); medMsg = 76; }
       }
     }
     pasoFade();
@@ -4130,9 +4150,9 @@ function loop() {
   /* --- Menús: esperar o no, y cómo bailar --- */
   if (estado === 'menu') {
     pantallaMenu(t);
-    if (consumed('up')   || consumed('left'))  menu.sel = (menu.sel + menu.ops.length - 1) % menu.ops.length;
-    if (consumed('down') || consumed('right')) menu.sel = (menu.sel + 1) % menu.ops.length;
-    if (consumed('a') || consumed('start')) menu.fn(menu.sel);
+    if (consumed('up')   || consumed('left'))  { menu.sel = (menu.sel + menu.ops.length - 1) % menu.ops.length; blip(660); }
+    if (consumed('down') || consumed('right')) { menu.sel = (menu.sel + 1) % menu.ops.length; blip(660); }
+    if (consumed('a') || consumed('start')) { chime(); menu.fn(menu.sel); }
     pasoFade();
     requestAnimationFrame(loop); return;
   }
