@@ -12,6 +12,16 @@ antes de tocar el código; el juego se rompe fácil si se ignoran.
 - Los finales malos son absurdos y rápidos (piano, avión, pizza). No se explican.
 - Santiago y Roberto nunca se declaran nada solemne: el romance sale por los hechos.
 
+## La consola (CSS)
+
+- Carcasa **teal GBC** con botones A/B frambuesa; el fondo de la página es azul
+  petróleo. Si se cambia el color, cambiar juntos: gradiente de `.gb`, fondo de
+  `body`, color del logo `.gbtxt` y el radial de los botones `.ab`.
+- Prioridad de espacio: **la pantalla manda**. El bisel y los márgenes se
+  mantienen delgados (bisel 5-6u, carcasa 5u) para que en un teléfono la pantalla
+  sea lo más grande posible; los botones grandes y separados (dpad 62u, A/B 28u)
+  porque se juega con el pulgar.
+
 ## La pantalla y la escala
 
 - Canvas fijo de **160×144** (Game Boy real). Nunca dibujar fuera de eso.

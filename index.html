@@ -20,7 +20,7 @@
   html, body {
     height:100%; overflow:hidden; overscroll-behavior:none;
     background:
-      radial-gradient(120% 90% at 50% 0%, #2a1f3d 0%, #17121f 55%, #0d0a13 100%);
+      radial-gradient(120% 90% at 50% 0%, #14343c 0%, #0c1f26 55%, #070f14 100%);
     font-family: ui-monospace, "SF Mono", Menlo, monospace;
     -webkit-text-size-adjust:100%;
     touch-action:none; user-select:none; -webkit-user-select:none;
@@ -42,9 +42,9 @@
     background:
       radial-gradient(120% 70% at 18% 2%,  rgba(255,255,255,.38), rgba(255,255,255,0) 52%),
       radial-gradient(90%  60% at 88% 96%, rgba(255,255,255,.14), rgba(255,255,255,0) 60%),
-      linear-gradient(158deg,#9463d6 0%,#7b49c0 32%,#5f34a0 62%,#41236f 100%);
+      linear-gradient(158deg,#46d6cc 0%,#1fa8a8 32%,#0e7f88 62%,#07525c 100%);
     border-radius:calc(9*var(--u)) calc(9*var(--u)) calc(12*var(--u)) calc(12*var(--u));
-    padding:calc(7*var(--u)) calc(7*var(--u)) calc(7*var(--u));
+    padding:calc(5*var(--u)) calc(5*var(--u)) calc(5*var(--u));
     box-shadow:
       0 calc(9*var(--u)) calc(22*var(--u)) rgba(0,0,0,.62),
       0 calc(2*var(--u)) calc(5*var(--u))  rgba(0,0,0,.45),
@@ -52,7 +52,7 @@
       inset 0 calc(-2*var(--u)) 0 rgba(0,0,0,.32),
       inset calc(2.5*var(--u)) 0 calc(7*var(--u)) rgba(255,255,255,.13),
       inset calc(-2.5*var(--u)) 0 calc(7*var(--u)) rgba(0,0,0,.28);
-    display:flex; flex-direction:column; align-items:center; gap:calc(3*var(--u));
+    display:flex; flex-direction:column; align-items:center; gap:calc(2*var(--u));
   }
   /* brillo de plástico que cruza la carcasa */
   .gb::after {
@@ -92,23 +92,23 @@
   /* ---------- Bisel + pantalla ---------- */
   .bezel {
     background:linear-gradient(168deg,#3a3648 0%,#26232f 45%,#1a1822 100%);
-    border-radius:calc(4*var(--u)) calc(4*var(--u)) calc(9*var(--u)) calc(9*var(--u));
-    padding:calc(8*var(--u)) calc(10*var(--u)) calc(7*var(--u)); position:relative;
+    border-radius:calc(4*var(--u)) calc(4*var(--u)) calc(8*var(--u)) calc(8*var(--u));
+    padding:calc(5*var(--u)) calc(6*var(--u)) calc(5*var(--u)) calc(9*var(--u)); position:relative;
     box-shadow:inset 0 calc(1.2*var(--u)) calc(3*var(--u)) rgba(0,0,0,.75),
                inset 0 calc(-1*var(--u)) 0 rgba(255,255,255,.10),
                0 calc(1*var(--u)) 0 rgba(255,255,255,.16);
   }
   .lamp {
-    position:absolute; left:calc(3.5*var(--u)); top:calc(24*var(--u));
-    width:calc(3.4*var(--u)); height:calc(3.4*var(--u)); border-radius:50%;
+    position:absolute; left:calc(2.6*var(--u)); top:calc(22*var(--u));
+    width:calc(3.2*var(--u)); height:calc(3.2*var(--u)); border-radius:50%;
     background:radial-gradient(circle at 35% 30%,#ff9a92,#e0332c);
     box-shadow:0 0 calc(3.5*var(--u)) rgba(255,70,60,.9), 0 0 calc(8*var(--u)) rgba(255,70,60,.45);
     animation:latido 2.4s ease-in-out infinite;
   }
   @keyframes latido { 0%,100%{opacity:1} 50%{opacity:.62} }
   .lamplbl {
-    position:absolute; left:calc(1.2*var(--u)); top:calc(29*var(--u)); width:calc(8*var(--u));
-    font-size:calc(2.2*var(--u)); color:#7f7a90; text-align:center; letter-spacing:0;
+    position:absolute; left:calc(.4*var(--u)); top:calc(26.6*var(--u)); width:calc(8*var(--u));
+    font-size:calc(1.9*var(--u)); color:#7f7a90; text-align:center; letter-spacing:0;
   }
 
   .screen { position:relative; line-height:0; border-radius:calc(2*var(--u)); overflow:hidden;
@@ -139,14 +139,14 @@
   /* ---------- Logo GAME BOY COLOR ---------- */
   .logo {
     width:100%; display:flex; align-items:baseline; gap:calc(2*var(--u));
-    padding:calc(1*var(--u)) calc(4*var(--u)) 0;
+    padding:calc(.5*var(--u)) calc(4*var(--u)) 0;
   }
   .logo .gbtxt {
-    font-size:calc(5*var(--u)); font-weight:800; font-style:italic;
-    letter-spacing:calc(.2*var(--u)); color:#211a3a;
-    text-shadow:0 calc(.6*var(--u)) 0 rgba(255,255,255,.28);
+    font-size:calc(4.2*var(--u)); font-weight:800; font-style:italic;
+    letter-spacing:calc(.2*var(--u)); color:#083038;
+    text-shadow:0 calc(.6*var(--u)) 0 rgba(255,255,255,.30);
   }
-  .logo .color { font-size:calc(5*var(--u)); font-weight:800; font-style:italic; letter-spacing:calc(.2*var(--u)); }
+  .logo .color { font-size:calc(4.2*var(--u)); font-weight:800; font-style:italic; letter-spacing:calc(.2*var(--u)); }
   .logo .color i { font-style:italic; }
   .logo .color i:nth-child(1){ color:#e8443c }
   .logo .color i:nth-child(2){ color:#f08a2a }
@@ -154,18 +154,18 @@
   .logo .color i:nth-child(4){ color:#4bb35a }
   .logo .color i:nth-child(5){ color:#3d7fe0 }
   .logo .nos {
-    margin-left:auto; font-size:calc(3.2*var(--u)); letter-spacing:calc(.4*var(--u));
-    color:rgba(255,255,255,.62); font-weight:700;
+    margin-left:auto; font-size:calc(2.9*var(--u)); letter-spacing:calc(.4*var(--u));
+    color:rgba(255,255,255,.70); font-weight:700;
   }
 
   /* ---------- Controles ---------- */
   .pad {
     display:flex; align-items:center; justify-content:space-between;
-    width:100%; padding:calc(2*var(--u)) calc(2*var(--u)) 0;
+    width:100%; padding:calc(1*var(--u)) calc(1*var(--u)) 0;
   }
 
   .dpad {
-    position:relative; width:calc(54*var(--u)); height:calc(54*var(--u));
+    position:relative; width:calc(62*var(--u)); height:calc(62*var(--u));
     border-radius:50%;
     background:radial-gradient(circle at 50% 46%, #2f2b3a 62%, #241f2e 100%);
     box-shadow:inset 0 calc(1.5*var(--u)) calc(2.5*var(--u)) rgba(0,0,0,.55),
@@ -177,23 +177,23 @@
     background:linear-gradient(160deg,#413c50,#2a2634);
   }
   .dpad button { box-shadow:0 calc(1.4*var(--u)) 0 #171420, inset 0 calc(.8*var(--u)) 0 rgba(255,255,255,.13); }
-  .dpad .u { left:calc(18*var(--u)); top:calc(3*var(--u));    width:calc(18*var(--u)); height:calc(17*var(--u)); border-radius:calc(3*var(--u)) calc(3*var(--u)) 0 0; }
-  .dpad .d { left:calc(18*var(--u)); bottom:calc(3*var(--u)); width:calc(18*var(--u)); height:calc(17*var(--u)); border-radius:0 0 calc(3*var(--u)) calc(3*var(--u)); }
-  .dpad .l { top:calc(18*var(--u)); left:calc(3*var(--u));    width:calc(17*var(--u)); height:calc(18*var(--u)); border-radius:calc(3*var(--u)) 0 0 calc(3*var(--u)); }
-  .dpad .r { top:calc(18*var(--u)); right:calc(3*var(--u));   width:calc(17*var(--u)); height:calc(18*var(--u)); border-radius:0 calc(3*var(--u)) calc(3*var(--u)) 0; }
+  .dpad .u { left:calc(21*var(--u)); top:calc(3*var(--u));    width:calc(20*var(--u)); height:calc(19*var(--u)); border-radius:calc(3*var(--u)) calc(3*var(--u)) 0 0; }
+  .dpad .d { left:calc(21*var(--u)); bottom:calc(3*var(--u)); width:calc(20*var(--u)); height:calc(19*var(--u)); border-radius:0 0 calc(3*var(--u)) calc(3*var(--u)); }
+  .dpad .l { top:calc(21*var(--u)); left:calc(3*var(--u));    width:calc(19*var(--u)); height:calc(20*var(--u)); border-radius:calc(3*var(--u)) 0 0 calc(3*var(--u)); }
+  .dpad .r { top:calc(21*var(--u)); right:calc(3*var(--u));   width:calc(19*var(--u)); height:calc(20*var(--u)); border-radius:0 calc(3*var(--u)) calc(3*var(--u)) 0; }
   .dpad .c {
-    left:calc(18*var(--u)); top:calc(18*var(--u)); width:calc(18*var(--u)); height:calc(18*var(--u));
+    left:calc(21*var(--u)); top:calc(21*var(--u)); width:calc(20*var(--u)); height:calc(20*var(--u));
     background:radial-gradient(circle at 50% 40%, #3b3648, #262232);
     box-shadow:inset 0 0 calc(2*var(--u)) rgba(0,0,0,.6);
   }
 
-  .ab { display:flex; gap:calc(7*var(--u)); align-items:center; transform:rotate(-22deg); }
+  .ab { display:flex; gap:calc(11*var(--u)); align-items:center; transform:rotate(-22deg); }
   .ab .btnwrap { display:flex; flex-direction:column; align-items:center; gap:calc(1.5*var(--u)); }
   .ab button {
-    width:calc(24*var(--u)); height:calc(24*var(--u)); border-radius:50%; border:0;
-    background:radial-gradient(circle at 34% 28%, #6b3f8f 0%, #4a2668 48%, #2d1442 100%);
-    color:#f0e2ff; font-size:calc(8*var(--u)); font-weight:800; line-height:1;
-    box-shadow:0 calc(2*var(--u)) 0 #1d0d2c,
+    width:calc(28*var(--u)); height:calc(28*var(--u)); border-radius:50%; border:0;
+    background:radial-gradient(circle at 34% 28%, #a5487e 0%, #7c2f5c 48%, #4e1a3a 100%);
+    color:#ffe4f2; font-size:calc(9.5*var(--u)); font-weight:800; line-height:1;
+    box-shadow:0 calc(2*var(--u)) 0 #2e0e22,
                inset 0 calc(1*var(--u)) 0 rgba(255,255,255,.30),
                inset 0 calc(-1.5*var(--u)) calc(1.5*var(--u)) rgba(0,0,0,.45);
     text-shadow:0 calc(.6*var(--u)) 0 rgba(0,0,0,.5);
@@ -204,12 +204,12 @@
 
   .bottom {
     width:100%; display:flex; align-items:flex-end; justify-content:space-between;
-    padding:calc(3*var(--u)) calc(3*var(--u)) 0;
+    padding:calc(2*var(--u)) calc(3*var(--u)) 0;
   }
-  .sys { display:flex; gap:calc(9*var(--u)); padding-left:calc(6*var(--u)); }
+  .sys { display:flex; gap:calc(13*var(--u)); padding-left:calc(6*var(--u)); }
   .sys button {
     position:relative;
-    width:calc(26*var(--u)); height:calc(6.5*var(--u));
+    width:calc(28*var(--u)); height:calc(7*var(--u));
     border-radius:calc(4*var(--u)); border:0;
     background:linear-gradient(180deg,#a9a2bb,#7c7590);
     transform:rotate(-22deg);
