@@ -808,6 +808,7 @@ let maleta = false;
 let medX = 13, medMsg = 0;
 let ingr = 0, llevando = false, muerdeT = 0;
 let numSel = 0, numTexto = [], numMsg = 0, numFallos = 0;
+let despIdx = 0, despT = 0, apagT = 0;
 function pintaCangurera(x, y, flip) {
   R(x + 1, y + 19, 14, 4, '#5cff3a');
   R(x + 1, y + 19, 14, 1, '#b6ff9e');
@@ -3589,6 +3590,7 @@ function reiniciar() {
   corazonTomado = false; cangurera = false; maleta = false; cuartoNoche = false;
   medX = 13; medMsg = 0; ingr = 0; llevando = false; muerdeT = 0;
   numSel = 0; numTexto = []; numMsg = 0; numFallos = 0;
+  despIdx = 0; despT = 0; apagT = 0;
   charla = []; charlaIdx = 0; pages = []; page = 0; revealed = 0; textTimer = 0;
   fade = 0; fadeDir = 0; pendiente = null;
   for (const k in keys) keys[k] = false;
@@ -3686,6 +3688,52 @@ function pantallaTitulo(t) {
 
   if ((t / 30 | 0) % 2) centerText(122, "PRESIONA A", '#ffe9a8', 'rgba(60,10,50,.85)');
   centerText(133, "-- LADO A --", 'rgba(255,255,255,.7)');
+}
+
+/* Cierra como abrió: la pantalla verde de Game Boy, respondiendo la pregunta */
+const DESPEDIDA = [
+  ['WHAT IS LOVE?'],
+  ['...'],
+  ['MAYBE ITS A FEELING...'],
+  ['MAYBE ITS A CHOICE...'],
+  ['MAYBE ITS A RIDE...'],
+  ['TBH IDK'],
+  ["BUT I'M HAPPY TO BE", 'FIGURING OUT WITH YOU'],
+  ['TE AMO,', 'FELICES 6 MESES']
+];
+function pantallaDespedida() {
+  R(0, 0, 160, 144, '#9bbc0f');
+  for (let y = 0; y < 144; y += 2) dith(0, y, 160, '#8fb00d', (y >> 1) & 1);
+  const ls = DESPEDIDA[despIdx];
+  const y0 = 58 - (ls.length - 1) * 7;
+  const listo = despT > 10;
+  for (let i = 0; i < ls.length; i++)
+    if (listo || i === 0) centerText(y0 + i * 13, ls[i], '#0f380f');
+  if (despT > 18) drawSprite(CORAZON, 76, y0 + ls.length * 13 + 10, false, PAL_COR_DMG);
+  if (despT > 30 && (despT / 22 | 0) % 2) {
+    R(139, 126, 15, 13, 'rgba(15,56,15,.72)');
+    drawText(144, 129, 'A', '#9bbc0f');
+  }
+}
+/* El apagón de una Game Boy de verdad: se cierra a una raya y luego a un punto */
+function pantallaApagado() {
+  R(0, 0, 160, 144, '#0b0a10');
+  const p = apagT;
+  if (p < 18) {
+    const h = Math.max(2, Math.round(144 * (1 - p / 18)));
+    const y = Math.round(72 - h / 2);
+    R(0, y, 160, h, '#9bbc0f');
+    for (let yy = y; yy < y + h; yy += 2) dith(0, yy, 160, '#8fb00d', (yy >> 1) & 1);
+    const ls = DESPEDIDA[DESPEDIDA.length - 1];
+    if (h > 40) for (let i = 0; i < ls.length; i++) centerText(51 + i * 13, ls[i], '#0f380f');
+  } else if (p < 34) {
+    const w = Math.max(3, Math.round(160 * (1 - (p - 18) / 16)));
+    R(Math.round(80 - w / 2), 71, w, 2, '#d8f27a');
+  } else if (p < 42) {
+    R(78, 70, 4, 4, 'rgba(216,242,122,' + ((42 - p) / 8).toFixed(2) + ')');
+  }
+  if (p > 76 && (p / 32 | 0) % 2)
+    centerText(126, 'A = OTRA VEZ', 'rgba(180,214,90,.5)', null);
 }
 
 function pantallaCreditos(t) {
@@ -3995,7 +4043,8 @@ const SALTOS = [
   { n:'SE LA COMIÓ',      f:() => { estado = 'envenenado'; } },
   { n:'LAS AMIGAS',       f:() => { correrGuion(NOVIOS, finActo); } },
   { n:'EL FINAL',         f:() => { correrGuion(CIERRE_FINAL, () => { estado = 'creditos'; }, true); } },
-  { n:'CRÉDITOS',         f:() => { estado = 'creditos'; } }
+  { n:'CRÉDITOS',         f:() => { estado = 'creditos'; } },
+  { n:'LA DESPEDIDA',     f:() => { despIdx = 0; despT = 0; estado = 'despedida'; } }
 ];
 const SALTOS_VIS = 11;
 
@@ -4436,9 +4485,37 @@ function loop() {
     requestAnimationFrame(loop); return;
   }
 
+  if (estado === 'despedida') {
+    despT++;
+    pantallaDespedida();
+    if (despT > 14 && (consumed('a') || consumed('start'))) {
+      if (despIdx < DESPEDIDA.length - 1) { despIdx++; despT = 0; blip(720); }
+      else {
+        apagT = 0; estado = 'apagando';
+        if (musicOn) {
+          musicOn = false; clearTimeout(musicTimer);
+          muteBtn.textContent = 'SONIDO: OFF';
+          tone(N.G4, .55, .05, 'triangle');
+        }
+      }
+    }
+    pasoFade();
+    requestAnimationFrame(loop); return;
+  }
+
+  if (estado === 'apagando') {
+    apagT++;
+    pantallaApagado();
+    if (apagT > 76 && (consumed('a') || consumed('start')))
+      transicionar(() => { estado = 'titulo'; });
+    pasoFade();
+    requestAnimationFrame(loop); return;
+  }
+
   if (estado === 'creditos') {
     pantallaCreditos(t);
-    if (consumed('a') || consumed('start')) transicionar(() => { estado = 'titulo'; });
+    if (consumed('a') || consumed('start'))
+      transicionar(() => { despIdx = 0; despT = 0; estado = 'despedida'; });
     pasoFade();
     requestAnimationFrame(loop); return;
   }

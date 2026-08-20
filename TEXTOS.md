@@ -308,6 +308,19 @@ El juego cierra aquí mismo, en la sala con las amigas — ya no hay fases de me
 - **SANTIAGO:** SEIS MESES. NADA MAL PARA ALGUIEN CUYO PLAN IDEAL ERA GOING OUT AND BLACKING OUT.
 - Créditos: **FELICES** · **6 MESES** · **SANTIAGO & ROBERTO** · **A = OTRA VEZ**
 
+### La despedida (vuelve la pantalla verde del arranque, una A por pantalla)
+
+1. **WHAT IS LOVE?**
+2. **...**
+3. **MAYBE ITS A FEELING...**
+4. **MAYBE ITS A CHOICE...**
+5. **MAYBE ITS A RIDE...**
+6. **TBH IDK**
+7. **BUT I'M HAPPY TO BE** / **FIGURING OUT WITH YOU**
+8. **TE AMO,** / **FELICES 6 MESES**
+
+Y ahí se apaga la consola. Al rato aparece **A = OTRA VEZ** por si quieren volver a jugar.
+
 ## 13. Consola y selector
 
 - **REINICIAR**, **SONIDO: ON/OFF**, **ESCENAS**, **MES 2/6** (el contador sale a partir del mes 2)

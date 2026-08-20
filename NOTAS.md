@@ -113,6 +113,15 @@ la página con `window.onerror`.
 - `chime()` = recoger/confirmar algo bueno; `blip(660)` = mover cursor; `buzz()` = error
   ("MENTIROSO"). Mantén ese vocabulario.
 - La música es un loop de 32 pasos; corre a 148ms durante los bailes, 185ms el resto.
+- En la despedida la música se apaga sola (y el botón se pone en OFF) antes del
+  apagón: el silencio es parte del cierre. No lo quites.
+
+## El cierre
+
+El juego abre con la pantalla verde preguntando **WHAT IS LOVE?** y cierra con la
+misma pantalla respondiéndola (`DESPEDIDA`, una A por pantalla), y de ahí el apagón
+clásico de Game Boy: la imagen se colapsa a una raya, la raya a un punto, negro.
+Es el remate del regalo — si se toca algo de ahí, que sea sin romper esa simetría.
 
 ## Controles
 
