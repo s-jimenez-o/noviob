@@ -309,4 +309,5 @@ El juego cierra aquí mismo, en la sala con las amigas — ya no hay fases de me
 ## 13. Consola y selector
 
 - **REINICIAR**, **SONIDO: ON/OFF**, **ESCENAS**, **MES 2/6** (el contador sale a partir del mes 2)
-- Selector (SELECT o botón ESCENAS): **IR A...** con 48 secciones, pie **A = IR    B = SALIR**
+- Selector (SELECT o botón ESCENAS): **IR A...**, pie **B O SELECT = VOLVER**
+- La primera opción es **SEGUIR JUGANDO**: cierra el menú y te deja donde ibas

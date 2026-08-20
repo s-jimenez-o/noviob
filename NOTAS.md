@@ -124,6 +124,11 @@ la página con `window.onerror`.
 
 - `SALTOS` salta a cualquier punto; cada entrada debe dejar los flags como estarían
   llegando ahí jugando (cangurera, maleta, cuartoNoche, mesaElegida...).
+- **La entrada 0 es `SEGUIR JUGANDO` con `f:null`**: cierra el menú y devuelve al
+  jugador exactamente donde estaba. El cursor SIEMPRE arranca ahí, para que picar
+  SELECT sin querer y luego A por reflejo no mande a nadie al arranque. Si agregas
+  entradas, que sea después de esa. Tampoco se abre el menú durante un barrido
+  (se perdería el callback pendiente).
 - **Si insertas pasos en un guion, revisa los `irGuion(GUION, índice, ...)` de SALTOS**:
   los índices son posiciones absolutas y se corren. Imprime el guion numerado para verificar.
 - Para el regalo final: borrar el botón `.escenas` del HTML y el bloque de "saltos".

@@ -3479,7 +3479,7 @@ function ensureAudio() {
 document.getElementById('reset').onclick = () => { ensureAudio(); reiniciar(); };
 document.getElementById('escenas').onclick = () => {
   ensureAudio();
-  if (estado === 'saltos') estado = saltoVuelve; else abrirSaltos();
+  if (estado === 'saltos') cerrarSaltos(); else abrirSaltos();
 };
 
 muteBtn.onclick = () => {
@@ -3934,6 +3934,9 @@ function irMes(m) {
   jug.x = 8; jug.mirando = 1; estado = 'juego';
 }
 const SALTOS = [
+  /* La primera SIEMPRE es volver: así, si abres el menú sin querer y le picas
+     a A por reflejo, no te manda a ningún lado. */
+  { n:'SEGUIR JUGANDO',   f:null },
   { n:'ENCENDIDO',        f:() => { estado = 'boot'; bootT = 0; } },
   { n:'TÍTULO',           f:() => { estado = 'titulo'; } },
   { n:'INTRO: LA APP',    f:() => { cangurera = false; irGuion(INTRO, 0, finIntro, true); } },
@@ -3993,11 +3996,13 @@ const SALTOS = [
 const SALTOS_VIS = 11;
 
 function abrirSaltos() {
-  if (estado === 'saltos') return;
+  /* durante un barrido no se abre: se perdería lo que quedó pendiente */
+  if (estado === 'saltos' || fadeDir !== 0) return;
   saltoVuelve = estado;
-  fade = 0; fadeDir = 0; pendiente = null;
+  saltoSel = 0; saltoTop = 0; repite = 0;
   estado = 'saltos';
 }
+function cerrarSaltos() { estado = saltoVuelve; repite = 0; }
 function saltarA(i) {
   fade = 0; fadeDir = 0; pendiente = null;
   charla = []; charlaIdx = 0; pages = []; page = 0; revealed = 0; textTimer = 0;
@@ -4009,7 +4014,7 @@ function pantallaSaltos(t) {
   vgrad(0, 0, 160, 144, ['#1a0f2e','#22143c','#2a1848','#331d54']);
   R(0, 0, 160, 13, '#5f34a0'); R(0, 0, 160, 1, '#8f63d6'); R(0, 12, 160, 1, '#2a1550');
   drawText(4, 3, 'IR A...', '#ffffff');
-  drawText(110, 3, (saltoSel + 1) + '/' + SALTOS.length, '#d9c2ff');
+  drawText(110, 3, saltoSel + '/' + (SALTOS.length - 1), '#d9c2ff');
   for (let i = 0; i < SALTOS_VIS; i++) {
     const idx = saltoTop + i;
     if (idx >= SALTOS.length) break;
@@ -4018,7 +4023,10 @@ function pantallaSaltos(t) {
       R(2, y - 2, 156, 10, '#f6efdc');
       corazon(4, y - 1, (t / 12 | 0) % 2);
     }
-    drawText(15, y, SALTOS[idx].n, idx === saltoSel ? '#5f34a0' : '#bda6e4');
+    const propia = !SALTOS[idx].f;   /* la de volver va en otro color */
+    drawText(15, y, SALTOS[idx].n,
+             idx === saltoSel ? (propia ? '#1c7a4a' : '#5f34a0')
+                              : (propia ? '#7ee8a8' : '#bda6e4'));
   }
   /* barra de desplazamiento */
   if (SALTOS.length > SALTOS_VIS) {
@@ -4028,7 +4036,7 @@ function pantallaSaltos(t) {
     R(157, 15 + arr, 2, alto, '#a882e8');
   }
   R(0, 131, 160, 13, '#2a1550'); R(0, 131, 160, 1, '#5f34a0');
-  drawText(4, 134, 'A = IR    B = SALIR', '#bda6e4');
+  drawText(4, 134, 'B O SELECT = VOLVER', '#bda6e4');
 }
 
 
@@ -4113,7 +4121,7 @@ function loop() {
   const hablando = (estado === 'dialogo' || estado === 'dialogoFinal');
 
   /* SELECT abre y cierra el selector de escenas desde donde sea */
-  if (consumed('select')) { if (estado === 'saltos') estado = saltoVuelve; else abrirSaltos(); }
+  if (consumed('select')) { if (estado === 'saltos') cerrarSaltos(); else abrirSaltos(); }
 
   if (estado === 'saltos') {
     pantallaSaltos(t);
@@ -4129,8 +4137,11 @@ function loop() {
       saltoTop = Math.max(saltoSel - SALTOS_VIS + 1, Math.min(saltoTop, saltoSel));
       saltoTop = Math.max(0, Math.min(SALTOS.length - SALTOS_VIS, saltoTop));
     }
-    if (consumed('a') || consumed('start')) { ensureAudio(); saltarA(saltoSel); }
-    else if (consumed('b')) estado = saltoVuelve;
+    if (consumed('a') || consumed('start')) {
+      ensureAudio();
+      if (SALTOS[saltoSel].f) saltarA(saltoSel); else { blip(660); cerrarSaltos(); }
+    }
+    else if (consumed('b')) cerrarSaltos();
     requestAnimationFrame(loop); return;
   }
 
