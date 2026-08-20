@@ -2358,41 +2358,43 @@ function burbujaCharla(x, y, t, alReves) {
 
 /* El teclado para adivinar el número */
 const TECLAS = ['1','2','3','4','5','6','7','8','9','C','0',''];
-const TEC_X = [30, 62, 94], TEC_Y = [56, 73, 90, 107];
+const TEC_X = [26, 64, 102], TEC_Y = [58, 75, 92, 109];
 function pantallaNumeros(t) {
   bgInterior(t);
   const cx = MESAS[mesaElegida];
   sentadosEn(t, cx); mesaFrente(cx);
   velo(.62);
   /* marco */
-  R(22, 16, 118, 110, 'rgba(10,4,24,.45)');
-  R(20, 14, 118, 110, '#f6efdc');
-  R(20, 14, 118, 12, '#5f34a0'); R(20, 14, 118, 1, '#8f63d6');
-  R(20, 14, 118, 1, '#241a3c'); R(20, 123, 118, 1, '#241a3c');
-  R(20, 14, 1, 110, '#241a3c'); R(137, 14, 1, 110, '#241a3c');
-  drawTextS(28, 17, 'NÚMERO DE LA SUERTE', '#ffffff', 'rgba(0,0,0,.4)');
+  R(18, 10, 128, 124, 'rgba(10,4,24,.45)');
+  R(16, 8, 128, 124, '#f6efdc');
+  R(16, 8, 128, 22, '#5f34a0'); R(16, 8, 128, 1, '#8f63d6');
+  R(16, 8, 128, 1, '#241a3c'); R(16, 131, 128, 1, '#241a3c');
+  R(16, 8, 1, 124, '#241a3c'); R(143, 8, 1, 124, '#241a3c');
+  centerText(11, '¿CUÁL ES MI NÚMERO', '#ffffff', 'rgba(0,0,0,.4)');
+  centerText(21, 'DE LA SUERTE?', '#ffffff', 'rgba(0,0,0,.4)');
   /* lo que lleva marcado */
-  R(44, 30, 70, 20, '#2a2035'); R(45, 31, 68, 18, '#1c1526');
+  R(44, 35, 72, 20, '#2a2035'); R(45, 36, 70, 18, '#1c1526');
   for (let i = 0; i < 3; i++) {
     const d = numTexto[i];
-    if (d !== undefined) drawTextG(52 + i * 22, 34, d, '#8ef2a0', 2);
-    else R(52 + i * 22, 44, 10, 2, '#4a5a52');
+    if (d !== undefined) drawTextG(53 + i * 22, 39, d, '#8ef2a0', 2);
+    else R(53 + i * 22, 49, 10, 2, '#4a5a52');
   }
   /* las teclas */
   for (let i = 0; i < 12; i++) {
     const k = TECLAS[i];
     if (!k) continue;
     const x = TEC_X[i % 3], y = TEC_Y[i / 3 | 0], sel = (numSel === i);
-    R(x, y, 28, 15, sel ? '#8a2f78' : '#e0d5ba');
-        R(x, y, 28, 1, sel ? '#c96ab0' : '#ffffff');
-    R(x, y + 14, 28, 1, sel ? '#5a1a50' : '#bfb298');
-    R(x, y, 1, 15, sel ? '#c96ab0' : '#ffffff'); R(x + 27, y, 1, 15, sel ? '#5a1a50' : '#bfb298');
-    drawText(x + 12 - (k.length - 1) * 3, y + 4, k, sel ? '#ffe9a8' : '#4a3a58');
+    R(x, y, 32, 15, sel ? '#8a2f78' : '#e0d5ba');
+    R(x, y, 32, 1, sel ? '#c96ab0' : '#ffffff');
+    R(x, y + 14, 32, 1, sel ? '#5a1a50' : '#bfb298');
+    R(x, y, 1, 15, sel ? '#c96ab0' : '#ffffff'); R(x + 31, y, 1, 15, sel ? '#5a1a50' : '#bfb298');
+    drawText(x + 14 - (k.length - 1) * 3, y + 4, k, sel ? '#ffe9a8' : '#4a3a58');
   }
   if (numMsg > 0) {
-    R(20, 100, 118, 24, 'rgba(20,6,24,.86)');
-    centerText(104, numMsg > 40 ? 'ESE NO ES.' : 'PISTA: ES UNA', '#ff8fa3', null);
-    centerText(114, numMsg > 40 ? 'OTRA VEZ.' : 'EMERGENCIA.', '#ff8fa3', null);
+    R(17, 82, 126, 49, '#2a1030');
+    R(17, 82, 126, 1, '#8a2f78'); R(17, 130, 126, 1, '#8a2f78');
+    centerText(96, numMsg > 40 ? 'ESE NO ES.' : 'PISTA: ES UNA', '#ff8fa3', 'rgba(0,0,0,.6)');
+    centerText(110, numMsg > 40 ? 'OTRA VEZ.' : 'EMERGENCIA.', '#ff8fa3', 'rgba(0,0,0,.6)');
   }
 }
 
@@ -2421,10 +2423,10 @@ function torres(tt, conCorazones) {
     for (let wy = 26; wy < 142; wy += 7)
       for (let wx = x + 4; wx < x + 15; wx += 4) R(wx, wy, 2, 4, 'rgba(56,76,98,.42)');
   }
-  const px = -62 + tt * 2.2;
-  if (tt < 34) avion(px, 44, false);
-  else if (conCorazones) explosionCorazones(66, 50, tt - 34);
-  else explosion(66, 50, tt - 34);
+  const px = -62 + tt * 1.5;
+  if (tt < 52) avion(px, 44, false);
+  else if (conCorazones) explosionCorazones(66, 50, (tt - 52) * 0.72);
+  else explosion(66, 50, (tt - 52) * 0.72);
 }
 function explosionCorazones(cx, cy, p) {
   if (p < 30) {
@@ -2872,17 +2874,19 @@ const NOCHE = [
   { e:'conMesera', a:{}, q:'roberto', t:'YA ÓRALE PUES NECIA, TRÁEME LA CAGUAMA.' },
   { e:'conMesera', a:{}, q:'santiago', t:'YO UNA CUBA, POR FAVOR.' },
   { e:'mesa', a:{carta:false, platican:true}, dur:132 },
-  { e:'mesa', a:{carta:false}, q:'santiago', t:'MI NÚMERO DE LA SUERTE ES...' }
+  { e:'mesa', a:{carta:false}, q:'santiago', t:'BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH...' },
+  { e:'mesa', a:{carta:false}, q:'santiago', t:'¿A QUE NO ADIVINAS MI NÚMERO DE LA SUERTE?' }
 ];
 
 /* Le atina al 911 y pasa lo que pasa */
 const TORRES = [
-  { e:'torres', a:{}, dur:96 },
+  { e:'torres', a:{}, dur:132 },
   { e:'mesa', a:{carta:false}, q:'roberto',
     t:'DE HECHO MI CUMPLEAÑOS ES EL 10 DE SEPTIEMBRE.' },
   { e:'mesa', a:{carta:false}, q:'roberto',
     t:'IBA A NACER EL 11, PERO MI MAMÁ NO QUISO.' },
-  { e:'torres', a:{corazones:true}, dur:104 }
+  { e:'mesa', a:{carta:false}, q:'santiago', t:'¿QUEEEE?' },
+  { e:'torres', a:{corazones:true}, dur:150 }
 ];
 
 /* Y de ahí se hace de noche y se van */

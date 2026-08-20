@@ -110,18 +110,20 @@ Cartel: **MÁS TARDE...** / **Y NINGUNA HACHA LANZADA.** — se queda hasta que 
 3. **ROBERTO:** YA ÓRALE PUES NECIA, TRÁEME LA CAGUAMA.
 4. **SANTIAGO:** YO UNA CUBA, POR FAVOR.
 5. (se quedan platicando: las burbujitas van cambiando de lado)
-6. **SANTIAGO:** MI NÚMERO DE LA SUERTE ES...
+6. **SANTIAGO:** BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH...
+7. **SANTIAGO:** ¿A QUE NO ADIVINAS MI NÚMERO DE LA SUERTE?
 
 ### El número de la suerte (jugable: teclado)
 
-- Título: **NÚMERO DE LA SUERTE** · teclas **1-9**, **C** (borrar) y **0**
+- Título: **¿CUÁL ES MI NÚMERO** / **DE LA SUERTE?** · teclas **1-9**, **C** (borrar) y **0**
 - La respuesta es **911**. Si le pica a otra cosa: **ESE NO ES.** / **OTRA VEZ.**
 - A partir del tercer intento sale la pista: **PISTA: ES UNA** / **EMERGENCIA.**
 - Al atinarle, se ve el avión estrellándose contra las dos torres.
 
 1. **ROBERTO:** DE HECHO MI CUMPLEAÑOS ES EL 10 DE SEPTIEMBRE.
 2. **ROBERTO:** IBA A NACER EL 11, PERO MI MAMÁ NO QUISO.
-3. (vuelve a pasar la escena, pero ahora explota en corazones)
+3. **SANTIAGO:** ¿QUEEEE?
+4. (vuelve a pasar la escena, pero ahora explota en corazones)
 
 ### Ya de noche
 
