@@ -91,7 +91,7 @@ Los mensajes que le llegan:
 - **¿LO ESPERAS?** · **ME ESPERO** / **ME VOY**
 - Si se va: **SE FUE.** · **FINAL MALO** · **A = OTRA VEZ**
 
-## 7. Mes 1: la primera cita
+## 7. La primera cita
 
 ### Afuera del club
 
@@ -109,8 +109,24 @@ Cartel: **MÁS TARDE...** / **Y NINGUNA HACHA LANZADA.** — se queda hasta que 
 2. **MESERA:** HOLA, BUENAS NOCHES. ¿LES PUEDO TOM...
 3. **ROBERTO:** YA ÓRALE PUES NECIA, TRÁEME LA CAGUAMA.
 4. **SANTIAGO:** YO UNA CUBA, POR FAVOR.
-5. **SANTIAGO:** OYE, TENGO UN CUMPLEAÑOS. ¿ME ACOMPAÑAS?
-6. **ROBERTO:** VAMOS.
+5. (se quedan platicando: las burbujitas van cambiando de lado)
+6. **SANTIAGO:** MI NÚMERO DE LA SUERTE ES...
+
+### El número de la suerte (jugable: teclado)
+
+- Título: **NÚMERO DE LA SUERTE** · teclas **1-9**, **C** (borrar) y **0**
+- La respuesta es **911**. Si le pica a otra cosa: **ESE NO ES.** / **OTRA VEZ.**
+- A partir del tercer intento sale la pista: **PISTA: ES UNA** / **EMERGENCIA.**
+- Al atinarle, se ve el avión estrellándose contra las dos torres.
+
+1. **ROBERTO:** DE HECHO MI CUMPLEAÑOS ES EL 10 DE SEPTIEMBRE.
+2. **ROBERTO:** IBA A NACER EL 11, PERO MI MAMÁ NO QUISO.
+3. (vuelve a pasar la escena, pero ahora explota en corazones)
+
+### Ya de noche
+
+1. **SANTIAGO:** OYE, TENGO UN CUMPLEAÑOS. ¿ME ACOMPAÑAS?
+2. **ROBERTO:** VAMOS.
 
 ### El cumpleaños en el lugar de drags
 
@@ -283,20 +299,14 @@ Avisos: **PÁSAME EL QUESO PORFA** / **PÁSAME LA SALSA PORFA** ·
 6. **ROBERTO:** ¿ENTONCES ESO NOS HACE NOVIOS?
 7. **LOS DOS:** SÍ.
 
-## 12. Meses 2 al 6
+## 12. Final y créditos
 
-- **MES 2** (`cine`) — MES 2. FUIMOS AL CINE. NO ME ACUERDO DE LA PELÍCULA.
-- **MES 3** (`lluvia`) — MES 3. NOS AGARRÓ LA LLUVIA SIN PARAGUAS Y NOS FUIMOS CAMINANDO.
-- **MES 4** (`noche`) — MES 4. AZOTEA, DOS DE LA MAÑANA. ME CONTASTE TUS PLANES.
-- **MES 5** (`casa`) — MES 5. DOMINGO ENTERO EN EL SILLÓN SIN HACER NADA.
-- **MES 6** (`cabana`) — MES 6. HOY. SEGUIMOS AQUÍ.
-
-## 13. Final y créditos
+El juego cierra aquí mismo, en la sala con las amigas — ya no hay fases de meses.
 
 - **SANTIAGO:** SEIS MESES. NADA MAL PARA ALGUIEN CUYO PLAN IDEAL ERA GOING OUT AND BLACKING OUT.
 - Créditos: **FELICES** · **6 MESES** · **SANTIAGO & ROBERTO** · **A = OTRA VEZ**
 
-## 14. Consola y selector
+## 13. Consola y selector
 
 - **REINICIAR**, **SONIDO: ON/OFF**, **ESCENAS**, **MES 2/6** (el contador sale a partir del mes 2)
-- Selector (SELECT o botón ESCENAS): **IR A...** con 51 secciones, pie **A = IR    B = SALIR**
+- Selector (SELECT o botón ESCENAS): **IR A...** con 48 secciones, pie **A = IR    B = SALIR**

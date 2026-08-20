@@ -336,11 +336,6 @@ const HISTORIA = {
       { q:"roberto",  t:"HOLA. ¿ENTRAMOS?" },
       { q:"roberto",  t:"(QUÉ FEA CANGURERA.)" }
     ]},
-    { escena:"cine",   texto:"MES 2. FUIMOS AL CINE. NO ME ACUERDO DE LA PELÍCULA." },
-    { escena:"lluvia", texto:"MES 3. NOS AGARRÓ LA LLUVIA SIN PARAGUAS Y NOS FUIMOS CAMINANDO." },
-    { escena:"noche",  texto:"MES 4. AZOTEA, DOS DE LA MAÑANA. ME CONTASTE TUS PLANES." },
-    { escena:"casa",   texto:"MES 5. DOMINGO ENTERO EN EL SILLÓN SIN HACER NADA." },
-    { escena:"cabana", texto:"MES 6. HOY. SEGUIMOS AQUÍ." }
   ],
 
   final: "SEIS MESES. NADA MAL PARA ALGUIEN CUYO PLAN IDEAL ERA GOING OUT AND BLACKING OUT.",
@@ -812,6 +807,7 @@ let cangurera = false;
 let maleta = false;
 let medX = 13, medMsg = 0;
 let ingr = 0, llevando = false, muerdeT = 0;
+let numSel = 0, numTexto = [], numMsg = 0, numFallos = 0;
 function pintaCangurera(x, y, flip) {
   R(x + 1, y + 19, 14, 4, '#5cff3a');
   R(x + 1, y + 19, 14, 1, '#b6ff9e');
@@ -2344,6 +2340,107 @@ function pantallaEnvenenado(t) {
   if ((t / 30 | 0) % 2) centerText(124, 'A = OTRA VEZ', '#ffffff', 'rgba(6,16,6,.85)');
 }
 
+/* ---- 20. EL NÚMERO DE LA SUERTE ---- */
+/* Burbujita de "seguimos platicando" arriba de la cabeza
+   (ojo: `burbuja` ya existe y es la de los mensajes de chat) */
+function burbujaCharla(x, y, t, alReves) {
+  R(x, y, 22, 12, '#f6efdc');
+  R(x, y, 22, 1, '#241a3c'); R(x, y + 11, 22, 1, '#241a3c');
+  R(x, y, 1, 12, '#241a3c'); R(x + 21, y, 1, 12, '#241a3c');
+  R(x + 1, y + 1, 20, 1, '#ffffff');
+  const px = alReves ? x + 4 : x + 14;
+  R(px, y + 12, 4, 1, '#f6efdc'); R(px + 1, y + 13, 2, 1, '#f6efdc');
+  R(px - 1, y + 12, 1, 1, '#241a3c'); R(px + 4, y + 12, 1, 1, '#241a3c');
+  const n = ((t / 11 | 0) % 3) + 1;
+  for (let i = 0; i < 3; i++)
+    R(x + 5 + i * 5, y + 5, 3, 3, i < n ? '#5c4a6a' : 'rgba(92,74,106,.20)');
+}
+
+/* El teclado para adivinar el número */
+const TECLAS = ['1','2','3','4','5','6','7','8','9','C','0',''];
+const TEC_X = [30, 62, 94], TEC_Y = [56, 73, 90, 107];
+function pantallaNumeros(t) {
+  bgInterior(t);
+  const cx = MESAS[mesaElegida];
+  sentadosEn(t, cx); mesaFrente(cx);
+  velo(.62);
+  /* marco */
+  R(22, 16, 118, 110, 'rgba(10,4,24,.45)');
+  R(20, 14, 118, 110, '#f6efdc');
+  R(20, 14, 118, 12, '#5f34a0'); R(20, 14, 118, 1, '#8f63d6');
+  R(20, 14, 118, 1, '#241a3c'); R(20, 123, 118, 1, '#241a3c');
+  R(20, 14, 1, 110, '#241a3c'); R(137, 14, 1, 110, '#241a3c');
+  drawTextS(28, 17, 'NÚMERO DE LA SUERTE', '#ffffff', 'rgba(0,0,0,.4)');
+  /* lo que lleva marcado */
+  R(44, 30, 70, 20, '#2a2035'); R(45, 31, 68, 18, '#1c1526');
+  for (let i = 0; i < 3; i++) {
+    const d = numTexto[i];
+    if (d !== undefined) drawTextG(52 + i * 22, 34, d, '#8ef2a0', 2);
+    else R(52 + i * 22, 44, 10, 2, '#4a5a52');
+  }
+  /* las teclas */
+  for (let i = 0; i < 12; i++) {
+    const k = TECLAS[i];
+    if (!k) continue;
+    const x = TEC_X[i % 3], y = TEC_Y[i / 3 | 0], sel = (numSel === i);
+    R(x, y, 28, 15, sel ? '#8a2f78' : '#e0d5ba');
+        R(x, y, 28, 1, sel ? '#c96ab0' : '#ffffff');
+    R(x, y + 14, 28, 1, sel ? '#5a1a50' : '#bfb298');
+    R(x, y, 1, 15, sel ? '#c96ab0' : '#ffffff'); R(x + 27, y, 1, 15, sel ? '#5a1a50' : '#bfb298');
+    drawText(x + 12 - (k.length - 1) * 3, y + 4, k, sel ? '#ffe9a8' : '#4a3a58');
+  }
+  if (numMsg > 0) {
+    R(20, 100, 118, 24, 'rgba(20,6,24,.86)');
+    centerText(104, numMsg > 40 ? 'ESE NO ES.' : 'PISTA: ES UNA', '#ff8fa3', null);
+    centerText(114, numMsg > 40 ? 'OTRA VEZ.' : 'EMERGENCIA.', '#ff8fa3', null);
+  }
+}
+
+/* Las torres, el avión y las dos explosiones */
+function torres(tt, conCorazones) {
+  vgrad(0, 0, 160, 144, ['#4aa8e8','#74c2ef','#a2d8f5','#cfeaf8']);
+  for (let i = 0; i < 4; i++) {
+    const cx = ((i * 47 - (tt * 0.4 | 0)) % 200) - 20;
+    elipse(cx, 16 + (i % 3) * 8, 11, 4, '#ffffff');
+  }
+  /* la ciudad de atrás */
+  for (let i = 0; i < 11; i++) {
+    const x = i * 15, h = 24 + ((i * 13) % 5) * 8;
+    R(x, 144 - h, 14, h, '#6f8399');
+    R(x, 144 - h, 14, 1, '#8fa2b6');
+    for (let wy = 144 - h + 4; wy < 140; wy += 7)
+      for (let wx = x + 2; wx < x + 12; wx += 4)
+        R(wx, wy, 2, 3, ((wx + wy + i) % 3) ? '#57697d' : '#c8dced');
+  }
+  /* las dos torres */
+  for (let i = 0; i < 2; i++) {
+    const x = 58 + i * 26;
+    R(x, 20, 18, 124, '#b8c4d0');
+    R(x, 20, 3, 124, '#dae4ee'); R(x + 15, 20, 3, 124, '#8a96a4');
+    R(x, 20, 18, 2, '#eef4f8'); R(x + 7, 12, 2, 8, '#8a96a4');
+    for (let wy = 26; wy < 142; wy += 7)
+      for (let wx = x + 4; wx < x + 15; wx += 4) R(wx, wy, 2, 4, 'rgba(56,76,98,.42)');
+  }
+  const px = -62 + tt * 2.2;
+  if (tt < 34) avion(px, 44, false);
+  else if (conCorazones) explosionCorazones(66, 50, tt - 34);
+  else explosion(66, 50, tt - 34);
+}
+function explosionCorazones(cx, cy, p) {
+  if (p < 30) {
+    const r = 4 + p * 1.25;
+    elipse(cx, cy, r, r * .85, '#e8437a');
+    elipse(cx, cy, r * .78, r * .66, '#ff8fb8');
+    elipse(cx, cy, r * .50, r * .42, '#ffc2d8');
+    if (p < 14) elipse(cx, cy, r * .26, r * .22, '#ffffff');
+  }
+  for (let i = 0; i < 14; i++) {
+    const a = i * 0.45 + 0.2, d = p * 2.1;
+    const x = cx + Math.cos(a) * d, y = cy + Math.sin(a) * d * .72 - p * 0.5;
+    if (x > -8 && x < 162 && y > -10 && y < 150) corazon(x, y, ((p / 5 | 0) + i) % 2);
+  }
+}
+
 const ESCENAS = { patio:bgPatio, cuarto:bgCuarto, interior:bgInterior, drags:bgDrags, cocina:bgCocina, sala:bgSala,
                   amigo:bgAmigo, aero:bgAero, cielo:bgCielo, playa:bgPlaya,
                   parque:bgParque, cine:bgCine, lluvia:bgLluvia, noche:bgNoche,
@@ -2676,7 +2773,13 @@ const CUADROS_NOCHE = {
     sentadosEn(tt, cx);
     mesaFrente(cx);
     if (a.carta !== false) carta(cx, 70);
+    /* siguen platicando: la burbuja va cambiando de lado */
+    if (a.platican) {
+      if ((tt / 66 | 0) % 2) burbujaCharla(cx + 12, 42, tt, true);
+      else burbujaCharla(cx - 32, 42, tt, false);
+    }
   },
+  torres: (tt, a) => torres(tt, a && a.corazones),
   llegaMesera: (tt) => {
     bgInterior(tt);
     const cx = MESAS[mesaElegida];
@@ -2768,6 +2871,22 @@ const NOCHE = [
   { e:'conMesera', a:{}, q:'mesera',  t:'HOLA, BUENAS NOCHES. ¿LES PUEDO TOM...' },
   { e:'conMesera', a:{}, q:'roberto', t:'YA ÓRALE PUES NECIA, TRÁEME LA CAGUAMA.' },
   { e:'conMesera', a:{}, q:'santiago', t:'YO UNA CUBA, POR FAVOR.' },
+  { e:'mesa', a:{carta:false, platican:true}, dur:132 },
+  { e:'mesa', a:{carta:false}, q:'santiago', t:'MI NÚMERO DE LA SUERTE ES...' }
+];
+
+/* Le atina al 911 y pasa lo que pasa */
+const TORRES = [
+  { e:'torres', a:{}, dur:96 },
+  { e:'mesa', a:{carta:false}, q:'roberto',
+    t:'DE HECHO MI CUMPLEAÑOS ES EL 10 DE SEPTIEMBRE.' },
+  { e:'mesa', a:{carta:false}, q:'roberto',
+    t:'IBA A NACER EL 11, PERO MI MAMÁ NO QUISO.' },
+  { e:'torres', a:{corazones:true}, dur:104 }
+];
+
+/* Y de ahí se hace de noche y se van */
+const NOCHE2 = [
   { e:'anochece', a:{}, espera:true },
   { e:'mesa', a:{carta:false}, q:'santiago', t:'OYE, TENGO UN CUMPLEAÑOS. ¿ME ACOMPAÑAS?' },
   { e:'mesa', a:{carta:false}, q:'roberto',  t:'VAMOS.' },
@@ -3203,6 +3322,12 @@ const PASTA = [
   { e:'metros', a:{}, espera:true }
 ];
 
+/* El cierre: la última línea, con los cuatro todavía en la sala */
+const CIERRE_FINAL = [
+  { e:'sentadosPizza', a:{amigas:true}, dur:70 },
+  { e:'sentadosPizza', a:{amigas:true}, q:'santiago', t:HISTORIA.final }
+];
+
 /* Ya con la pizza lista: se van a sentar a la sala */
 const A_LA_SALA = [
   { e:'yaEstaLaPizza', a:{}, dur:64 },
@@ -3459,6 +3584,7 @@ function reiniciar() {
   mes = 0; jug.x = 6; jug.mirando = 1;
   corazonTomado = false; cangurera = false; maleta = false; cuartoNoche = false;
   medX = 13; medMsg = 0; ingr = 0; llevando = false; muerdeT = 0;
+  numSel = 0; numTexto = []; numMsg = 0; numFallos = 0;
   charla = []; charlaIdx = 0; pages = []; page = 0; revealed = 0; textTimer = 0;
   fade = 0; fadeDir = 0; pendiente = null;
   for (const k in keys) keys[k] = false;
@@ -3654,6 +3780,12 @@ function pantallaMedidor(t) {
   }
 }
 function empezarMedidor() { medX = MED_MIN; medMsg = 0; estado = 'medidor'; }
+/* El teclado del número de la suerte */
+function empezarNumeros() {
+  numSel = 0; numTexto = []; numMsg = 0; numFallos = 0;
+  estado = 'numeros';
+}
+function seguirNoche() { correrGuion(NOCHE2, () => correrGuion(ANTRO, menuBaile, true), true); }
 /* Dos semanas después: Roberto llega a la casa y hay que llevarlo a la cocina */
 function empezarCocina() {
   cuartoNoche = false;
@@ -3818,9 +3950,12 @@ const SALTOS = [
   { n:'ESCOGER MESA',     f:() => { cangurera = true; mes = 0; interiorNoche = false;
                                     estado = 'sentarse'; jug.x = 6; jug.mirando = 1; } },
   { n:'LA MESERA',        f:() => { interiorNoche = false; mesaElegida = 1;
-                                    irGuion(NOCHE, 2, () => correrGuion(ANTRO, menuBaile, true)); } },
+                                    irGuion(NOCHE, 2, empezarNumeros, true); } },
   { n:'SE HACE NOCHE',    f:() => { interiorNoche = false; mesaElegida = 1;
-                                    irGuion(NOCHE, 6, () => correrGuion(ANTRO, menuBaile, true)); } },
+                                    irGuion(NOCHE2, 0, () => correrGuion(ANTRO, menuBaile, true)); } },
+  { n:'EL NÚMERO',        f:() => { mesaElegida = 1; interiorNoche = false; empezarNumeros(); } },
+  { n:'LAS TORRES',       f:() => { mesaElegida = 1; interiorNoche = false;
+                                    correrGuion(TORRES, seguirNoche, true); } },
   { n:'EL ANTRO',         f:() => { correrGuion(ANTRO, menuBaile, true); } },
   { n:'¿CÓMO BAILAS?',    f:() => { menuBaile(); } },
   { n:'BAILANDO',         f:() => { baileT = 0; estado = 'baile'; } },
@@ -3852,13 +3987,7 @@ const SALTOS = [
   { n:'¿QUIERES COMER?',  f:() => { menuPizza(); } },
   { n:'SE LA COMIÓ',      f:() => { estado = 'envenenado'; } },
   { n:'LAS AMIGAS',       f:() => { correrGuion(NOVIOS, finActo); } },
-  { n:'MES 2: CINE',      f:() => irMes(1) },
-  { n:'MES 3: LLUVIA',    f:() => irMes(2) },
-  { n:'MES 4: AZOTEA',    f:() => irMes(3) },
-  { n:'MES 5: CASA',      f:() => irMes(4) },
-  { n:'MES 6: CABAÑA',    f:() => irMes(5) },
-  { n:'EL FINAL',         f:() => { mes = HISTORIA.meses.length; estado = 'final';
-                                    jug.x = 8; jug.mirando = 1; corazonTomado = false; } },
+  { n:'EL FINAL',         f:() => { correrGuion(CIERRE_FINAL, () => { estado = 'creditos'; }, true); } },
   { n:'CRÉDITOS',         f:() => { estado = 'creditos'; } }
 ];
 const SALTOS_VIS = 11;
@@ -3958,10 +4087,11 @@ function finIntro() { estado = 'cuarto'; jug.x = 46; jug.mirando = -1; }
 function empezarNoche() {
   estado = 'sentarse'; jug.x = 6; jug.mirando = 1;
 }
+/* Después de la cena ya no hay más fases: cierra y pasa a los créditos */
 function finActo() {
-  mes = 1; estado = 'juego'; jug.x = 8; jug.mirando = 1;
   corazonTomado = false; cangurera = false; maleta = false;
   interiorNoche = false; cuartoNoche = false;
+  correrGuion(CIERRE_FINAL, () => { estado = 'creditos'; }, true);
 }
 function finBeso() { correrGuion(CASA, () => correrGuion(AMIGO, menuPuerto, true)); }
 /* Una semana después: se despierta y no sale del cuarto sin la maleta */
@@ -4153,6 +4283,36 @@ function loop() {
     requestAnimationFrame(loop); return;
   }
 
+  /* --- El teclado: hay que atinarle al número de la suerte --- */
+  if (estado === 'numeros') {
+    pantallaNumeros(t);
+    if (numMsg > 0) { numMsg--; if (numMsg === 0) numTexto = []; }
+    else {
+      let f = numSel / 3 | 0, c = numSel % 3;
+      if (consumed('up'))    f = (f + 3) % 4;
+      if (consumed('down'))  f = (f + 1) % 4;
+      if (consumed('left'))  c = (c + 2) % 3;
+      if (consumed('right')) c = (c + 1) % 3;
+      const nuevo = f * 3 + c;
+      if (nuevo !== numSel && TECLAS[nuevo]) { numSel = nuevo; blip(660); }
+      if (consumed('a') || consumed('start')) {
+        const k = TECLAS[numSel];
+        if (k === 'C') { numTexto = []; blip(500); }
+        else if (k && numTexto.length < 3) {
+          numTexto.push(k); blip(820);
+          if (numTexto.length === 3) {
+            if (numTexto.join('') === '911') {
+              chime();
+              transicionar(() => correrGuion(TORRES, seguirNoche, true));
+            } else { buzz(); numFallos++; numMsg = numFallos >= 3 ? 38 : 78; }
+          }
+        }
+      }
+    }
+    pasoFade();
+    requestAnimationFrame(loop); return;
+  }
+
   /* --- El medidor: la respuesta sólo vale fuera de la barra --- */
   if (estado === 'medidor') {
     pantallaMedidor(t);
@@ -4204,7 +4364,7 @@ function loop() {
     jug.x = Math.max(2, Math.min(142, jug.x));
     if (cerca >= 0 && (consumed('a') || consumed('start'))) {
       mesaElegida = cerca;
-      correrGuion(NOCHE, () => correrGuion(ANTRO, menuBaile, true));
+      correrGuion(NOCHE, empezarNumeros, true);
     }
     pasoFade();
     requestAnimationFrame(loop); return;

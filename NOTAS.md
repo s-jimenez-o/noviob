@@ -40,6 +40,15 @@ antes de tocar el código; el juego se rompe fácil si se ignoran.
   `#5c3d22`) para que se sienta continuidad (cuarto, cocina, sala).
 - Sombras: `sombraPiso(cx, y+30)` bajo cada personaje parado. `persona()` ya la pone.
 
+## Nombres de funciones: cuidado con pisarlas
+
+El archivo es enorme y ya hubo un choque: una función `burbuja` nueva pisó la de
+los mensajes de chat (las declaraciones `function` se hoistean, gana la última).
+**Antes de nombrar una función nueva, `grep -n "function nombre"`.** Los `const`
+son peor: usar uno antes de su línea de declaración mata el juego entero al cargar
+(pasó con los sprites de las amigas), y las sondas normales no lo detectan — solo
+la página con `window.onerror`.
+
 ## Personajes
 
 - Sprites indexados: arrays de strings de 16 de ancho, con `armar(cabeza, torso, piernas)`
@@ -154,7 +163,8 @@ regeneran fácil — el patrón está en el historial de la conversación):
 
 - `icon.png` no existe: el ícono de pantalla de inicio sale como captura. Hacer un
   pixel art (la GBC morada con corazón) de 180×180.
-- Los textos de los **meses 2 a 6** siguen siendo relleno; faltan los recuerdos reales.
+- Los meses 2 a 6 (relleno) se eliminaron: el juego ahora va intro → patio →
+  club → drags → casa del amigo → Puerto Escondido → cena → créditos.
 - El `TEXTOS.md` se regenera a mano tras cada cambio de texto — mantenerlo al día.
 - Ideas guardadas: ghosting sutil del LCD, variaciones de la música por acto.
 - Etiqueta `antes-pulido-visual`: la versión previa a la pasada visual grande,
