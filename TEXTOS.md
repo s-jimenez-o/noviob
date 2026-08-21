@@ -211,10 +211,10 @@ Y ya se van al aeropuerto juntos:
 
 1. **LECHE:** UMMM...
 2. **LECHE:** ONICHAN.
-3. (todo se vuelve Japón: torii, el Fuji, pétalos; todos con kimono y ojos enormes)
-4. **SANTIAGO:** AYY, ¿LES GUSTA EL ANIME?
+3. **SANTIAGO:** AYY, ¿LES GUSTA EL ANIME?
+4. (al preguntarlo todo se vuelve Japón: torii, el Fuji, pétalos; todos con kimono y ojos enormes)
 5. **LOS AMIGOS:** NO.
-6. (y todo vuelve a la normalidad)
+6. (y con el NO todo vuelve a la normalidad)
 
 ### Se suben al coche y navegan hasta la casa
 
@@ -274,7 +274,7 @@ Avisos: **LA COCINA ESTÁ ALLÁ**
 ### La cocina (jugable: hay que sacar dos cosas del refri)
 
 Avisos: **PÁSAME EL QUESO PORFA** / **PÁSAME LA SALSA PORFA**, con **(ABRE EL REFRI)**
-abajo · al cargarlo: **LLÉVASELO PORFA** / **(DÁSELO)**
+abajo · al cargarlo: **LLÉVASELO PORFA**
 
 ### Mientras se cocina
 
@@ -307,28 +307,33 @@ abajo · al cargarlo: **LLÉVASELO PORFA** / **(DÁSELO)**
 El juego cierra aquí mismo, en la sala con las amigas — ya no hay fases de meses
 ni pantalla de créditos: de esta línea pasa directo a la despedida.
 
-- **SANTIAGO:** SEIS MESES. NADA MAL PARA ALGUIEN CUYO PLAN IDEAL ERA GOING OUT AND BLACKING OUT.
+- *(narrador)* **Y ASÍ HAN PASADO** / **SEIS MESES...**
+- *(narrador)* **SOOO...**
 
 ### La despedida (corre sola, como una secuencia de cine: ~45 segundos)
 
-1. **SOOO...** / **WHAT IS LOVE?**
+Va una tarjeta verde y un momento, una tarjeta y un momento, hasta el final.
+
+1. **WHAT IS LOVE?**
 2. *(momento)* la cuadra de Luis Barragán: el muro rosa y la foto con flash
 3. **...**
 4. *(momento)* bailando tectonic en una casa, hasta que se resbala y se abre el codo — **AY MI CODO**
-5. *(momento)* el **YALENDER REVEAL** en su casa: se pone todo rojo — **NO ENTRÉ.**
-6. **MAYBE ITS A FEELING...**
-7. *(momento)* la clase de cerámica, los dos en el torno y la maceta
-8. **MAYBE ITS A CHOICE...**
-9. *(momento)* el concierto de **FKA TWIGS**, con su hermano y una amiga
-10. **MAYBE ITS A RIDE...**
-11. *(momento)* la alberca — **EW** / **LAS ALBERCAS**
-12. **OR COMMITMENT?**
-13. *(momento)* las torres grises: **TE LLEVO A TU CASA**
-14. *(la misma escena)* **TE LLEVO A TU CASA** / **OTRA VEZ**
-15. *(y otra vez)* **OTRA VEZ**
-16. **TBH IDK**
-17. **BUT I'M HAPPY TO BE** / **FIGURING OUT WITH YOU**
-18. **TE AMO,** / **FELICES 6 MESES**
+5. **MAYBE ITS A FEELING...**
+6. *(momento)* el **YALENDER REVEAL** en su casa: se pone todo rojo — **NO ENTRÉ.**
+7. **MAYBE ITS A CHOICE...**
+8. *(momento)* la clase de cerámica, los dos en el torno y la maceta
+9. **MAYBE ITS A RIDE...**
+10. *(momento)* el concierto de **FKA TWIGS**, con su hermano y una amiga
+11. **MAYBE ITS A JOKE...**
+12. *(momento)* la alberca — **EW** / **LAS ALBERCAS**
+13. **OR COMMITMENT?**
+14. *(momento)* las torres grises: **TE LLEVO A TU CASA**
+15. *(la misma escena)* **TE LLEVO A TU CASA** / **OTRA VEZ**
+16. *(y otra vez)* **OTRA VEZ**
+17. *(momento)* los dos frente a frente, el reloj corriendo — **\* PLÁTICAS INCÓMODAS \***
+18. **TBH IDK**
+19. **BUT I'M HAPPY TO BE** / **FIGURING OUT WITH YOU**
+20. **TE AMO,** / **FELICES 6 MESES**
 
 Y ahí se apaga la consola. Al rato aparece **A = OTRA VEZ** por si quieren volver a jugar.
 

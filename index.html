@@ -351,7 +351,7 @@ const HISTORIA = {
     ]},
   ],
 
-  final: "SEIS MESES. NADA MAL PARA ALGUIEN CUYO PLAN IDEAL ERA GOING OUT AND BLACKING OUT.",
+  final: "Y ASÍ HAN PASADO SEIS MESES...",
 
   // Quién camina y quién espera. Si los sprites salieran al revés,
   // intercambia estos dos valores y ya.
@@ -1480,15 +1480,22 @@ function bgInterior(t) {
   /* planta */
   R(146, GROUND - 22, 12, 22, '#a8583a'); R(145, GROUND - 25, 14, 3, '#c47a54');
   elipse(152, GROUND - 32, 11, 9, '#2f7b45'); elipse(148, GROUND - 36, 5, 4, '#54ad60');
-  /* piso */
-  vgrad(0, GROUND, 160, ALTO - GROUND, n ? ['#332430','#2b1f28','#241a21'] : ['#7c6450','#6e5745','#5f4a3a']);
-  R(0, GROUND, 160, 1, n ? '#544456' : '#9a8068');
-  /* duela de madera corrida */
-  for (let r = 0; r < 6; r++) {
-    const y = GROUND + 10 + r * 11;
-    R(0, y, 160, 1, n ? 'rgba(14,8,14,.45)' : 'rgba(38,24,14,.40)');
-    for (let x = (r % 2) * 27; x < 160; x += 54) R(x, y - 10, 1, 10, n ? 'rgba(14,8,14,.30)' : 'rgba(38,24,14,.25)');
-  }
+  /* piso: duela que corre hacia el frente, para que no parezca otro muro */
+  vgrad(0, GROUND, 160, ALTO - GROUND, n ? ['#3d2c38','#33242d','#2a1c24'] : ['#8c7058','#7b6048','#6a523d']);
+  R(0, GROUND, 160, 1, n ? '#5d4a5e' : '#ab8c6e');
+  R(0, GROUND + 1, 160, 2, n ? 'rgba(255,255,255,.05)' : 'rgba(255,226,182,.10)');
+  const junta  = n ? 'rgba(12,6,12,.42)' : 'rgba(44,26,14,.36)';
+  const brillo = n ? 'rgba(255,255,255,.05)' : 'rgba(255,214,166,.08)';
+  for (let i = -2; i <= 8; i++)
+    for (let y = GROUND + 2; y < ALTO; y += 6) {
+      const k = (y - GROUND) / (ALTO - GROUND);
+      const x = Math.round(80 + (i * 20 - 80) * (1 + k * 0.7));
+      if (x < -2 || x > 160) continue;
+      R(x, y, 1, 6, junta); R(x + 1, y, 1, 6, brillo);
+    }
+  /* las juntas a lo ancho, cada tantas tablas */
+  for (let r = 0; r < 3; r++)
+    R(0, GROUND + 15 + r * 21, 160, 1, n ? 'rgba(12,6,12,.26)' : 'rgba(44,26,14,.20)');
   /* tapete bajo cada mesa */
   for (const m of MESAS) {
     elipse(m, GROUND + 5, 21, 5, n ? '#4a2a34' : '#8a4640');
@@ -1496,22 +1503,14 @@ function bgInterior(t) {
     elipse(m, GROUND + 5, 12, 3, n ? '#4a2a34' : '#8a4640');
   }
   for (let i = 0; i < MESAS.length; i++) mesaFondo(MESAS[i]);
+  /* la luz se va cayendo hacia el borde de abajo: da hondura sin parpadear */
+  R(0, ALTO - 30, 160, 30, n ? 'rgba(8,4,12,.26)' : 'rgba(38,20,8,.18)');
+  R(0, ALTO - 16, 160, 16, n ? 'rgba(8,4,12,.24)' : 'rgba(38,20,8,.16)');
   if (n) R(0, 0, 160, ALTO, 'rgba(20,8,30,.20)');
 }
-function frInterior(t) {
-  const n = interiorNoche;
-  /* mesas en primerísimo plano, en las esquinas de abajo: dan profundidad */
-  for (const cx of [-16, 176]) {
-    elipse(cx, ALTO - 4, 62, 27, n ? '#1c1218' : '#2e2018');
-    elipse(cx, ALTO - 8, 58, 24, n ? '#2e2029' : '#4a3524');
-    elipse(cx, ALTO - 10, 54, 21, n ? '#3a2934' : '#5f452e');
-  }
-  /* un tarro en cada una */
-  R(28, ALTO - 32, 7, 10, '#c9a05a'); R(28, ALTO - 32, 7, 3, '#f2e8cc');
-  R(35, ALTO - 29, 2, 5, '#a87c3a');
-  R(124, ALTO - 30, 7, 10, '#c9a05a'); R(124, ALTO - 30, 7, 3, '#f2e8cc');
-  R(122, ALTO - 27, 2, 5, '#a87c3a');
-}
+/* Aquí no va nada en primer plano: la caja de diálogo tapa esa franja y
+   cualquier cosa que se dibuje abajo parece que se enciende y se apaga. */
+function frInterior(t) {}
 
 /* ---- 11. EL LUGAR DE DRAGS ---- */
 const DRAGS_EXTRA = [
@@ -1650,54 +1649,96 @@ function frAmigo(t) {}
 
 /* ---- 13. AEROPUERTO ---- */
 function bgAero(t, trop) {
-  vgrad(0, 0, 160, GROUND, trop ? ['#f9e0bc','#f2ccA2','#e8b890'] : ['#dfe8f2','#cfdbea','#bfcee1']);
-  /* plafón con sus paneles y lámparas colgadas */
-  R(0, -DESP, 160, 18, '#9aa5b4');
-  for (let x = 0; x < 160; x += 40) R(x, -DESP, 2, 18, '#7f8b9a');
-  R(0, 6, 160, 2, '#6f7c8d');
-  for (let i = 0; i < 4; i++) {
-    const lx = 22 + i * 40;
-    R(lx - 7, 6, 14, 3, '#e8eef4'); R(lx - 7, 6, 14, 1, '#ffffff');
-    disco(lx, 11, 10, 'rgba(255,255,255,.08)');
+  /* ---- el techo: bóveda clara con costillas y tragaluces ---- */
+  vgrad(0, 0, 160, 16, ['#f0f4f9','#dde5ee','#c6d0dc']);
+  for (let x = -8; x < 168; x += 24) {
+    R(x, -DESP, 4, 28, '#aeb9c7'); R(x, -DESP, 1, 28, '#e8eef5');
+    R(x + 3, -DESP, 1, 28, '#8e9aaa');
   }
-  /* ventanal con la pista */
-  R(10, 12, 140, 44, '#7a8798');
-  vgrad(13, 15, 134, 38, trop ? ['#f2a05a','#f9c884','#ffe4b0'] : ['#8fd0f2','#b5e2f5','#d8eedd']);
-  R(13, 44, 134, 9, '#8a9a86'); R(13, 44, 134, 1, '#a8bda0');
-  R(13, 50, 134, 3, '#6b7a86'); dith(13, 50, 134, '#8b98a4', 0);
-  if (trop) {
-    disco(38, 30, 9, '#fff3ae');
-    for (let i = 0; i < 3; i++) {
-      const px = 22 + i * 48;
-      R(px, 30, 2, 14, '#6b4526');
-      for (let a = 0; a < 5; a++)
-        elipse(px + 1 + Math.cos(Math.PI + a * 0.63) * 7, 30 + Math.sin(Math.PI + a * 0.63) * 4, 6, 2, a % 2 ? '#2f7b45' : '#3f9a52');
+  for (let x = 2; x < 158; x += 24) {
+    R(x, -9, 18, 7, trop ? '#ffe6b4' : '#ddefff');
+    R(x, -9, 18, 1, '#ffffff'); R(x, -3, 18, 1, 'rgba(110,130,158,.55)');
+  }
+  R(0, 16, 160, 3, '#8e9aaa'); R(0, 16, 160, 1, '#b9c4d2');
+  R(0, 19, 160, 2, 'rgba(58,70,88,.28)');
+
+  /* ---- el ventanal: la pista al otro lado ---- */
+  R(4, 20, 152, 47, '#67727f'); R(4, 20, 152, 2, '#96a2b1');
+  vgrad(7, 23, 146, 20, trop ? ['#f4924e','#f9b877','#ffd9a4'] : ['#7fc8ef','#a8dcf4','#cfeaf6']);
+  if (trop) disco(90, 29, 9, '#fff3ae');
+  for (let i = 0; i < 4; i++)
+    elipse(18 + i * 34, 28 + (i % 2) * 4, 9, 3, trop ? '#ffe4b0' : '#ffffff');
+  /* los hangares del fondo */
+  for (let i = 0; i < 4; i++) {
+    const hx = 7 + i * 13;
+    R(hx, 36, 12, 7, '#98a4b2'); R(hx, 36, 12, 1, '#c3ccd8');
+    R(hx + 2, 39, 3, 4, '#6d798a'); R(hx + 7, 39, 3, 4, '#6d798a');
+  }
+  /* pasto y pista */
+  R(7, 43, 146, 6, trop ? '#c9a96e' : '#8fa189');
+  R(7, 43, 146, 1, trop ? '#e2c48c' : '#a9bda0');
+  R(7, 49, 146, 12, '#5e6a76'); R(7, 49, 146, 1, '#818e9b');
+  for (let x = 9; x < 152; x += 20) R(x, 54, 11, 2, 'rgba(255,255,255,.55)');
+  /* palmeras nada más del lado tropical */
+  if (trop) for (let i = 0; i < 3; i++) {
+    const px = 16 + i * 54;
+    R(px, 32, 2, 11, '#6b4526');
+    for (let a = 0; a < 5; a++)
+      elipse(px + 1 + Math.cos(Math.PI + a * 0.63) * 7, 32 + Math.sin(Math.PI + a * 0.63) * 4,
+             6, 2, a % 2 ? '#2f7b45' : '#3f9a52');
+  }
+  avion(52, 40, false);
+  /* los montantes y el marco de abajo */
+  for (let i = 1; i < 7; i++) R(6 + i * 21, 23, 2, 38, '#67727f');
+  R(4, 61, 152, 6, '#4f5a66'); R(4, 61, 152, 1, '#7c8894');
+
+  /* ---- lo que cuelga del techo: la pantalla y el letrero de sala ---- */
+  R(112, 19, 2, 5, '#5c6675'); R(140, 19, 2, 5, '#5c6675');
+  R(102, 24, 52, 23, 'rgba(10,14,22,.35)');
+  R(101, 23, 52, 23, '#1a212b'); R(101, 23, 52, 1, '#3d4956');
+  R(103, 25, 48, 19, '#232c38');
+  drawText(105, 27, trop ? 'CDMX' : 'PTO ESC', '#8ef2a0');
+  drawText(105, 36, ((t / 30 | 0) % 2) ? 'ABORDAR' : 'A TIEMPO', '#ffe08a');
+  R(24, 19, 2, 5, '#5c6675');
+  R(6, 23, 38, 13, '#2f6b4e'); R(6, 23, 38, 1, '#5ea37e'); R(6, 35, 38, 1, '#1e4633');
+  drawText(8, 26, trop ? 'SALA 2' : 'SALA 7', '#eaf6ee');
+
+  /* ---- el muro bajo y la sala de espera ---- */
+  vgrad(0, 66, 160, GROUND - 66, ['#ccd5df','#bac4d0','#a8b3c0']);
+  R(0, 66, 160, 2, '#8e9aaa');
+  R(0, GROUND - 6, 160, 6, '#8d97a5'); R(0, GROUND - 6, 160, 1, '#aeb8c4');
+  for (let i = 0; i < 5; i++) {
+    const sx = 1 + i * 32;
+    R(sx, GROUND - 26, 27, 9, '#4c5c74'); R(sx, GROUND - 26, 27, 1, '#72839c');
+    R(sx, GROUND - 17, 27, 6, '#3e4d63'); R(sx, GROUND - 17, 27, 1, '#5d6e88');
+    R(sx + 13, GROUND - 17, 1, 6, '#2c384a');
+    R(sx + 2, GROUND - 11, 2, 11, '#9aa6b6'); R(sx + 23, GROUND - 11, 2, 11, '#9aa6b6');
+    elipse(sx + 13, GROUND + 1, 13, 3, 'rgba(40,50,66,.22)');
+  }
+
+  /* ---- el piso pulido ---- */
+  vgrad(0, GROUND, 160, ALTO - GROUND, ['#ced5de','#bcc4cf','#a9b1bd']);
+  R(0, GROUND, 160, 1, '#e6ebf1');
+  for (let y = GROUND + 9; y < ALTO; y += 12) {
+    R(0, y, 160, 1, 'rgba(74,86,102,.26)');
+    R(0, y + 1, 160, 1, 'rgba(255,255,255,.16)');
+  }
+  /* las juntas se abren hacia el frente: da fuga sin deformar nada */
+  for (let i = -2; i <= 7; i++) {
+    const x0 = i * 24;
+    for (let y = GROUND; y < ALTO; y += 6) {
+      const k = (y - GROUND) / (ALTO - GROUND);
+      R(Math.round(80 + (x0 - 80) * (1 + k * 0.6)), y, 1, 6, 'rgba(74,86,102,.16)');
     }
   }
-  avion(96, 26, false);
-  for (let i = 0; i < 4; i++) elipse(24 + i * 30, 22 + (i % 2) * 5, 8, 3, trop ? '#ffe4b0' : '#ffffff');
-  for (let i = 0; i < 6; i++) R(13 + i * 23, 15, 2, 38, '#7a8798');
-  R(10, 12, 140, 3, '#98a5b6'); R(10, 53, 140, 3, '#5f6b7a');
-  /* pantalla de vuelos */
-  R(106, 60, 48, 20, '#1e2430'); R(108, 62, 44, 16, '#28303f');
-  drawText(110, 63, trop ? 'CDMX' : 'PTO ESC', '#8ef2a0');
-  drawText(110, 71, ((t / 30 | 0) % 2) ? 'ABORDAR' : '', '#ffe08a');
-  /* asientos de sala */
-  for (let i = 0; i < 4; i++) {
-    const sx = 6 + i * 24;
-    R(sx, GROUND - 20, 20, 5, '#4a5a72'); R(sx, GROUND - 20, 20, 1, '#6b7d97');
-    R(sx, GROUND - 15, 20, 4, '#3a4a60');
-    R(sx + 2, GROUND - 11, 2, 11, '#8a97a8'); R(sx + 16, GROUND - 11, 2, 11, '#8a97a8');
-  }
-  vgrad(0, GROUND, 160, ALTO - GROUND, ['#c2c9d2','#b0b8c2','#9ea6b1']);
-  R(0, GROUND, 160, 1, '#dbe1e8');
-  for (let y = GROUND + 10; y < ALTO; y += 13) R(0, y, 160, 1, 'rgba(70,80,95,.22)');
-  for (let x = 0; x < 160; x += 26) R(x, GROUND, 1, ALTO - GROUND, 'rgba(70,80,95,.20)');
-  /* la alfombra que lleva a la sala de abordar */
-  R(0, GROUND + 24, 160, 13, trop ? '#c9603f' : '#3f5e8c');
-  R(0, GROUND + 24, 160, 1, trop ? '#e8906a' : '#6584b0');
-  R(0, GROUND + 36, 160, 1, trop ? '#9c4830' : '#2f4a70');
-  for (let x = 8; x < 160; x += 24) R(x, GROUND + 29, 10, 2, 'rgba(255,255,255,.25)');
+  /* el brillo del piso pulido, pegado al muro */
+  R(0, GROUND + 1, 160, 4, 'rgba(255,255,255,.13)');
+  R(0, GROUND + 5, 160, 3, 'rgba(255,255,255,.07)');
+  /* la alfombra que lleva a la puerta de abordar */
+  R(0, GROUND + 26, 160, 15, trop ? '#b8543a' : '#3a5a86');
+  R(0, GROUND + 26, 160, 1, trop ? '#e08a62' : '#6d8cba');
+  R(0, GROUND + 40, 160, 1, trop ? '#8c3d27' : '#2a4468');
+  for (let x = 5; x < 158; x += 22) R(x, GROUND + 31, 13, 2, 'rgba(255,255,255,.22)');
 }
 function frAero(t) {}
 
@@ -2902,6 +2943,61 @@ function momYale(tt) {
   }
 }
 
+/* g) Las pláticas incómodas: los dos frente a frente y el reloj corriendo */
+function momPlaticas(tt) {
+  /* la sala de noche, con su lamparita */
+  vgrad(0, 0, 160, 100, ['#3b2a4e','#453257','#4d3a62']);
+  for (let x = 0; x < 160; x += 15) R(x, 0, 1, 100, 'rgba(255,255,255,.05)');
+  /* la ventana con la ciudad prendida */
+  R(12, 32, 42, 34, '#241a3c'); R(14, 34, 38, 30, '#141230');
+  for (let i = 0; i < 15; i++) {
+    const wx = 16 + (i % 5) * 7, wy = 37 + ((i / 5) | 0) * 9;
+    R(wx, wy, 4, 4, ((i * 7 + (tt / 44 | 0)) % 4) ? '#2a2450' : '#ffe08a');
+  }
+  R(12, 32, 42, 2, '#6a5490'); R(32, 32, 2, 34, '#6a5490');
+  R(12, 64, 42, 2, '#6a5490');
+  /* el reloj: lo único que aquí se mueve de prisa */
+  disco(122, 44, 12, '#2b2136'); disco(122, 44, 10, '#f6efdc');
+  disco(122, 44, 9, '#fdf7e6');
+  for (let i = 0; i < 12; i++)
+    R(122 + Math.round(Math.cos(i * 0.5236) * 8), 44 + Math.round(Math.sin(i * 0.5236) * 8),
+      1, 1, i % 3 ? '#b8a894' : '#6a5a48');
+  const ang = (tt / 6) % 6.2832;
+  for (let i = 2; i <= 7; i++)
+    R(122 + Math.round(Math.cos(ang) * i), 44 + Math.round(Math.sin(ang) * i), 1, 1, '#c9382f');
+  for (let i = 1; i <= 4; i++)
+    R(122 + Math.round(Math.cos(ang / 12 - 1.9) * i), 44 + Math.round(Math.sin(ang / 12 - 1.9) * i), 1, 1, '#3a2f48');
+  R(121, 43, 2, 2, '#2b2136');
+  /* el piso y el tapete */
+  R(0, 100, 160, ALTO - 100, '#4a3a2c'); R(0, 100, 160, 1, '#6b5540');
+  for (let y = 112; y < ALTO; y += 12) R(0, y, 160, 1, 'rgba(30,20,12,.4)');
+  elipse(80, 133, 52, 13, '#6d4356'); elipse(80, 133, 45, 10, '#7d4e62');
+  elipse(80, 133, 34, 7, '#6d4356');
+  /* la mesita con los dos vasos que nadie toca */
+  R(66, 104, 28, 3, '#a3714a'); R(66, 104, 28, 1, '#c99163');
+  R(69, 107, 3, 9, '#7a5230'); R(88, 107, 3, 9, '#7a5230');
+  R(71, 99, 4, 5, '#cfe4f2'); R(71, 99, 4, 1, '#f2fbff');
+  R(85, 99, 4, 5, '#cfe4f2'); R(85, 99, 4, 1, '#f2fbff');
+  /* una planta en su rincón */
+  R(140, 88, 11, 12, '#8a5a3a'); R(139, 86, 13, 3, '#a87a54');
+  elipse(146, 80, 10, 8, '#2f6b45'); elipse(142, 76, 5, 4, '#4f9a5c');
+  /* los dos, cada quien en su cojin, mirandose */
+  elipse(48, MOM_PIE, 13, 4, 'rgba(20,10,30,.35)');
+  elipse(102, MOM_PIE, 13, 4, 'rgba(20,10,30,.35)');
+  persona('santiago', 40, MOM_Y, false, false, tt);
+  persona('roberto', 94, MOM_Y, true, false, tt + 9);
+  /* se turnan la palabra, uno y otro, sin llegar a nada */
+  const turno = (tt / 44 | 0) % 2;
+  if (turno === 0) burbujaCharla(52, MOM_Y - 20, tt, false);
+  else burbujaCharla(86, MOM_Y - 20, tt, true);
+  /* la gotita de incomodidad */
+  if ((tt / 22 | 0) % 3 === 1) {
+    R(turno ? 36 : 110, MOM_Y + 2, 2, 3, '#bfe4ff');
+    R(turno ? 36 : 110, MOM_Y + 5, 2, 1, '#8fc8f0');
+  }
+  cartelEscena(['* PLÁTICAS INCÓMODAS *'], 14);
+}
+
 const ESCENAS = { patio:bgPatio, cuarto:bgCuarto, interior:bgInterior, drags:bgDrags, cocina:bgCocina, sala:bgSala,
                   amigo:bgAmigo, aero:bgAero, cielo:bgCielo, playa:bgPlaya,
                   parque:bgParque, cine:bgCine, lluvia:bgLluvia, noche:bgNoche,
@@ -3329,9 +3425,9 @@ const CUADROS_NOCHE = {
 const NOCHE = [
   { e:'mesa', a:{}, q:'roberto',  t:'A VER QUÉ HAY DE TOMAR.' },
   { e:'llegaMesera', a:{}, dur:34 },
-  { e:'conMesera', a:{}, q:'mesera',  t:'HOLA, BUENAS NOCHES. ¿LES PUEDO TOM...' },
-  { e:'conMesera', a:{}, q:'roberto', t:'YA ÓRALE PUES NECIA, TRÁEME LA CAGUAMA.' },
-  { e:'conMesera', a:{}, q:'santiago', t:'YO UNA CUBA, POR FAVOR.' },
+  { e:'conMesera', a:{}, sigue:true, q:'mesera',  t:'HOLA, BUENAS NOCHES. ¿LES PUEDO TOM...' },
+  { e:'conMesera', a:{}, sigue:true, q:'roberto', t:'YA ÓRALE PUES NECIA, TRÁEME LA CAGUAMA.' },
+  { e:'conMesera', a:{}, sigue:true, q:'santiago', t:'YO UNA CUBA, POR FAVOR.' },
   { e:'mesa', a:{carta:false, platican:true}, dur:132 },
   { e:'mesa', a:{carta:false}, q:'santiago', t:'BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH...' },
   { e:'mesa', a:{carta:false}, q:'santiago', t:'¿A QUE NO ADIVINAS MI NÚMERO DE LA SUERTE?' }
@@ -3660,6 +3756,7 @@ Object.assign(CUADROS, {
     if (a && a.amigas) { g.unshift(['amiga1', 8, false]); g.push(['amiga2', 128, true]); }
     salaGente(tt, g);
     mesaPizza(tt, a && a.rebanadas);
+    if (a && a.cartel) { cartelEscena(a.cartel, 14); botonA(); }
   },
   muerde: (tt) => {
     bgSala(tt);
@@ -3725,7 +3822,7 @@ const VIAJE = [
   { e:'viaje', a:{tema:'desierto' },                        dur:130 },
   { e:'viaje', a:{tema:'antartida' },                       dur:130 },
   { e:'viaje', a:{tema:'mar', para:true },                  dur:130 },
-  { e:'viaje', a:{tema:'mar', para:true}, q:'santiago', t:'¿PODRÉ HACER ESTO PARA SIEMPRE?' },
+  { e:'viaje', a:{tema:'mar', para:true}, sigue:true, q:'santiago', t:'¿PODRÉ HACER ESTO PARA SIEMPRE?' },
   { e:'llegada', a:{}, dur:96 },
   { e:'llegada', a:{ve:true}, q:'santiago', t:'SÍ. SÍ PODRÍA.' },
   { e:'aeroJuntos', a:{}, dur:70 },
@@ -3740,11 +3837,11 @@ const PUERTO2 = [
   { e:'playa', a:{quietos:true}, q:'santiago', t:'ME DABA UN POCO DE PTSD VOLVER.' },
   /* llegan los amigos y caminan todos al coche */
   { e:'calle', a:{}, dur:74 },
-  { e:'calle', a:{fin:true}, q:'amigoP1', t:'UMMM...' },
-  { e:'calle', a:{fin:true}, q:'amigoP1', t:'ONICHAN.' },
+  { e:'calle', a:{fin:true}, sigue:true, q:'amigoP1', t:'UMMM...' },
+  { e:'calle', a:{fin:true}, sigue:true, q:'amigoP1', t:'ONICHAN.' },
+  { e:'calle', a:{fin:true}, sigue:true, q:'santiago', t:'AYY, ¿LES GUSTA EL ANIME?' },
   { e:'anime', a:{}, dur:84 },
-  { e:'anime', a:{}, q:'santiago', t:'AYY, ¿LES GUSTA EL ANIME?' },
-  { e:'anime', a:{}, q:'amigoP2',  t:'NO.' },
+  { e:'anime', a:{}, sigue:true, q:'amigoP2',  t:'NO.' },
   { e:'calle', a:{fin:true}, dur:44 },
   /* se suben todos y navegan hasta la casa */
   { e:'subir', a:{}, dur:88 },
@@ -3787,7 +3884,9 @@ const PASTA = [
 /* El cierre: la última línea, con los cuatro todavía en la sala */
 const CIERRE_FINAL = [
   { e:'sentadosPizza', a:{amigas:true}, dur:70 },
-  { e:'sentadosPizza', a:{amigas:true}, q:'santiago', t:HISTORIA.final }
+  { e:'sentadosPizza', a:{amigas:true, cartel:['Y ASÍ HAN PASADO', 'SEIS MESES...']},
+    sigue:true, espera:true },
+  { e:'sentadosPizza', a:{amigas:true, cartel:['SOOO...']}, sigue:true, espera:true }
 ];
 
 /* Ya con la pizza lista: se van a sentar a la sala */
@@ -3810,7 +3909,7 @@ const NOVIOS = [
 /* Después de contestar el medidor: el aeropuerto de Puerto Escondido */
 const CIERRE = [
   { e:'aeroTrop', a:{}, dur:76 },
-  { e:'aeroTrop', a:{}, q:'santiago', t:'QUÉ BONITO QUE PUDE SANAR MIS HERIDAS.' }
+  { e:'aeroTrop', a:{}, sigue:true, q:'santiago', t:'QUÉ BONITO QUE PUDE SANAR MIS HERIDAS.' }
 ];
 
 
@@ -4052,6 +4151,10 @@ let corazonTomado = false;
 let pages = [], page = 0, revealed = 0, textTimer = 0, hablante = 'santiago';
 let charla = [], charlaIdx = 0, volverA = 'juego';
 let guion = null, gPaso = 0, gT = 0, gFin = null, gSinFade = false;
+/* Se enciende al empezar cada paso. Si el paso trae sigue:true el reloj NO
+   se reinicia, y así una escena repetida no vuelve a arrancar su animación
+   (el coche que ya llegó no vuelve a entrar, nadie camina dos veces). */
+let gArranca = true;
 let menu = null, pianoT = 0;
 let baileTipo = 'salsa', baileT = 0;
 let saltoSel = 0, saltoTop = 0, saltoVuelve = 'titulo', repite = 0;
@@ -4100,7 +4203,7 @@ function avanzarTexto() {
 /* Deja todo como recién encendido. Lo usa el botón REINICIAR. */
 function reiniciar() {
   estado = 'boot'; bootT = 0;
-  guion = null; gPaso = 0; gT = 0; gFin = null; gSinFade = false;
+  guion = null; gPaso = 0; gT = 0; gFin = null; gSinFade = false; gArranca = true;
   menu = null; pianoT = 0; volverA = 'juego';
   baileTipo = 'salsa'; baileT = 0; interiorNoche = false; mesaElegida = 1;
   saltoSel = 0; saltoTop = 0; saltoVuelve = 'titulo'; repite = 0;
@@ -4213,21 +4316,23 @@ function pantallaTitulo(t) {
 /* Corre sola, como una secuencia de cine: cada paso dura lo suyo y se funde
    con el siguiente. Aquí no se pica nada. */
 const DESPEDIDA = [
-  { t:['SOOO...', 'WHAT IS LOVE?'], dur:150 },
+  { t:['WHAT IS LOVE?'], dur:140 },
   { e:momBarragan, dur:150 },
   { t:['...'], dur:80 },
   { e:momTectonic, dur:190 },
-  { e:momYale, dur:170 },
   { t:['MAYBE ITS A FEELING...'], dur:130 },
-  { e:momCeramica, dur:150 },
+  { e:momYale, dur:170 },
   { t:['MAYBE ITS A CHOICE...'], dur:130 },
-  { e:momConcierto, dur:150 },
+  { e:momCeramica, dur:150 },
   { t:['MAYBE ITS A RIDE...'], dur:130 },
+  { e:momConcierto, dur:150 },
+  { t:['MAYBE ITS A JOKE...'], dur:130 },
   { e:momAlberca, dur:150 },
   { t:['OR COMMITMENT?'], dur:130 },
   { e:momCasa, txt:['TE LLEVO A TU CASA'], dur:165 },
   { e:momCasa, txt:['TE LLEVO A TU CASA', 'OTRA VEZ'], veloz:true, dur:120 },
   { e:momCasa, txt:['OTRA VEZ'], veloz:true, dur:110 },
+  { e:momPlaticas, dur:170 },
   { t:['TBH IDK'], dur:120 },
   { t:["BUT I'M HAPPY TO BE", 'FIGURING OUT WITH YOU'], dur:190 },
   { t:['TE AMO,', 'FELICES 6 MESES'], dur:210 }
@@ -4297,7 +4402,7 @@ function pantallaMenu(t) {
   centerText(BOX_Y + 2, menu.pregunta, p.tinta, 'rgba(0,0,0,.35)');
   for (let i = 0; i < menu.ops.length; i++) {
     const oy = BOX_Y + 14 + i * 10;
-    if (menu.sel === i) { R(8, oy - 2, ALTO, 10, '#e8d9b8'); corazon(11, oy - 1, (t / 12 | 0) % 2); }
+    if (menu.sel === i) { R(8, oy - 2, 144, 10, '#e8d9b8'); corazon(11, oy - 1, (t / 12 | 0) % 2); }
     drawText(23, oy, menu.ops[i], menu.sel === i ? '#8a2f78' : '#9a8a68');
   }
 }
@@ -4310,10 +4415,10 @@ function flechita(x, y, dir, c) {
 function pantallaMedidor(t) {
   vgrad(0, 0, 160, ALTO, ['#2a1140','#3a1a55','#4a2168']);
   for (let i = 0; i < 24; i++) P((i * 53) % 160, (i * 37 + (t / 3 | 0)) % ALTO, 'rgba(255,255,255,.10)');
-  R(8, 22, ALTO, 78, 'rgba(10,4,24,.45)');
-  R(6, 20, ALTO, 78, '#f6efdc');
-  R(6, 20, ALTO, 12, '#d9366a'); R(6, 20, ALTO, 1, '#ff88a8');
-  R(6, 20, ALTO, 1, '#241a3c'); R(6, 97, ALTO, 1, '#241a3c');
+  R(8, 22, 144, 78, 'rgba(10,4,24,.45)');
+  R(6, 20, 144, 78, '#f6efdc');
+  R(6, 20, 144, 12, '#d9366a'); R(6, 20, 144, 1, '#ff88a8');
+  R(6, 20, 144, 1, '#241a3c'); R(6, 97, 144, 1, '#241a3c');
   R(6, 20, 1, 78, '#241a3c'); R(149, 20, 1, 78, '#241a3c');
   centerText(23, '¿Y PARA TI?', '#ffffff', 'rgba(0,0,0,.4)');
   R(15, 52, 102, 14, '#3a2f48'); R(16, 53, 100, 12, '#2a2035');
@@ -4503,7 +4608,7 @@ function flechaSalida(x, y) {
    Para quitarlo del regalo final: borra el botón .escenas del HTML y el
    bloque de 'saltos' de aquí abajo.
    ========================================================================= */
-function irGuion(lista, paso, fin, sinFade) { correrGuion(lista, fin, sinFade); gPaso = paso; gT = 0; }
+function irGuion(lista, paso, fin, sinFade) { correrGuion(lista, fin, sinFade); gPaso = paso; gT = 0; gArranca = true; }
 function irMes(m) {
   mes = m; corazonTomado = false; cangurera = false;
   jug.x = 8; jug.mirando = 1; estado = 'juego';
@@ -4591,7 +4696,7 @@ function pantallaSaltos(t) {
 /* sinFade sirve cuando la escena que sigue usa el mismo fondo:
    el barrido ahí sólo estorba. */
 function correrGuion(lista, alTerminar, sinFade) {
-  guion = lista; gPaso = 0; gT = 0; gFin = alTerminar; gSinFade = !!sinFade;
+  guion = lista; gPaso = 0; gT = 0; gFin = alTerminar; gSinFade = !!sinFade; gArranca = true;
   estado = 'guion';
 }
 function pasoGuion() {
@@ -4599,7 +4704,10 @@ function pasoGuion() {
     const f = gFin;
     if (gSinFade) { gSinFade = false; if (f) f(); }
     else transicionar(() => { if (f) f(); });
-  } else { gPaso++; gT = 0; }
+  } else {
+    gPaso++; gArranca = true;
+    if (!(guion[gPaso] && guion[gPaso].sigue)) gT = 0;
+  }
 }
 function abrirMenu(pregunta, ops, quien, fondo, fn) {
   menu = { pregunta: pregunta, ops: ops, quien: quien, fondo: fondo, fn: fn, sel: 0 };
@@ -4722,7 +4830,8 @@ function loop() {
   if (estado === 'guion') {
     const p = guion[gPaso];
     gT++;
-    if (gT === 1) {
+    if (gArranca) {
+      gArranca = false;
       if (p.hacer) p.hacer();
       if (p.t) { charla = [{ q: p.q, t: p.t }]; charlaIdx = 0; cargarLinea(); }
     }
@@ -4825,7 +4934,7 @@ function loop() {
     const enEstufa = jug.x > 96;
     if (ingr < INGREDIENTES.length) {
       avisoArriba(llevando ? 'LLÉVASELO PORFA' : 'PÁSAME ' + INGREDIENTES[ingr] + ' PORFA', 100);
-      avisoArriba(llevando ? '(DÁSELO)' : '(ABRE EL REFRI)', 114);
+      if (!llevando) avisoArriba('(ABRE EL REFRI)', 114);
     }
     if ((t / 18 | 0) % 2 && ((!llevando && enRefri) || (llevando && enEstufa)))
       avisoArriba('A', 128);

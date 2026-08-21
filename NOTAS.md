@@ -114,6 +114,11 @@ la página con `window.onerror`.
   - `espera:true` → se queda hasta que piquen A (usa `botonA()` en el cuadro).
   - `t` → caja de diálogo, avanza con A.
   - `hacer` → efectos colaterales al entrar al paso (flags como `cuartoNoche`).
+  - `sigue:true` → **no reinicia el reloj del paso**. Va SIEMPRE que dos pasos
+    seguidos comparten cuadro y ese cuadro anima una entrada (un coche que llega,
+    alguien que camina, la mesera que se acerca). Sin él la animación rebobina y
+    se ve como si la escena empezara dos veces. `hacer`/`t` siguen disparándose
+    igual: eso lo controla `gArranca`, no `gT`.
 - `correrGuion(lista, fin, sinFade)` — **la regla de oro de las transiciones**:
   el barrido SOLO se usa cuando cambia el lugar físico. Si la escena siguiente
   comparte fondo, pasa `sinFade=true`. El usuario pidió explícitamente quitar
