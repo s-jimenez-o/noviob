@@ -118,7 +118,8 @@ la página con `window.onerror`.
 
 ## El cierre
 
-El juego abre con la pantalla verde preguntando **WHAT IS LOVE?** y cierra con la
+No hay pantalla de créditos: la última línea de la historia pasa directo a la
+despedida. El juego abre con la pantalla verde preguntando **WHAT IS LOVE?** y cierra con la
 misma pantalla respondiéndola. `DESPEDIDA` es una lista de pasos que alternan
 pantallas verdes (`{t:[líneas]}`) con **momentos** reales de ellos dos
 (`{e:funcion, txt, veloz}`), a una A por paso. Los momentos son escenas de una sola

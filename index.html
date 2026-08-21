@@ -331,7 +331,7 @@
 const HISTORIA = {
   titulo:    "6 MESES",
   subtitulo: "SANTIAGO & ROBERTO",
-  fecha:     "12.08.2026",
+  fecha:     "22.08.2026",
 
   meses: [
     { escena:"patio", pareja:104, acto:true, charla:[
@@ -4089,6 +4089,7 @@ const DESPEDIDA = [
   { e:momConcierto },
   { t:['MAYBE ITS A RIDE...'] },
   { e:momAlberca },
+  { t:['OR COMMITMENT?'] },
   { e:momCasa, txt:'Y ME LLEVASTE A CASA...' },
   { e:momCasa, txt:'UNA Y OTRA VEZ...', veloz:true },
   { e:momCasa, txt:'Y OTRA VEZ.', veloz:true },
@@ -4142,40 +4143,6 @@ function pantallaApagado() {
     centerText(126, 'A = OTRA VEZ', 'rgba(180,214,90,.5)', null);
 }
 
-function pantallaCreditos(t) {
-  vgrad(0, 0, 160, 144, ['#12093a','#200c48','#2f1156','#451760','#5a1c62','#762660','#96305e','#b23c5c']);
-  for (let i = 0; i < 50; i++) {
-    const sx = (i * 47) % 158, sy = (i * 29) % 144;
-    if ((t / 13 + i) % 6 > 2.2) P(sx, sy, i % 4 ? '#ffffff' : '#ffe9a8');
-  }
-  for (let f = 0; f < 3; f++) {
-    const p = (t + f * 70) % 210;
-    if (p < 60) {
-      const cx = 26 + f * 54, cy = 20 + (f % 2) * 10, rad = p * 0.4;
-      const col = FUEGO_COL[(f + 1) % FUEGO_COL.length];
-      if (p < 12) disco(cx, cy, 12 - p, '#ffffff');
-      for (let a = 0; a < 22; a++) {
-        const ang = a * Math.PI / 11, dx = Math.cos(ang), dy = Math.sin(ang) * .85;
-        for (let e = 0; e < 3; e++) {
-          const rr = rad - e * 2.4;
-          if (rr < 1) continue;
-          P(cx + dx * rr, cy + dy * rr, e ? col : '#ffffff');
-        }
-      }
-    }
-  }
-  centerText(22, "FELICES", '#ffe9a8', 'rgba(40,6,40,.8)');
-  centerText(34, HISTORIA.titulo, '#ffe9a8', 'rgba(40,6,40,.8)');
-  for (let i = 0; i < 7; i++) {
-    const hx = 12 + i * 21, hy = 48 + (Math.sin(t / 22 + i) * 4 | 0);
-    corazon(hx, hy, ((t / 14 | 0) + i) % 2);
-  }
-  persona('roberto',  56, 72, false, false, t);
-  persona('santiago', 84, 72, true,  false, t);
-  corazon(74, 62 + (Math.sin(t / 15) * 2 | 0), true);
-  centerText(108, HISTORIA.subtitulo, '#ffd0dc');
-  if ((t / 30 | 0) % 2) centerText(126, "A = OTRA VEZ", '#ffffff', 'rgba(40,6,40,.8)');
-}
 
 
 /* ---------- Elegir, y las consecuencias de elegir mal ---------- */
@@ -4441,7 +4408,6 @@ const SALTOS = [
   { n:'18 METROS',          f:() => { irGuion(PASTA, 0, () => correrGuion(A_LA_SALA, menuPizza, true)); } },
   { n:'LA PIZZA',           f:() => { menuPizza(); } },
   { n:'LAS AMIGAS',         f:() => { correrGuion(NOVIOS, finActo); } },
-  { n:'CRÉDITOS',           f:() => { estado = 'creditos'; } },
   { n:'LA DESPEDIDA',       f:() => { despIdx = 0; despT = 0; estado = 'despedida'; } }
 ];
 
@@ -4551,7 +4517,7 @@ function empezarNoche() {
 function finActo() {
   corazonTomado = false; cangurera = false; maleta = false;
   interiorNoche = false; cuartoNoche = false;
-  correrGuion(CIERRE_FINAL, () => { estado = 'creditos'; }, true);
+  correrGuion(CIERRE_FINAL, () => { despIdx = 0; despT = 0; estado = 'despedida'; }, true);
 }
 function finBeso() { correrGuion(CASA, () => correrGuion(AMIGO, menuPuerto, true)); }
 /* Una semana después: se despierta y no sale del cuarto sin la maleta */
@@ -4909,14 +4875,6 @@ function loop() {
     requestAnimationFrame(loop); return;
   }
 
-  if (estado === 'creditos') {
-    pantallaCreditos(t);
-    if (consumed('a') || consumed('start'))
-      transicionar(() => { despIdx = 0; despT = 0; estado = 'despedida'; });
-    pasoFade();
-    requestAnimationFrame(loop); return;
-  }
-
   /* --- Escena de juego --- */
   const esFinal = (estado === 'final' || estado === 'dialogoFinal');
   const datosMes = HISTORIA.meses[mes];
@@ -4979,7 +4937,8 @@ function loop() {
   }
 
   if (hablando && charlaEnPantalla()) {
-    if (estado === 'dialogoFinal') transicionar(() => { estado = 'creditos'; });
+    if (estado === 'dialogoFinal')
+      transicionar(() => { despIdx = 0; despT = 0; estado = 'despedida'; });
     else estado = volverA;
   }
 

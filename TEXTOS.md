@@ -13,7 +13,7 @@ Edita lo que quieras y mándamelo de vuelta. Reglas de la fuente:
 
 ## 1. Portada
 
-- Título: **6 MESES** · Subtítulo: **SANTIAGO & ROBERTO** · Fecha: **12.08.2026**
+- Título: **6 MESES** · Subtítulo: **SANTIAGO & ROBERTO** · Fecha: **22.08.2026**
 - **PRESIONA A** · **-- LADO A --**
 
 ## 2. Pantalla de encendido
@@ -302,12 +302,12 @@ abajo · al cargarlo: **LLÉVASELO PORFA** / **(DÁSELO)**
 6. **ROBERTO:** ¿ENTONCES ESO NOS HACE NOVIOS?
 7. **LOS DOS:** SÍ.
 
-## 12. Final y créditos
+## 12. Final
 
-El juego cierra aquí mismo, en la sala con las amigas — ya no hay fases de meses.
+El juego cierra aquí mismo, en la sala con las amigas — ya no hay fases de meses
+ni pantalla de créditos: de esta línea pasa directo a la despedida.
 
 - **SANTIAGO:** SEIS MESES. NADA MAL PARA ALGUIEN CUYO PLAN IDEAL ERA GOING OUT AND BLACKING OUT.
-- Créditos: **FELICES** · **6 MESES** · **SANTIAGO & ROBERTO** · **A = OTRA VEZ**
 
 ### La despedida (pantallas verdes y momentos, una A por pantalla)
 
@@ -322,12 +322,13 @@ El juego cierra aquí mismo, en la sala con las amigas — ya no hay fases de me
 9. *(momento)* el concierto, con su hermano y una amiga
 10. **MAYBE ITS A RIDE...**
 11. *(momento)* la alberca en Acapulco — **EW**
-12. *(momento)* las torres grises: **Y ME LLEVASTE A CASA...**
-13. *(la misma escena)* **UNA Y OTRA VEZ...**
-14. *(y otra vez)* **Y OTRA VEZ.**
-15. **TBH IDK**
-16. **BUT I'M HAPPY TO BE** / **FIGURING OUT WITH YOU**
-17. **TE AMO,** / **FELICES 6 MESES**
+12. **OR COMMITMENT?**
+13. *(momento)* las torres grises: **Y ME LLEVASTE A CASA...**
+14. *(la misma escena)* **UNA Y OTRA VEZ...**
+15. *(y otra vez)* **Y OTRA VEZ.**
+16. **TBH IDK**
+17. **BUT I'M HAPPY TO BE** / **FIGURING OUT WITH YOU**
+18. **TE AMO,** / **FELICES 6 MESES**
 
 Y ahí se apaga la consola. Al rato aparece **A = OTRA VEZ** por si quieren volver a jugar.
 
