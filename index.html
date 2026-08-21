@@ -3890,10 +3890,18 @@ addEventListener('dblclick', e => e.preventDefault());
 function consumed(k) { if (pressed[k]) { pressed[k] = false; return true; } return false; }
 
 /* Tocar la pantalla: por ahora sólo sirve para el teclado del número */
-function toqueEnPantalla(clientX, clientY) {
+/* Pasa de píxeles de pantalla a los 160x144 del juego */
+function aLCD(clientX, clientY) {
   const r = cv.getBoundingClientRect();
-  const x = (clientX - r.left) / r.width * 160;
-  const y = (clientY - r.top) / r.height * 144;
+  return { x: (clientX - r.left) / r.width * 160,
+           y: (clientY - r.top)  / r.height * 144 };
+}
+/* La lista de escenas se arrastra con el dedo */
+const LIS_Y0 = 15, LIS_ALTO = 10;
+let arrastra = false, arrY = 0, arrTop = 0, arrMovido = 0;
+
+function toqueEnPantalla(clientX, clientY) {
+  const { x, y } = aLCD(clientX, clientY);
   if (estado === 'numeros' && numMsg === 0 && numT > 20) {
     for (let i = 0; i < 12; i++) {
       if (!TECLAS[i]) continue;
@@ -3903,12 +3911,44 @@ function toqueEnPantalla(clientX, clientY) {
       }
     }
   }
+  if (estado === 'saltos' && y > LIS_Y0 - 3 && y < 130) {
+    arrastra = true; arrY = y; arrTop = saltoTop; arrMovido = 0;
+    return true;
+  }
   return false;
+}
+function topeLista(v) {
+  return Math.max(0, Math.min(SALTOS.length - SALTOS_VIS, v));
 }
 cv.addEventListener('pointerdown', e => {
   ensureAudio();
-  if (toqueEnPantalla(e.clientX, e.clientY)) e.preventDefault();
+  if (toqueEnPantalla(e.clientX, e.clientY)) {
+    e.preventDefault();
+    if (cv.setPointerCapture) try { cv.setPointerCapture(e.pointerId); } catch (err) {}
+  }
 }, { passive: false });
+cv.addEventListener('pointermove', e => {
+  if (!arrastra) return;
+  e.preventDefault();
+  const d = arrY - aLCD(e.clientX, e.clientY).y;
+  arrMovido = Math.max(arrMovido, Math.abs(d));
+  saltoTop = topeLista(Math.round(arrTop + d / LIS_ALTO));
+}, { passive: false });
+function sueltaDedo(e) {
+  if (!arrastra) return;
+  arrastra = false;
+  /* si casi no se movió fue un toque: escoge esa línea */
+  if (arrMovido < 4 && estado === 'saltos') {
+    const y = aLCD(e.clientX, e.clientY).y;
+    const i = saltoTop + Math.floor((y - LIS_Y0 + 2) / LIS_ALTO);
+    if (i >= 0 && i < SALTOS.length) {
+      saltoSel = i;
+      if (SALTOS[i].f) saltarA(i); else { blip(660); cerrarSaltos(); }
+    }
+  }
+}
+cv.addEventListener('pointerup', sueltaDedo);
+cv.addEventListener('pointercancel', () => { arrastra = false; });
 
 
 /* ---------- Estado ---------- */
@@ -4549,7 +4589,7 @@ function loop() {
     if (d) {
       saltoSel = Math.max(0, Math.min(SALTOS.length - 1, saltoSel + d));
       saltoTop = Math.max(saltoSel - SALTOS_VIS + 1, Math.min(saltoTop, saltoSel));
-      saltoTop = Math.max(0, Math.min(SALTOS.length - SALTOS_VIS, saltoTop));
+      saltoTop = topeLista(saltoTop);
     }
     if (consumed('a') || consumed('start')) {
       ensureAudio();
