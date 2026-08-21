@@ -365,6 +365,11 @@ const HISTORIA = {
 
 /* ---------- Pantalla ---------- */
 const ALTO = 168;
+/* El juego se diseñó a 144 de alto; en la pantalla de 168 lo centramos:
+   12px de aire arriba y 12 abajo. El corrimiento lo pone loop() con un
+   translate, y R() extiende hacia arriba todo lo que nace en y=0, para
+   que cielos y paredes crezcan con su propio color y no quede franja. */
+const DESP = 12;
 const cv = document.getElementById('lcd');
 const ctx = cv.getContext('2d');
 ctx.imageSmoothingEnabled = false;
@@ -409,7 +414,10 @@ fit();
 
 
 /* ---------- Primitivas de dibujo (ahora a color) ---------- */
-function R(x, y, w, h, c) { ctx.fillStyle = c; ctx.fillRect(x|0, y|0, w|0, h|0); }
+function R(x, y, w, h, c) {
+  if (y === 0 && h >= 3) { y = -DESP; h += DESP; }   /* nace en el borde: crece */
+  ctx.fillStyle = c; ctx.fillRect(x|0, y|0, w|0, h|0);
+}
 function P(x, y, c)       { ctx.fillStyle = c; ctx.fillRect(x|0, y|0, 1, 1); }
 
 /* Trama de medio tono: así se ven los degradados en consolas de 8 bits */
@@ -2015,9 +2023,9 @@ function bgCasaR(t) {
 /* La "A" parpadeando: avisa que la pantalla espera a que le piquen */
 function botonA() {
   if ((t / 22 | 0) % 2 === 0) return;
-  R(139, 150, 15, 13, 'rgba(18,10,30,.75)');
-  R(139, 150, 15, 1, 'rgba(255,255,255,.25)');
-  drawText(144, 153, 'A', '#ffe9a8');
+  R(139, 138, 15, 13, 'rgba(18,10,30,.75)');
+  R(139, 138, 15, 1, 'rgba(255,255,255,.25)');
+  drawText(144, 141, 'A', '#ffe9a8');
 }
 /* Cartel de narrador: sin nombre y sin caja de diálogo */
 function cartelEscena(lineas, y0) {
@@ -2038,8 +2046,8 @@ function tarjetaTiki(t2, lineas) {
   for (let i = 0; i < n; i++)
     centerTextG(y0 + i * sep + (i % 2 ? 0 : w), lineas[i], '#12234c', 'rgba(255,255,255,.30)', 3);
   if (t2 > 40 && (t2 / 22 | 0) % 2) {
-    R(139, 150, 15, 13, 'rgba(18,35,76,.75)');
-    drawText(144, 153, 'A', '#f6e6c0');
+    R(139, 138, 15, 13, 'rgba(18,35,76,.75)');
+    drawText(144, 141, 'A', '#f6e6c0');
   }
 }
 
@@ -2407,7 +2415,7 @@ function pantallaEnvenenado(t) {
     elipse(70 + i * 6, 62 - h, 3, 2, 'rgba(150,240,140,' + Math.max(0, 0.38 - h / 92).toFixed(2) + ')');
   }
   centerText(104, 'FINAL MALO', '#8fe86a', 'rgba(6,16,6,.85)');
-  if ((t / 30 | 0) % 2) centerText(148, 'A = OTRA VEZ', '#ffffff', 'rgba(6,16,6,.85)');
+  if ((t / 30 | 0) % 2) centerText(136, 'A = OTRA VEZ', '#ffffff', 'rgba(6,16,6,.85)');
 }
 
 /* ---- 20. EL NÚMERO DE LA SUERTE ---- */
@@ -3767,7 +3775,7 @@ const CIERRE = [
 
 
 /* ---------- Caja de diálogo ---------- */
-const BOX_Y = 120, BOX_H = 46, MAXCH = 23;
+const BOX_Y = 108, BOX_H = 46, MAXCH = 23;
 
 function wrap(str) {
   const words = str.toUpperCase().split(/\s+/);
@@ -3939,7 +3947,7 @@ function consumed(k) { if (pressed[k]) { pressed[k] = false; return true; } retu
 function aLCD(clientX, clientY) {
   const r = cv.getBoundingClientRect();
   return { x: (clientX - r.left) / r.width * 160,
-           y: (clientY - r.top)  / r.height * ALTO };
+           y: (clientY - r.top)  / r.height * ALTO - DESP };
 }
 /* La lista de escenas se arrastra con el dedo */
 const LIS_Y0 = 15, LIS_ALTO = 10;
@@ -3956,7 +3964,7 @@ function toqueEnPantalla(clientX, clientY) {
       }
     }
   }
-  if (estado === 'saltos' && y > LIS_Y0 - 3 && y < 154) {
+  if (estado === 'saltos' && y > LIS_Y0 - 3 && y < 142) {
     arrastra = true; arrY = y; arrTop = saltoTop; arrMovido = 0;
     return true;
   }
@@ -4121,7 +4129,7 @@ function pantallaBoot() {
   R(0, 0, 160, ALTO, '#9bbc0f');
   for (let y = 0; y < ALTO; y += 2) dith(0, y, 160, '#8fb00d', (y >> 1) & 1);
   const p = Math.min(1, bootT / 50);
-  const y = Math.round(-12 + p * 84);
+  const y = Math.round(-12 + p * 72);
   centerText(y, 'WHAT IS LOVE?', '#0f380f');
   if (bootT > 54) {
     drawSprite(CORAZON, 76, y + 18, false, PAL_COR_DMG);
@@ -4157,8 +4165,8 @@ function pantallaTitulo(t) {
   drawTextS(26, 110, 'ROBERTO',  '#ffd9ec', 'rgba(20,6,26,.8)');
   drawTextS(87, 110, 'SANTIAGO', '#ffd9ec', 'rgba(20,6,26,.8)');
 
-  if ((t / 30 | 0) % 2) centerText(146, "PRESIONA A", '#ffe9a8', 'rgba(60,10,50,.85)');
-  centerText(157, "-- LADO A --", 'rgba(255,255,255,.7)');
+  if ((t / 30 | 0) % 2) centerText(134, "PRESIONA A", '#ffe9a8', 'rgba(60,10,50,.85)');
+  centerText(145, "-- LADO A --", 'rgba(255,255,255,.7)');
 }
 
 /* Cierra como abrió: la pantalla verde de Game Boy, respondiendo la pregunta */
@@ -4192,7 +4200,7 @@ function pantallaDespedida() {
     R(0, 0, 160, ALTO, '#9bbc0f');
     for (let y = 0; y < ALTO; y += 2) dith(0, y, 160, '#8fb00d', (y >> 1) & 1);
     const ls = paso.t;
-    const y0 = 70 - (ls.length - 1) * 7;
+    const y0 = 58 - (ls.length - 1) * 7;
     for (let i = 0; i < ls.length; i++)
       if (despT > 14 || i === 0) centerText(y0 + i * 13, ls[i], '#0f380f');
     if (despT > 24) drawSprite(CORAZON, 76, y0 + ls.length * 13 + 10, false, PAL_COR_DMG);
@@ -4209,19 +4217,19 @@ function pantallaApagado() {
   const p = apagT;
   if (p < 18) {
     const h = Math.max(2, Math.round(ALTO * (1 - p / 18)));
-    const y = Math.round(ALTO / 2 - h / 2);
+    const y = Math.round((ALTO / 2 - DESP) - h / 2);
     R(0, y, 160, h, '#9bbc0f');
     for (let yy = y; yy < y + h; yy += 2) dith(0, yy, 160, '#8fb00d', (yy >> 1) & 1);
     const ls = DESPEDIDA[DESPEDIDA.length - 1].t;
-    if (h > 40) for (let i = 0; i < ls.length; i++) centerText(63 + i * 13, ls[i], '#0f380f');
+    if (h > 40) for (let i = 0; i < ls.length; i++) centerText(51 + i * 13, ls[i], '#0f380f');
   } else if (p < 34) {
     const w = Math.max(3, Math.round(160 * (1 - (p - 18) / 16)));
-    R(Math.round(80 - w / 2), 83, w, 2, '#d8f27a');
+    R(Math.round(80 - w / 2), 71, w, 2, '#d8f27a');
   } else if (p < 42) {
-    R(78, 82, 4, 4, 'rgba(216,242,122,' + ((42 - p) / 8).toFixed(2) + ')');
+    R(78, 70, 4, 4, 'rgba(216,242,122,' + ((42 - p) / 8).toFixed(2) + ')');
   }
   if (p > 76 && (p / 32 | 0) % 2)
-    centerText(150, 'A = OTRA VEZ', 'rgba(180,214,90,.5)', null);
+    centerText(138, 'A = OTRA VEZ', 'rgba(180,214,90,.5)', null);
 }
 
 
@@ -4392,7 +4400,7 @@ function pantallaExplotado(t) {
   R(72, 66, 10, 4, '#8a8f98'); R(84, 62, 5, 6, '#c9553c');
   R(64, 74, 6, 3, '#8a8f98');
   centerText(104, 'FINAL MALO', '#e8433c', 'rgba(20,6,16,.85)');
-  if ((t / 30 | 0) % 2) centerText(148, 'A = OTRA VEZ', '#ffffff', 'rgba(20,6,16,.85)');
+  if ((t / 30 | 0) % 2) centerText(136, 'A = OTRA VEZ', '#ffffff', 'rgba(20,6,16,.85)');
 }
 
 function pantallaGameOver(t) {
@@ -4408,7 +4416,7 @@ function pantallaGameOver(t) {
   R(70, 91, 4, 2, PERSONAJES.roberto.color.o);
   R(80, 91, 4, 2, PERSONAJES.roberto.color.o);
   centerText(104, 'FINAL MALO', '#e8355c', 'rgba(20,6,24,.85)');
-  if ((t / 30 | 0) % 2) centerText(148, 'A = OTRA VEZ', '#ffffff', 'rgba(20,6,24,.85)');
+  if ((t / 30 | 0) % 2) centerText(136, 'A = OTRA VEZ', '#ffffff', 'rgba(20,6,24,.85)');
 }
 
 /* La cangurera tirada en la cama, esperando a que la levanten */
@@ -4529,13 +4537,13 @@ function pantallaSaltos(t) {
   }
   /* barra de desplazamiento */
   if (SALTOS.length > SALTOS_VIS) {
-    const alto = Math.max(8, Math.round(138 * SALTOS_VIS / SALTOS.length));
-    const arr = Math.round(138 * saltoTop / SALTOS.length);
-    R(157, 15, 2, 138, '#3a2560');
+    const alto = Math.max(8, Math.round(127 * SALTOS_VIS / SALTOS.length));
+    const arr = Math.round(127 * saltoTop / SALTOS.length);
+    R(157, 15, 2, 127, '#3a2560');
     R(157, 15 + arr, 2, alto, '#a882e8');
   }
-  R(0, 155, 160, 13, '#2a1550'); R(0, 155, 160, 1, '#5f34a0');
-  drawText(4, 158, 'B O SELECT = VOLVER', '#bda6e4');
+  R(0, 144, 160, 13, '#2a1550'); R(0, 144, 160, 1, '#5f34a0');
+  drawText(4, 147, 'B O SELECT = VOLVER', '#bda6e4');
 }
 
 
@@ -4616,7 +4624,9 @@ function charlaEnPantalla() {
 
 function loop() {
   t++;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.clearRect(0, 0, 160, ALTO);
+  ctx.setTransform(1, 0, 0, 1, 0, DESP);
   const hablando = (estado === 'dialogo' || estado === 'dialogoFinal');
 
   /* SELECT abre y cierra el selector de escenas desde donde sea */

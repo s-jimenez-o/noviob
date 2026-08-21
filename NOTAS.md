@@ -28,16 +28,20 @@ antes de tocar el código; el juego se rompe fácil si se ignoran.
 
 ## La pantalla y la escala
 
-- Canvas de **160×`ALTO`**, con `ALTO = 168`. La Game Boy real son 144, pero se le
-  dio aire abajo para aprovechar la pantalla del teléfono. **Nunca escribas 144 ni
-  168 a mano: usa `ALTO`.** Los píxeles siguen cuadrados (mismo `--u` en los dos ejes);
-  si alguna vez cambia `ALTO`, hay que cambiar también el `height` del `<canvas>` y
-  el `height:calc(...*var(--u))` del CSS, o la imagen se deforma.
+- Canvas de **160×`ALTO`**, con `ALTO = 168`. La Game Boy real son 144, pero la
+  pantalla del teléfono pedía más alto. **El mundo sigue diseñado a 144**: `loop()`
+  lo centra con un `translate(0, DESP)` (`DESP = 12` arriba y abajo), y `R()` extiende
+  hacia arriba cualquier rect que nazca en `y === 0` con alto ≥ 3 — así los cielos y
+  paredes crecen con su propio color, sin franjas. No escribas 144/168/12 a mano:
+  usa `ALTO` y `DESP`.
+- Consecuencias prácticas: se dibuja en coordenadas de diseño (0..144) y el
+  corrimiento es invisible; `aLCD()` ya devuelve el toque en esas coordenadas; la
+  interfaz pegada al borde de abajo se ancla restando `DESP` (la caja de diálogo es
+  `BOX_Y = 108`, que en pantalla cae en 120). Si cambia `ALTO`, cambian también el
+  `height` del `<canvas>` y el `height:calc(...*var(--u))` del CSS, o se deforma.
 - Un fondo que termine justo abajo se escribe `vgrad(0, y, 160, ALTO - y, ...)`,
-  nunca con el alto calculado a mano: si no, queda una franja negra.
+  nunca con el alto calculado a mano.
 - `GROUND = 92` es la línea de piso: los personajes (16×30) se paran en `y = GROUND - 30 = 62`.
-  El piso llega hasta `ALTO`, así que abajo hay bastante suelo — ahí cae la caja de
-  diálogo (`BOX_Y = 120`) y los avisos.
 - La carcasa se escala con la variable CSS `--s` (la fija `fit()`); TODA la consola
   está medida en `var(--u)`, así que crece y encoge junta. No usar px sueltos ahí.
 
@@ -196,9 +200,9 @@ regeneran fácil — el patrón está en el historial de la conversación):
    `--dump-dom`; se anula `requestAnimationFrame` y se llama `loop()` en un
    `setInterval(...,0)`). Uno del boot al antro, otro de la casa a los créditos, y
    uno por cada final malo. La ruta de estados impresa debe llegar a `creditos`.
-4. **Sonda de huecos**: dibuja cada escena y lee el canvas para ver si quedan
-   píxeles sin pintar en las últimas filas. Es la única forma sensata de revisar
-   50+ escenas tras un cambio de tamaño; encontró 17 fondos que terminaban en 144.
+4. **Sonda de huecos**: dibuja cada escena (con el translate puesto) y lee las
+   franjas de arriba y abajo del canvas buscando píxeles sin pintar. Es la única
+   forma sensata de revisar 50+ escenas tras un cambio de tamaño.
 5. **Capturas**: `grab.sh nombre "código de dibujo"` congela un cuadro y lo exporta
    a PNG (dibuja el frame a mano, escala ×4 con `imageSmoothingEnabled=false` y
    saca un dataURL). SIEMPRE mirar la captura: los bugs de encimado (texto sobre
