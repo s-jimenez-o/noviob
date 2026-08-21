@@ -119,9 +119,21 @@ la página con `window.onerror`.
 ## El cierre
 
 El juego abre con la pantalla verde preguntando **WHAT IS LOVE?** y cierra con la
-misma pantalla respondiéndola (`DESPEDIDA`, una A por pantalla), y de ahí el apagón
-clásico de Game Boy: la imagen se colapsa a una raya, la raya a un punto, negro.
-Es el remate del regalo — si se toca algo de ahí, que sea sin romper esa simetría.
+misma pantalla respondiéndola. `DESPEDIDA` es una lista de pasos que alternan
+pantallas verdes (`{t:[líneas]}`) con **momentos** reales de ellos dos
+(`{e:funcion, txt, veloz}`), a una A por paso. Los momentos son escenas de una sola
+función (`momBarragan`, `momTectonic`, `momYale`, `momCeramica`, `momConcierto`,
+`momAlberca`, `momCasa`) que pisan en `MOM_PIE = 116` en vez de `GROUND`, porque
+ahí no hay caja de diálogo y conviene usar toda la pantalla. Para agregar un
+momento: escribe su `mom*`, mételo en `DESPEDIDA` donde toque, y ya.
+De ahí el apagón clásico de Game Boy: la imagen se colapsa a una raya, la raya a un
+punto, negro. Es el remate del regalo — si se toca algo, que sea sin romper esa simetría.
+
+## El menú de escenas
+
+Va **compacto a propósito** (26 entradas, una por capítulo). Cada vez que se agrega
+una escena, la tentación es meterle una entrada más: no. Sólo capítulos que alguien
+querría revisitar, y con nombres de capítulo ("EL SHOW DE DRAGS", no "llegaRoberto").
 
 ## Controles
 

@@ -695,6 +695,18 @@ PERSONAJES.drag = {
   }
 };
 /* Las amigas, ya con cuerpo, para la sala */
+/* El hermano de Roberto, para el concierto */
+PERSONAJES.hermano = {
+  nombre: 'SU HERMANO', tinta: '#f4eeff',
+  quieto: armar(CAB_ROBERTO, TOR_ROBERTO, CUERPO_QUIETO),
+  paso:   armar(CAB_ROBERTO, TOR_ROBERTO, CUERPO_PASO),
+  color: {
+    k:'#1b1226', '1':'#2a1810', '2':'#4a2f1c',
+    s:'#e8b88a', S:'#c08a5c', e:'#231624', b:'#3a2418', m:'#6b3a34',
+    c:'#c9553c', C:'#a03a28', t:'#f2b09a',
+    p:'#3a4a6a', Q:'#2a3752', o:'#241d2b'
+  }
+};
 PERSONAJES.amiga1 = {
   nombre: 'LAS AMIGAS', tinta: '#eafff8',
   quieto: armar(CAB_DRAG, TOR_MESERA, CUERPO_QUIETO),
@@ -2444,6 +2456,322 @@ function explosionCorazones(cx, cy, p) {
   }
 }
 
+/* ---- 21. LOS MOMENTOS (el montaje del final) ---- */
+const MOM_PIE = 116;                 /* dónde pisan en estas escenas */
+const MOM_Y = MOM_PIE - 30;
+
+function bocadillo(x, y, txt) {
+  const w = textW(txt) + 9;
+  R(x, y, w, 13, '#f6efdc');
+  R(x, y, w, 1, '#241a3c'); R(x, y + 12, w, 1, '#241a3c');
+  R(x, y, 1, 13, '#241a3c'); R(x + w - 1, y, 1, 13, '#241a3c');
+  R(x + 1, y + 1, w - 2, 1, '#ffffff');
+  R(x + 5, y + 13, 4, 1, '#f6efdc'); R(x + 6, y + 14, 2, 1, '#f6efdc');
+  R(x + 4, y + 13, 1, 1, '#241a3c'); R(x + 9, y + 13, 1, 1, '#241a3c');
+  drawText(x + 5, y + 3, txt, '#2a2035');
+}
+
+/* a) La cuadra de Luis Barragán: el muro rosa y la foto */
+function momBarragan(tt) {
+  vgrad(0, 0, 160, 26, ['#5cb0e8','#8ccdf0','#bde4f2']);
+  for (let i = 0; i < 3; i++) {
+    const x = ((i * 57 - (tt * 0.1 | 0)) % 214) - 30;
+    elipse(x, 9 + (i % 2) * 6, 12, 4, '#ffffff');
+  }
+  /* el muro rosa mexicano, con sus juntas */
+  vgrad(0, 26, 160, 92, ['#f2547e','#e8446e','#d63a62']);
+  R(0, 26, 160, 2, '#ff86a4');
+  for (let y = 40; y < 118; y += 22) R(0, y, 160, 1, 'rgba(150,26,58,.35)');
+  R(52, 26, 2, 92, 'rgba(150,26,58,.28)'); R(112, 26, 2, 92, 'rgba(150,26,58,.28)');
+  /* el muro amarillo que asoma a un lado */
+  R(132, 30, 28, 88, '#e8b93c'); R(132, 30, 2, 88, '#ffd769');
+  R(132, 30, 28, 2, '#ffd769');
+  /* banqueta */
+  vgrad(0, 118, 160, 26, ['#b8b0a8','#a49c94','#908880']);
+  R(0, 118, 160, 1, '#d4ccc4');
+  for (let x = 0; x < 160; x += 30) R(x, 118, 1, 26, 'rgba(90,84,78,.35)');
+  /* posando */
+  persona('roberto', 56, MOM_Y, false, false, tt);
+  persona('santiago', 78, MOM_Y, true, false, tt);
+  /* el flash de la foto */
+  const f = tt % 78;
+  if (f < 4) R(0, 0, 160, 144, 'rgba(255,255,255,' + (0.7 - f * .16).toFixed(2) + ')');
+  else if (f < 12) for (let i = 0; i < 4; i++)
+    destello(48 + i * 22, 40 + (i % 2) * 8, i % 2 ? '#ffffff' : '#ffe9a8');
+}
+
+/* b) Bailando tectonic hasta que se resbala */
+function momTectonic(tt) {
+  vgrad(0, 0, 160, 100, ['#2e1a48','#3a2058','#452866']);
+  for (let x = 0; x < 160; x += 14) R(x, 0, 2, 100, 'rgba(255,255,255,.04)');
+  /* luces de fiesta */
+  for (let i = 0; i < 4; i++) {
+    const c = ['rgba(255,90,140,.14)','rgba(120,200,255,.13)','rgba(180,255,140,.12)','rgba(255,210,90,.13)'][i];
+    disco(24 + i * 38, 12 + (i % 2) * 8, 26 + (((tt / 6 | 0) + i) % 3) * 4, c);
+  }
+  /* sillón y bocina al fondo */
+  R(4, 74, 46, 26, '#5a3a6a'); R(4, 74, 46, 2, '#7a5490');
+  R(126, 58, 26, 42, '#241c2e'); R(126, 58, 26, 2, '#4a3a58');
+  disco(139, 72, 8, '#3a2f48'); disco(139, 72, 4, '#1a1424');
+  disco(139, 90, 5, '#3a2f48');
+  /* piso */
+  vgrad(0, 100, 160, 44, ['#3f2a56','#33224a','#291b3d']);
+  R(0, 100, 160, 1, '#6a4a86');
+  for (let y = 112; y < 144; y += 12) R(0, y, 160, 1, 'rgba(20,10,34,.4)');
+  /* la secuencia: baila, resbala, cae, sangra */
+  const s = PERSONAJES.santiago;
+  if (tt < 64) {
+    /* tectonic: brazos arriba y cambio rápido */
+    bailando('santiago', 68, MOM_Y, tt * 2, (tt / 16 | 0) % 2 ? 'macarena' : 'payaso');
+  } else if (tt < 78) {
+    /* el resbalón */
+    const p = (tt - 64) / 14;
+    sombraPiso(76, MOM_PIE);
+    drawSprite(s.paso, 68 + Math.round(p * 10), MOM_Y + Math.round(p * 16), false, s.color);
+  } else {
+    /* sentado en el piso, agarrándose el codo */
+    elipse(76, MOM_PIE, 22, 4, 'rgba(20,10,34,.35)');
+    /* las piernas estiradas al frente */
+    R(52, MOM_PIE - 9, 24, 8, s.color.p); R(52, MOM_PIE - 9, 24, 1, '#7a8452');
+    R(46, MOM_PIE - 9, 8, 8, s.color.o);
+    /* el torso y la cabeza, sentado */
+    drawSprite(s.quieto.slice(0, 21), 72, MOM_PIE - 21, false, s.color);
+    /* el brazo doblado, con el codo al aire */
+    R(68, MOM_PIE - 12, 5, 9, s.color.s);
+    R(66, MOM_PIE - 14, 7, 4, s.color.s);
+    R(66, MOM_PIE - 14, 7, 1, '#f6cb9e');
+    /* la sangre escurriendo */
+    R(67, MOM_PIE - 11, 4, 3, '#c9302a');
+    for (let i = 0; i < 3; i++) {
+      const g = ((tt - 78) * 0.55 + i * 7) % 22;
+      if (g < 11) R(67 + i * 2, MOM_PIE - 9 + g, 2, 3, i % 2 ? '#c9302a' : '#e8433c');
+    }
+    elipse(70, MOM_PIE, 7, 2, '#a8241f');
+    if ((tt / 14 | 0) % 2) bocadillo(92, MOM_PIE - 40, 'AY.');
+  }
+}
+
+/* c) La clase de cerámica: el torno y la maceta */
+function momCeramica(tt) {
+  vgrad(0, 0, 160, 104, ['#e8dcc4','#dccfb4','#cfc0a4']);
+  for (let x = 0; x < 160; x += 18) R(x, 0, 1, 104, 'rgba(140,120,90,.14)');
+  /* repisa con piezas */
+  R(6, 16, 62, 3, '#a3714a'); R(6, 16, 62, 1, '#c99163');
+  for (let i = 0; i < 4; i++) {
+    const x = 11 + i * 15;
+    R(x, 8, 8, 8, ['#c96a4a','#8a9a6a','#c9a44a','#7a8fa8'][i]);
+    R(x, 8, 8, 1, '#f2e8cc'); R(x - 1, 7, 10, 2, ['#e08a64','#a8bd88','#e8c46a','#9fb2c8'][i]);
+  }
+  R(100, 12, 52, 3, '#a3714a'); R(100, 12, 52, 1, '#c99163');
+  for (let i = 0; i < 3; i++) {
+    const x = 106 + i * 16;
+    elipse(x + 4, 8, 6, 4, ['#b8845c','#8a9a6a','#c96a4a'][i]);
+  }
+  /* ventana */
+  R(74, 22, 32, 26, '#8a6a4a'); R(76, 24, 28, 22, '#a8d8f0');
+  R(89, 24, 2, 22, '#8a6a4a'); R(76, 34, 28, 2, '#8a6a4a');
+  /* piso */
+  vgrad(0, 104, 160, 40, ['#a8825c','#96714e','#836142']);
+  R(0, 104, 160, 1, '#c49a70');
+  /* los dos en sus tornos */
+  for (let i = 0; i < 2; i++) {
+    const cx = 40 + i * 62, quien = i ? 'roberto' : 'santiago';
+    const p = PERSONAJES[quien];
+    drawSprite(p.quieto.slice(0, 21), cx - 8, 62, i === 1, p.color);
+    /* el torno: base, mesa que gira y el barro */
+    R(cx - 14, 92, 28, 4, '#6b6068'); R(cx - 14, 92, 28, 1, '#9a8f98');
+    R(cx - 6, 96, 12, 18, '#4a424e');
+    R(cx - 12, 114, 24, 4, '#3a333e');
+    const g = (tt / 3 + i * 4) | 0;
+    const w = 9 + ((g % 3) - 1);
+    elipse(cx, 88, w, 5, '#a8734a');
+    elipse(cx, 86, w - 2, 4, '#c48b5c');
+    R(cx - (w - 3), 84, (w - 3) * 2, 2, '#8a5c38');
+    if ((g % 3) === 0) P(cx - w + 1, 88, '#7a5230');
+    /* manitas al barro */
+    R(cx - 11, 84, 5, 4, p.color.s); R(cx + 6, 84, 5, 4, p.color.s);
+  }
+  /* la maceta terminada de Roberto, en la repisa de atrás */
+  R(126, 92, 14, 12, '#c96a4a'); R(126, 92, 14, 2, '#e08a64');
+  R(124, 90, 18, 3, '#e08a64');
+  elipse(133, 88, 6, 4, '#3f8f4f'); elipse(130, 86, 3, 2, '#6cbd6b');
+}
+
+/* d) El concierto, con su hermano y una amiga */
+function momConcierto(tt) {
+  vgrad(0, 0, 160, 96, ['#150c28','#1d1036','#281546']);
+  /* haces de luz desde el escenario */
+  for (let i = 0; i < 5; i++) {
+    const a = -1.25 + i * 0.5 + Math.sin(tt / 26 + i) * 0.16;
+    const c = ['rgba(255,90,140,.11)','rgba(120,200,255,.10)','rgba(180,255,140,.09)',
+               'rgba(255,210,90,.10)','rgba(200,140,255,.10)'][i];
+    for (let k = 0; k < 70; k += 2)
+      R(80 + Math.sin(a) * k - 3, 20 + Math.cos(a) * k * -0.9 + 60, 7 + (k >> 3), 2, c);
+  }
+  /* el escenario al fondo */
+  R(0, 44, 160, 4, '#3a2a4e');
+  R(30, 20, 100, 24, '#241a34'); R(30, 20, 100, 2, '#4a3a60');
+  for (let i = 0; i < 6; i++) {
+    const bx = 36 + i * 16, on = ((tt / 5 | 0) + i) % 3;
+    R(bx, 22, 6, 4, on ? '#ffe08a' : '#5a4a70');
+    if (on) disco(bx + 3, 24, 8, 'rgba(255,224,138,.10)');
+  }
+  /* la banda, en silueta */
+  for (let i = 0; i < 3; i++) {
+    const bx = 52 + i * 28, bob = ((tt / 9 + i) | 0) % 2;
+    elipse(bx, 34 + bob, 4, 5, '#0d0818');
+    R(bx - 6, 38 + bob, 12, 10, '#0d0818');
+  }
+  R(0, 96, 160, 48, '#120a22');
+  /* el público de enfrente */
+  for (let i = 0; i < 9; i++) {
+    const bx = -4 + i * 19, bob = ((tt / 7 + i) | 0) % 2;
+    elipse(bx + 8, 108 + bob, 7, 8, '#080512');
+    R(bx, 116 + bob, 17, 28, '#080512');
+    if (i % 3 === 0) { R(bx + 2, 96 + bob, 3, 12, '#080512'); R(bx + 13, 94 + bob, 3, 14, '#080512'); }
+  }
+  /* nosotros cuatro, saltando */
+  const gente = [['amiga1', 12], ['hermano', 44], ['roberto', 84], ['santiago', 116]];
+  for (let i = 0; i < 4; i++) {
+    const q = gente[i][0], x = gente[i][1];
+    const bob = (((tt / 6 | 0) + i) % 2) ? -2 : 0;
+    persona(q, x, MOM_Y - 6 + bob, i > 1, false, tt + i * 5);
+    if (i % 2 === 0) { R(x + 2, MOM_Y - 18 + bob, 3, 12, PERSONAJES[q].color.s);
+                       R(x + 11, MOM_Y - 20 + bob, 3, 14, PERSONAJES[q].color.s); }
+  }
+}
+
+/* e) La alberca en Acapulco */
+function momAlberca(tt) {
+  /* atardecer y el mar al fondo */
+  vgrad(0, 0, 160, 40, ['#f2a05a','#f6bd72','#f9d68f','#fbe8b0']);
+  disco(126, 26, 12, 'rgba(255,244,180,.30)'); disco(126, 26, 8, '#fff3ae');
+  vgrad(0, 40, 160, 18, ['#2f7fa8','#3f97bd','#54b0cc']);
+  for (let i = 0; i < 3; i++) {
+    const y = 44 + i * 5, off = ((tt * (0.4 + i * 0.2) | 0) % 24);
+    for (let x = -24; x < 176; x += 24) R(x + off, y, 10, 1, 'rgba(255,255,255,.42)');
+  }
+  /* cerros de Acapulco */
+  cerro(20, 40, 60, 22, '#7a6a58'); cerro(140, 40, 54, 18, '#6a5c4c');
+  /* arena y palmeras */
+  vgrad(0, 58, 160, 20, ['#e8d39a','#dcc287']);
+  for (let i = 0; i < 2; i++) {
+    const px = 16 + i * 122;
+    R(px, 44, 2, 16, '#6b4526');
+    for (let a = 0; a < 5; a++)
+      elipse(px + 1 + Math.cos(Math.PI + a * 0.63) * 8, 44 + Math.sin(Math.PI + a * 0.63) * 5,
+             6, 2, a % 2 ? '#2f7b45' : '#3f9a52');
+  }
+  /* el borde y el agua de la alberca */
+  R(0, 74, 160, 8, '#e8e2d4'); R(0, 74, 160, 2, '#fbf6ec');
+  vgrad(0, 82, 160, 62, ['#3fb0d8','#35a0cc','#2b8fbd','#237fae']);
+  for (let i = 0; i < 7; i++) {
+    const y = 90 + i * 8, off = ((tt * (0.5 + (i % 3) * 0.2) | 0) % 30);
+    for (let x = -30; x < 176; x += 30) R(x + off, y, 13, 1, 'rgba(255,255,255,.30)');
+  }
+  /* los dos metidos hasta el pecho */
+  for (let i = 0; i < 2; i++) {
+    const q = i ? 'roberto' : 'santiago', x = i ? 88 : 52;
+    const p = PERSONAJES[q], bob = (((tt / 16 | 0) + i) % 2);
+    drawSprite(p.quieto.slice(0, 18), x, 62 + bob, i === 1, p.color);
+    /* el reflejo cortado en el agua */
+    R(x, 80 + bob, 16, 2, 'rgba(255,255,255,.35)');
+    for (let k = 0; k < 3; k++)
+      R(x - 3 + k * 7, 82 + bob + (((tt / 7 + k) | 0) % 2), 5, 1, 'rgba(255,255,255,.45)');
+  }
+  bocadillo(104, 42, 'EW');
+}
+
+/* g) Cuando me dejaba en mi casa: las torres grises, de noche */
+function momCasa(tt, txt, veloz) {
+  vgrad(0, 0, 160, 100, ['#0f0c24','#171236','#221a4a','#30245e']);
+  for (let i = 0; i < 30; i++) {
+    const sx = (i * 53) % 158, sy = (i * 31) % 66;
+    if ((tt / 20 + i) % 5 > 2) P(sx, sy, i % 4 ? 'rgba(255,255,255,.6)' : 'rgba(255,233,168,.7)');
+  }
+  disco(132, 20, 7, 'rgba(255,244,214,.16)'); disco(132, 20, 5, '#f2ecd0');
+  /* los edificios chicos de atrás */
+  for (let i = 0; i < 10; i++) {
+    const x = i * 17, h = 22 + ((i * 13) % 5) * 7;
+    R(x, 100 - h, 16, h, '#26203c');
+    for (let wy = 100 - h + 4; wy < 96; wy += 7)
+      for (let wx = x + 2; wx < x + 14; wx += 5)
+        R(wx, wy, 3, 3, ((wx + wy + i) % 4) ? '#1c1730' : '#e8c86a');
+  }
+  /* las dos torres grises */
+  for (let i = 0; i < 2; i++) {
+    const x = 50 + i * 32;
+    R(x, 14, 24, 86, '#8a8f9c');
+    R(x, 14, 4, 86, '#a8aebc'); R(x + 20, 14, 4, 86, '#6a707e');
+    R(x, 14, 24, 2, '#c0c6d2');
+    R(x + 10, 8, 3, 6, '#6a707e');
+    for (let wy = 20; wy < 98; wy += 8)
+      for (let wx = x + 4; wx < x + 21, wx < x + 21; wx += 5) {
+        const on = ((wx * 7 + wy * 3 + i * 5) % 5) < 2;
+        R(wx, wy, 4, 5, on ? '#ffe9a8' : '#5c626e');
+      }
+    R(x + 7, 88, 10, 12, '#3a3f4a'); R(x + 7, 88, 10, 1, '#c0c6d2');
+  }
+  /* la calle */
+  vgrad(0, 100, 160, 44, ['#3a3648','#312e3e','#282634']);
+  R(0, 100, 160, 1, '#5a5568');
+  for (let x = 6; x < 160; x += 34) R(x, 128, 18, 2, 'rgba(255,255,255,.28)');
+  /* la banqueta y un poste */
+  R(0, 100, 160, 5, '#4a4658'); R(0, 100, 160, 1, '#6a6478');
+  R(14, 62, 3, 38, '#2a2634'); R(14, 60, 11, 3, '#2a2634');
+  R(21, 62, 4, 3, '#ffe08a'); disco(23, 64, 11, 'rgba(255,224,138,.09)');
+  /* el coche llegando, y bajándose */
+  const v = veloz ? 3.4 : 2.0, tope = 46;
+  const x = Math.min(tope, -70 + tt * v);
+  const llego = x >= tope;
+  coche(x, 76, tt, llego, llego);
+  if (llego) {
+    const p = Math.min(1, (tt - (tope + 70) / v) / (veloz ? 22 : 34));
+    persona('santiago', 104 + p * 22, 73, false, p < 1, tt);
+  }
+  cartelEscena([txt], 14);
+}
+
+/* f) El reveal party en su casa, que acabó en rojo */
+function momYale(tt) {
+  const rojo = tt > 58;
+  vgrad(0, 0, 160, 100, ['#3a2a58','#452f66','#4e3572']);
+  for (let x = 0; x < 160; x += 13) R(x, 0, 1, 100, 'rgba(255,255,255,.05)');
+  /* globos y el letrero */
+  for (let i = 0; i < 5; i++) {
+    const x = 12 + i * 34, bob = ((tt / 12 + i) | 0) % 2;
+    R(x + 3, 24 + bob, 1, 12, 'rgba(255,255,255,.35)');
+    elipse(x + 3, 18 + bob, 6, 7, ['#e8506a','#f2c14e','#5cb0e8','#8fd06a','#c98fe8'][i]);
+    P(x + 1, 15 + bob, '#ffffff');
+  }
+  R(16, 34, 128, 15, '#241a3c'); R(16, 34, 128, 1, '#6a5490');
+  centerText(38, 'YALENDER REVEAL', '#ffe9a8', 'rgba(0,0,0,.5)');
+  /* la sala */
+  R(0, 100, 160, 44, '#4a3a2c');
+  R(0, 100, 160, 1, '#6b5540');
+  for (let y = 112; y < 144; y += 12) R(0, y, 160, 1, 'rgba(30,20,12,.4)');
+  /* la mesa con la laptop */
+  R(50, 96, 60, 4, '#a3714a'); R(50, 96, 60, 1, '#c99163');
+  R(56, 100, 4, 16, '#7a5230'); R(100, 100, 4, 16, '#7a5230');
+  R(64, 78, 32, 18, '#3a3440'); R(66, 80, 28, 14, rojo ? '#c9302a' : '#8fd0f0');
+  if (rojo) {
+    R(72, 84, 16, 2, '#ffffff'); R(72, 88, 10, 2, '#ffffff');
+    if ((tt / 8 | 0) % 2) { R(70, 82, 3, 3, '#ffffff'); R(87, 82, 3, 3, '#ffffff'); }
+  } else {
+    for (let i = 0; i < 4; i++) R(69 + i * 6, 84 + ((tt / 4 + i) | 0) % 3, 4, 4, '#5c88b8');
+  }
+  R(62, 96, 36, 2, '#5a5464');
+  /* los dos mirando la pantalla */
+  persona('santiago', 30, MOM_Y, false, false, tt);
+  persona('roberto', 112, MOM_Y, true, false, tt + 8);
+  if (rojo) {
+    /* se pone todo rojo */
+    const a = Math.min(.62, (tt - 58) / 40);
+    R(0, 0, 160, 144, 'rgba(200,20,26,' + a.toFixed(2) + ')');
+    if (tt > 78 && (tt / 12 | 0) % 2) bocadillo(6, 52, 'NO ENTRÉ.');
+  }
+}
+
 const ESCENAS = { patio:bgPatio, cuarto:bgCuarto, interior:bgInterior, drags:bgDrags, cocina:bgCocina, sala:bgSala,
                   amigo:bgAmigo, aero:bgAero, cielo:bgCielo, playa:bgPlaya,
                   parque:bgParque, cine:bgCine, lluvia:bgLluvia, noche:bgNoche,
@@ -3692,19 +4020,39 @@ function pantallaTitulo(t) {
 
 /* Cierra como abrió: la pantalla verde de Game Boy, respondiendo la pregunta */
 const DESPEDIDA = [
-  ['WHAT IS LOVE?'],
-  ['...'],
-  ['MAYBE ITS A FEELING...'],
-  ['MAYBE ITS A CHOICE...'],
-  ['MAYBE ITS A RIDE...'],
-  ['TBH IDK'],
-  ["BUT I'M HAPPY TO BE", 'FIGURING OUT WITH YOU'],
-  ['TE AMO,', 'FELICES 6 MESES']
+  { t:['SOOO...', 'WHAT IS LOVE?'] },
+  { e:momBarragan },
+  { t:['...'] },
+  { e:momTectonic },
+  { e:momYale },
+  { t:['MAYBE ITS A FEELING...'] },
+  { e:momCeramica },
+  { t:['MAYBE ITS A CHOICE...'] },
+  { e:momConcierto },
+  { t:['MAYBE ITS A RIDE...'] },
+  { e:momAlberca },
+  { e:momCasa, txt:'Y ME LLEVASTE A CASA...' },
+  { e:momCasa, txt:'UNA Y OTRA VEZ...', veloz:true },
+  { e:momCasa, txt:'Y OTRA VEZ.', veloz:true },
+  { t:['TBH IDK'] },
+  { t:["BUT I'M HAPPY TO BE", 'FIGURING OUT WITH YOU'] },
+  { t:['TE AMO,', 'FELICES 6 MESES'] }
 ];
 function pantallaDespedida() {
+  const paso = DESPEDIDA[despIdx];
+  /* los momentos van a color; las preguntas, en la pantalla verde */
+  if (paso.e) {
+    paso.e(despT, paso.txt, paso.veloz);
+    if (despT > 34 && (despT / 22 | 0) % 2) {
+      R(139, 126, 15, 13, 'rgba(18,10,30,.75)');
+      R(139, 126, 15, 1, 'rgba(255,255,255,.25)');
+      drawText(144, 129, 'A', '#ffe9a8');
+    }
+    return;
+  }
   R(0, 0, 160, 144, '#9bbc0f');
   for (let y = 0; y < 144; y += 2) dith(0, y, 160, '#8fb00d', (y >> 1) & 1);
-  const ls = DESPEDIDA[despIdx];
+  const ls = paso.t;
   const y0 = 58 - (ls.length - 1) * 7;
   const listo = despT > 10;
   for (let i = 0; i < ls.length; i++)
@@ -3724,7 +4072,7 @@ function pantallaApagado() {
     const y = Math.round(72 - h / 2);
     R(0, y, 160, h, '#9bbc0f');
     for (let yy = y; yy < y + h; yy += 2) dith(0, yy, 160, '#8fb00d', (yy >> 1) & 1);
-    const ls = DESPEDIDA[DESPEDIDA.length - 1];
+    const ls = DESPEDIDA[DESPEDIDA.length - 1].t;
     if (h > 40) for (let i = 0; i < ls.length; i++) centerText(51 + i * 13, ls[i], '#0f380f');
   } else if (p < 34) {
     const w = Math.max(3, Math.round(160 * (1 - (p - 18) / 16)));
@@ -3986,66 +4334,38 @@ function irMes(m) {
   jug.x = 8; jug.mirando = 1; estado = 'juego';
 }
 const SALTOS = [
-  /* La primera SIEMPRE es volver: así, si abres el menú sin querer y le picas
-     a A por reflejo, no te manda a ningún lado. */
-  { n:'SEGUIR JUGANDO',   f:null },
-  { n:'ENCENDIDO',        f:() => { estado = 'boot'; bootT = 0; } },
-  { n:'TÍTULO',           f:() => { estado = 'titulo'; } },
-  { n:'INTRO: LA APP',    f:() => { cangurera = false; irGuion(INTRO, 0, finIntro, true); } },
-  { n:'INTRO: ¡ES MATCH!',f:() => { cangurera = false; irGuion(INTRO, 7, finIntro, true); } },
-  { n:'INTRO: EL CHAT',   f:() => { cangurera = false; irGuion(INTRO, 8, finIntro, true); } },
-  { n:'INTRO: WHATSAPP',  f:() => { cangurera = false; irGuion(INTRO, 12, finIntro, true); } },
-  { n:'EL CUARTO',        f:() => { cangurera = false; maleta = false; estado = 'cuarto'; jug.x = 46; jug.mirando = -1; } },
-  { n:'LA CITA',          f:() => { cangurera = true; mes = 0; corazonTomado = false;
+  /* Menú corto: sólo los capítulos. La 0 siempre es volver. */
+  { n:'SEGUIR JUGANDO',     f:null },
+  { n:'ENCENDIDO',          f:() => { estado = 'boot'; bootT = 0; } },
+  { n:'TÍTULO',             f:() => { estado = 'titulo'; } },
+  { n:'LA APP',             f:() => { cangurera = false; irGuion(INTRO, 0, finIntro, true); } },
+  { n:'EL CUARTO',          f:() => { cangurera = false; maleta = false; estado = 'cuarto'; jug.x = 46; jug.mirando = -1; } },
+  { n:'AFUERA DEL CLUB',    f:() => { cangurera = true; mes = 0; corazonTomado = false;
                                     jug.x = 6; jug.mirando = 1; estado = 'juego'; } },
-  { n:'ROBERTO ESPERA',   f:() => { cangurera = true; correrGuion(ESPERA, menuEspera, true); } },
-  { n:'LA DECISIÓN',      f:() => { cangurera = true; menuEspera(); } },
-  { n:'EL PIANO',         f:() => { pianoT = 0; estado = 'piano'; } },
-  { n:'FINAL MALO',       f:() => { estado = 'gameover'; } },
-  { n:'ESCOGER MESA',     f:() => { cangurera = true; mes = 0; interiorNoche = false;
+  { n:'ROBERTO ESPERA',     f:() => { cangurera = true; correrGuion(ESPERA, menuEspera, true); } },
+  { n:'ADENTRO DEL CLUB',   f:() => { cangurera = true; mes = 0; interiorNoche = false;
                                     estado = 'sentarse'; jug.x = 6; jug.mirando = 1; } },
-  { n:'LA MESERA',        f:() => { interiorNoche = false; mesaElegida = 1;
-                                    irGuion(NOCHE, 2, empezarNumeros, true); } },
-  { n:'SE HACE NOCHE',    f:() => { interiorNoche = false; mesaElegida = 1;
-                                    irGuion(NOCHE2, 0, () => correrGuion(ANTRO, menuBaile, true)); } },
-  { n:'EL NÚMERO',        f:() => { mesaElegida = 1; interiorNoche = false; empezarNumeros(); } },
-  { n:'LAS TORRES',       f:() => { mesaElegida = 1; interiorNoche = false;
-                                    correrGuion(TORRES, seguirNoche, true); } },
-  { n:'EL ANTRO',         f:() => { correrGuion(ANTRO, menuBaile, true); } },
-  { n:'¿CÓMO BAILAS?',    f:() => { menuBaile(); } },
-  { n:'BAILANDO',         f:() => { baileT = 0; estado = 'baile'; } },
-  { n:'EL BESO',          f:() => { irGuion(BESO, 0, finActo); } },
-  { n:'VUELVE A CASA',    f:() => { cangurera = true; cuartoNoche = true;
+  { n:'EL 911',             f:() => { mesaElegida = 1; interiorNoche = false; empezarNumeros(); } },
+  { n:'EL SHOW DE DRAGS',   f:() => { correrGuion(ANTRO, menuBaile, true); } },
+  { n:'EL BESO',            f:() => { irGuion(BESO, 0, finActo); } },
+  { n:'DE VUELTA EN CASA',  f:() => { cangurera = true; cuartoNoche = true;
                                     correrGuion(CASA, () => correrGuion(AMIGO, menuPuerto, true)); } },
-  { n:'CASA DEL AMIGO',   f:() => { cuartoNoche = false; correrGuion(AMIGO, menuPuerto, true); } },
-  { n:'¿LO INVITAS?',     f:() => { menuPuerto(); } },
-  { n:'EL AVIÓN (MALO)',  f:() => { maleta = false; correrGuion(AVION_MALO, () => { estado = 'explotado'; }); } },
-  { n:'ME LO LLEVO',      f:() => { cangurera = true; correrGuion(PUERTO, empezarMaleta); } },
-  { n:'LA MALETA',        f:() => { empezarMaleta(); } },
-  { n:'EL VIAJE',         f:() => { cangurera = false; maleta = true; correrGuion(VIAJE, finViaje, true); } },
-  { n:'LLEGO POR ÉL',     f:() => { cangurera = false; maleta = true; irGuion(VIAJE, 6, finViaje, true); } },
-  { n:'LA PLAYA',         f:() => { maleta = false; correrGuion(PUERTO2, empezarMedidor, true); } },
-  { n:'ONICHAN',          f:() => { maleta = false; irGuion(PUERTO2, 3, empezarMedidor, true); } },
-  { n:'SE SUBEN AL COCHE', f:() => { maleta = false; irGuion(PUERTO2, 9, empezarMedidor, true); } },
-  { n:'LA CASA ROJA',     f:() => { maleta = false; irGuion(PUERTO2, 11, empezarMedidor, true); } },
-  { n:'EL PESCADO',       f:() => { maleta = false; irGuion(PUERTO2, 14, empezarMedidor, true); } },
-  { n:'SUPERESTRELLA',    f:() => { maleta = false; irGuion(PUERTO2, 20, empezarMedidor, true); } },
-  { n:'LOVE METER',       f:() => { maleta = false; irGuion(PUERTO2, 22, empezarMedidor, true); } },
-  { n:'¿Y TÚ CÓMO?',      f:() => { maleta = false; empezarMedidor(); } },
-  { n:'EL AEROPUERTO',    f:() => { maleta = false; correrGuion(CIERRE, empezarCocina); } },
-  { n:'DOS SEMANAS...',   f:() => { maleta = false; cangurera = false; empezarCocina(); } },
-  { n:'LLEGA A MI CASA',  f:() => { maleta = false; cangurera = false; cuartoNoche = false;
-                                    estado = 'aCocina'; jug.x = 130; jug.mirando = -1; } },
-  { n:'LA COCINA',        f:() => { maleta = false; cangurera = false; empezarCocinar(); } },
-  { n:'18 METROS',        f:() => { irGuion(PASTA, 0, () => correrGuion(A_LA_SALA, menuPizza, true)); } },
-  { n:'YA ESTÁ LA PIZZA',  f:() => { correrGuion(A_LA_SALA, menuPizza, true); } },
-  { n:'¿QUIERES COMER?',  f:() => { menuPizza(); } },
-  { n:'SE LA COMIÓ',      f:() => { estado = 'envenenado'; } },
-  { n:'LAS AMIGAS',       f:() => { correrGuion(NOVIOS, finActo); } },
-  { n:'EL FINAL',         f:() => { correrGuion(CIERRE_FINAL, () => { estado = 'creditos'; }, true); } },
-  { n:'CRÉDITOS',         f:() => { estado = 'creditos'; } },
-  { n:'LA DESPEDIDA',     f:() => { despIdx = 0; despT = 0; estado = 'despedida'; } }
+  { n:'CASA DEL AMIGO',     f:() => { cuartoNoche = false; correrGuion(AMIGO, menuPuerto, true); } },
+  { n:'LA MALETA',          f:() => { empezarMaleta(); } },
+  { n:'EL VIAJE EN COCHE',  f:() => { cangurera = false; maleta = true; correrGuion(VIAJE, finViaje, true); } },
+  { n:'PUERTO ESCONDIDO',   f:() => { maleta = false; correrGuion(PUERTO2, empezarMedidor, true); } },
+  { n:'LA CASA ROJA',       f:() => { maleta = false; irGuion(PUERTO2, 11, empezarMedidor, true); } },
+  { n:'EL LOVE METER',      f:() => { maleta = false; irGuion(PUERTO2, 22, empezarMedidor, true); } },
+  { n:'EL AEROPUERTO',      f:() => { maleta = false; correrGuion(CIERRE, empezarCocina); } },
+  { n:'DOS SEMANAS DESPUÉS',f:() => { maleta = false; cangurera = false; empezarCocina(); } },
+  { n:'LA COCINA',          f:() => { maleta = false; cangurera = false; empezarCocinar(); } },
+  { n:'18 METROS',          f:() => { irGuion(PASTA, 0, () => correrGuion(A_LA_SALA, menuPizza, true)); } },
+  { n:'LA PIZZA',           f:() => { menuPizza(); } },
+  { n:'LAS AMIGAS',         f:() => { correrGuion(NOVIOS, finActo); } },
+  { n:'CRÉDITOS',           f:() => { estado = 'creditos'; } },
+  { n:'LA DESPEDIDA',       f:() => { despIdx = 0; despT = 0; estado = 'despedida'; } }
 ];
+
 const SALTOS_VIS = 11;
 
 function abrirSaltos() {

@@ -308,16 +308,25 @@ El juego cierra aquí mismo, en la sala con las amigas — ya no hay fases de me
 - **SANTIAGO:** SEIS MESES. NADA MAL PARA ALGUIEN CUYO PLAN IDEAL ERA GOING OUT AND BLACKING OUT.
 - Créditos: **FELICES** · **6 MESES** · **SANTIAGO & ROBERTO** · **A = OTRA VEZ**
 
-### La despedida (vuelve la pantalla verde del arranque, una A por pantalla)
+### La despedida (pantallas verdes y momentos, una A por pantalla)
 
-1. **WHAT IS LOVE?**
-2. **...**
-3. **MAYBE ITS A FEELING...**
-4. **MAYBE ITS A CHOICE...**
-5. **MAYBE ITS A RIDE...**
-6. **TBH IDK**
-7. **BUT I'M HAPPY TO BE** / **FIGURING OUT WITH YOU**
-8. **TE AMO,** / **FELICES 6 MESES**
+1. **SOOO...** / **WHAT IS LOVE?**
+2. *(momento)* la cuadra de Luis Barragán: el muro rosa y la foto con flash
+3. **...**
+4. *(momento)* bailando tectonic en una casa, hasta que se resbala y se abre el codo — **AY.**
+5. *(momento)* el **YALENDER REVEAL** en su casa: se pone todo rojo — **NO ENTRÉ.**
+6. **MAYBE ITS A FEELING...**
+7. *(momento)* la clase de cerámica, los dos en el torno y la maceta
+8. **MAYBE ITS A CHOICE...**
+9. *(momento)* el concierto, con su hermano y una amiga
+10. **MAYBE ITS A RIDE...**
+11. *(momento)* la alberca en Acapulco — **EW**
+12. *(momento)* las torres grises: **Y ME LLEVASTE A CASA...**
+13. *(la misma escena)* **UNA Y OTRA VEZ...**
+14. *(y otra vez)* **Y OTRA VEZ.**
+15. **TBH IDK**
+16. **BUT I'M HAPPY TO BE** / **FIGURING OUT WITH YOU**
+17. **TE AMO,** / **FELICES 6 MESES**
 
 Y ahí se apaga la consola. Al rato aparece **A = OTRA VEZ** por si quieren volver a jugar.
 
