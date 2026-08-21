@@ -17,6 +17,10 @@ antes de tocar el código; el juego se rompe fácil si se ignoran.
 - Carcasa **teal GBC** con botones A/B frambuesa; el fondo de la página es azul
   petróleo. Si se cambia el color, cambiar juntos: gradiente de `.gb`, fondo de
   `body`, color del logo `.gbtxt` y el radial de los botones `.ab`.
+- Si sobra alto (teléfonos largos), la carcasa se **estira** hasta llenarlo: `fit()`
+  le pone un `height` y los `div.aire` (flex) reparten el sobrante arriba, en medio
+  y abajo. Así no queda hueco negro y los controles bajan a donde están los pulgares.
+  El tope es 1.3× el alto natural para que no se deforme.
 - Prioridad de espacio: **la pantalla manda**. El bisel y los márgenes se
   mantienen delgados (bisel 5-6u, carcasa 5u) para que en un teléfono la pantalla
   sea lo más grande posible; los botones grandes y separados (dpad 62u, A/B 28u)

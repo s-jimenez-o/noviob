@@ -54,6 +54,11 @@
       inset calc(-2.5*var(--u)) 0 calc(7*var(--u)) rgba(0,0,0,.28);
     display:flex; flex-direction:column; align-items:center; gap:calc(2*var(--u));
   }
+  /* huecos elásticos: si sobra alto, la carcasa se estira y los controles
+     se van hacia abajo en vez de dejar un vacío negro en la pantalla */
+  .aire       { flex:3 1 0; min-height:0; }
+  .aire.arriba{ flex:1 1 0; }
+  .aire.pie   { flex:1.2 1 0; }
   /* brillo de plástico que cruza la carcasa */
   .gb::after {
     content:""; position:absolute; inset:0; pointer-events:none; border-radius:inherit;
@@ -278,6 +283,8 @@
     <div class="vents"></div>
   </div>
 
+  <div class="aire arriba"></div>
+
   <div class="bezel">
     <div class="lamp"></div>
     <div class="lamplbl">POWER</div>
@@ -289,6 +296,8 @@
     <span class="color"><i>C</i><i>O</i><i>L</i><i>O</i><i>R</i></span>
     <span class="nos">NOSOTROS</span>
   </div>
+
+  <div class="aire"></div>
 
   <div class="pad">
     <div class="dpad">
@@ -311,6 +320,8 @@
     </div>
     <div class="speaker"><i></i><i></i><i></i><i></i><i></i><i></i></div>
   </div>
+
+  <div class="aire pie"></div>
 
 </div>
 </div>
@@ -367,6 +378,7 @@ let UW = 0, UH = 0;
 
 function medirUnidades() {
   rootEl.style.setProperty('--s', '4');
+  shell.style.height = '';          /* medimos la carcasa sin estirar */
   const r = shell.getBoundingClientRect();
   UW = r.width / 4;
   UH = r.height / 4;
@@ -375,6 +387,12 @@ function fit() {
   if (!UW) medirUnidades();
   const s = Math.min(stage.clientWidth / UW, stage.clientHeight / UH);
   rootEl.style.setProperty('--s', Math.max(0.5, Math.min(6, Math.floor(s * 100) / 100)));
+  /* si el ancho fue el límite y sobra alto, estiramos la carcasa hasta llenarlo
+     (con tope, para que no se deforme en pantallas muy largas) */
+  shell.style.height = '';
+  const alto = shell.getBoundingClientRect().height;
+  if (stage.clientHeight > alto + 6)
+    shell.style.height = Math.min(stage.clientHeight, alto * 1.3) + 'px';
 }
 let fitPend = false;
 function fitSoon() {
@@ -2498,14 +2516,18 @@ const MOM_PIE = 116;                 /* dónde pisan en estas escenas */
 const MOM_Y = MOM_PIE - 30;
 
 function bocadillo(x, y, txt) {
-  const w = textW(txt) + 9;
-  R(x, y, w, 13, '#f6efdc');
-  R(x, y, w, 1, '#241a3c'); R(x, y + 12, w, 1, '#241a3c');
-  R(x, y, 1, 13, '#241a3c'); R(x + w - 1, y, 1, 13, '#241a3c');
+  const ls = Array.isArray(txt) ? txt : [txt];
+  let w = 0; for (const l of ls) w = Math.max(w, textW(l));
+  w += 9;
+  const h = ls.length * 10 + 3;
+  x = Math.max(2, Math.min(158 - w, x));      /* que nunca se salga */
+  R(x, y, w, h, '#f6efdc');
+  R(x, y, w, 1, '#241a3c'); R(x, y + h - 1, w, 1, '#241a3c');
+  R(x, y, 1, h, '#241a3c'); R(x + w - 1, y, 1, h, '#241a3c');
   R(x + 1, y + 1, w - 2, 1, '#ffffff');
-  R(x + 5, y + 13, 4, 1, '#f6efdc'); R(x + 6, y + 14, 2, 1, '#f6efdc');
-  R(x + 4, y + 13, 1, 1, '#241a3c'); R(x + 9, y + 13, 1, 1, '#241a3c');
-  drawText(x + 5, y + 3, txt, '#2a2035');
+  R(x + 5, y + h, 4, 1, '#f6efdc'); R(x + 6, y + h + 1, 2, 1, '#f6efdc');
+  R(x + 4, y + h, 1, 1, '#241a3c'); R(x + 9, y + h, 1, 1, '#241a3c');
+  for (let i = 0; i < ls.length; i++) drawText(x + 5, y + 3 + i * 10, ls[i], '#2a2035');
 }
 
 /* a) La cuadra de Luis Barragán: el muro rosa y la foto */
@@ -2584,7 +2606,7 @@ function momTectonic(tt) {
       if (g < 11) R(67 + i * 2, MOM_PIE - 9 + g, 2, 3, i % 2 ? '#c9302a' : '#e8433c');
     }
     elipse(70, MOM_PIE, 7, 2, '#a8241f');
-    if ((tt / 14 | 0) % 2) bocadillo(92, MOM_PIE - 40, 'AY.');
+    if ((tt / 14 | 0) % 2) bocadillo(88, MOM_PIE - 42, 'AY MI CODO');
   }
 }
 
@@ -2647,11 +2669,17 @@ function momConcierto(tt) {
   }
   /* el escenario al fondo */
   R(0, 44, 160, 4, '#3a2a4e');
-  R(30, 20, 100, 24, '#241a34'); R(30, 20, 100, 2, '#4a3a60');
+  /* la lona del concierto, colgada hasta arriba */
+  R(26, 3, 108, 17, '#150c22');
+  R(26, 3, 108, 1, '#6a5490'); R(26, 19, 108, 1, '#3a2a4e');
+  R(26, 3, 1, 17, '#4a3a60'); R(133, 3, 1, 17, '#4a3a60');
+  centerText(8, 'FKA TWIGS', ((tt / 26 | 0) % 2) ? '#ff8fd0' : '#e86ab8', 'rgba(0,0,0,.6)');
+  /* el marco del escenario y sus reflectores */
+  R(30, 24, 100, 20, '#241a34'); R(30, 24, 100, 2, '#4a3a60');
   for (let i = 0; i < 6; i++) {
     const bx = 36 + i * 16, on = ((tt / 5 | 0) + i) % 3;
-    R(bx, 22, 6, 4, on ? '#ffe08a' : '#5a4a70');
-    if (on) disco(bx + 3, 24, 8, 'rgba(255,224,138,.10)');
+    R(bx, 25, 6, 4, on ? '#ffe08a' : '#5a4a70');
+    if (on) disco(bx + 3, 27, 8, 'rgba(255,224,138,.10)');
   }
   /* la banda, en silueta */
   for (let i = 0; i < 3; i++) {
@@ -2678,45 +2706,60 @@ function momConcierto(tt) {
   }
 }
 
-/* e) La alberca en Acapulco */
+/* e) La alberca (de alberca, no de mar) */
 function momAlberca(tt) {
-  /* atardecer y el mar al fondo */
-  vgrad(0, 0, 160, 40, ['#f2a05a','#f6bd72','#f9d68f','#fbe8b0']);
-  disco(126, 26, 12, 'rgba(255,244,180,.30)'); disco(126, 26, 8, '#fff3ae');
-  vgrad(0, 40, 160, 18, ['#2f7fa8','#3f97bd','#54b0cc']);
-  for (let i = 0; i < 3; i++) {
-    const y = 44 + i * 5, off = ((tt * (0.4 + i * 0.2) | 0) % 24);
-    for (let x = -24; x < 176; x += 24) R(x + off, y, 10, 1, 'rgba(255,255,255,.42)');
+  /* cielo de tarde */
+  vgrad(0, 0, 160, 38, ['#f6b96a','#f9d08a','#fbe2ae','#fdf0cc']);
+  disco(128, 22, 12, 'rgba(255,244,180,.30)'); disco(128, 22, 8, '#fff3ae');
+  /* la barda del jardín, con su enredadera */
+  vgrad(0, 38, 160, 20, ['#e8dcc0','#dccfae']);
+  R(0, 38, 160, 2, '#f6ecd6'); R(0, 56, 160, 2, '#c4b48e');
+  for (let x = 0; x < 160; x += 16) R(x, 38, 1, 20, 'rgba(160,140,100,.28)');
+  for (let i = 0; i < 11; i++) {
+    elipse(6 + i * 15, 40 + (i % 2) * 3, 7, 4, i % 2 ? '#3f8f4f' : '#2f7b45');
+    elipse(12 + i * 15, 44, 5, 3, '#57ab66');
   }
-  /* cerros de Acapulco */
-  cerro(20, 40, 60, 22, '#7a6a58'); cerro(140, 40, 54, 18, '#6a5c4c');
-  /* arena y palmeras */
-  vgrad(0, 58, 160, 20, ['#e8d39a','#dcc287']);
+  /* palmeras y camastros del borde */
   for (let i = 0; i < 2; i++) {
-    const px = 16 + i * 122;
-    R(px, 44, 2, 16, '#6b4526');
+    const px = 14 + i * 128;
+    R(px, 24, 3, 34, '#6b4526');
     for (let a = 0; a < 5; a++)
-      elipse(px + 1 + Math.cos(Math.PI + a * 0.63) * 8, 44 + Math.sin(Math.PI + a * 0.63) * 5,
-             6, 2, a % 2 ? '#2f7b45' : '#3f9a52');
+      elipse(px + 1 + Math.cos(Math.PI + a * 0.63) * 9, 24 + Math.sin(Math.PI + a * 0.63) * 5,
+             7, 3, a % 2 ? '#2f7b45' : '#3f9a52');
   }
-  /* el borde y el agua de la alberca */
-  R(0, 74, 160, 8, '#e8e2d4'); R(0, 74, 160, 2, '#fbf6ec');
-  vgrad(0, 82, 160, 62, ['#3fb0d8','#35a0cc','#2b8fbd','#237fae']);
-  for (let i = 0; i < 7; i++) {
-    const y = 90 + i * 8, off = ((tt * (0.5 + (i % 3) * 0.2) | 0) % 30);
-    for (let x = -30; x < 176; x += 30) R(x + off, y, 13, 1, 'rgba(255,255,255,.30)');
+  for (let i = 0; i < 2; i++) {
+    const cx = 36 + i * 70;
+    R(cx, 62, 26, 4, '#f2e8d8'); R(cx, 62, 26, 1, '#ffffff');
+    R(cx + 20, 57, 6, 5, '#e8d0b8');
+    R(cx + 2, 66, 2, 5, '#a89880'); R(cx + 22, 66, 2, 5, '#a89880');
   }
+  /* el piso alrededor y el borde de la alberca */
+  vgrad(0, 58, 160, 20, ['#e8e2d4','#dcd4c4']);
+  for (let x = 0; x < 160; x += 20) R(x, 58, 1, 20, 'rgba(150,140,120,.30)');
+  R(0, 74, 160, 6, '#f6f2e8'); R(0, 74, 160, 2, '#ffffff');
+  R(0, 80, 160, 2, '#9fd4e4');
+  /* el agua: turquesa de alberca, con su cuadrícula de mosaico */
+  vgrad(0, 82, 160, 62, ['#5fd0e8','#4bc0dc','#38aacd','#2a95bd']);
+  for (let y = 88; y < 144; y += 11) R(0, y, 160, 1, 'rgba(255,255,255,.16)');
+  for (let x = 0; x < 160; x += 16) R(x, 82, 1, 62, 'rgba(255,255,255,.13)');
+  for (let i = 0; i < 8; i++) {
+    const y = 90 + i * 7, off = ((tt * (0.5 + (i % 3) * 0.2) | 0) % 32);
+    for (let x = -32; x < 176; x += 32) R(x + off, y, 14, 1, 'rgba(255,255,255,.34)');
+  }
+  /* la escalerita */
+  R(138, 68, 3, 22, '#d8dde2'); R(150, 68, 3, 22, '#d8dde2');
+  R(138, 66, 15, 3, '#e8edf2');
+  R(140, 78, 11, 2, '#c8ced4'); R(140, 86, 11, 2, '#c8ced4');
   /* los dos metidos hasta el pecho */
   for (let i = 0; i < 2; i++) {
     const q = i ? 'roberto' : 'santiago', x = i ? 88 : 52;
     const p = PERSONAJES[q], bob = (((tt / 16 | 0) + i) % 2);
     drawSprite(p.quieto.slice(0, 18), x, 62 + bob, i === 1, p.color);
-    /* el reflejo cortado en el agua */
-    R(x, 80 + bob, 16, 2, 'rgba(255,255,255,.35)');
+    R(x - 1, 80 + bob, 18, 2, 'rgba(255,255,255,.4)');
     for (let k = 0; k < 3; k++)
-      R(x - 3 + k * 7, 82 + bob + (((tt / 7 + k) | 0) % 2), 5, 1, 'rgba(255,255,255,.45)');
+      R(x - 3 + k * 7, 82 + bob + (((tt / 7 + k) | 0) % 2), 5, 1, 'rgba(255,255,255,.5)');
   }
-  bocadillo(104, 42, 'EW');
+  bocadillo(76, 32, ['EW', 'LAS ALBERCAS']);
 }
 
 /* g) Cuando me dejaba en mi casa: las torres grises, de noche */
@@ -2766,7 +2809,7 @@ function momCasa(tt, txt, veloz) {
     const p = Math.min(1, (tt - (tope + 70) / v) / (veloz ? 22 : 34));
     persona('santiago', 104 + p * 22, 73, false, p < 1, tt);
   }
-  cartelEscena([txt], 14);
+  cartelEscena(txt, 14);
 }
 
 /* f) El reveal party en su casa, que acabó en rojo */
@@ -4132,9 +4175,9 @@ const DESPEDIDA = [
   { t:['MAYBE ITS A RIDE...'], dur:130 },
   { e:momAlberca, dur:150 },
   { t:['OR COMMITMENT?'], dur:130 },
-  { e:momCasa, txt:'Y ME LLEVASTE A CASA...', dur:165 },
-  { e:momCasa, txt:'UNA Y OTRA VEZ...', veloz:true, dur:110 },
-  { e:momCasa, txt:'Y OTRA VEZ.', veloz:true, dur:110 },
+  { e:momCasa, txt:['TE LLEVO A TU CASA'], dur:165 },
+  { e:momCasa, txt:['TE LLEVO A TU CASA', 'OTRA VEZ'], veloz:true, dur:120 },
+  { e:momCasa, txt:['OTRA VEZ'], veloz:true, dur:110 },
   { t:['TBH IDK'], dur:120 },
   { t:["BUT I'M HAPPY TO BE", 'FIGURING OUT WITH YOU'], dur:190 },
   { t:['TE AMO,', 'FELICES 6 MESES'], dur:210 }

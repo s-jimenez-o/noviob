@@ -314,18 +314,18 @@ ni pantalla de créditos: de esta línea pasa directo a la despedida.
 1. **SOOO...** / **WHAT IS LOVE?**
 2. *(momento)* la cuadra de Luis Barragán: el muro rosa y la foto con flash
 3. **...**
-4. *(momento)* bailando tectonic en una casa, hasta que se resbala y se abre el codo — **AY.**
+4. *(momento)* bailando tectonic en una casa, hasta que se resbala y se abre el codo — **AY MI CODO**
 5. *(momento)* el **YALENDER REVEAL** en su casa: se pone todo rojo — **NO ENTRÉ.**
 6. **MAYBE ITS A FEELING...**
 7. *(momento)* la clase de cerámica, los dos en el torno y la maceta
 8. **MAYBE ITS A CHOICE...**
-9. *(momento)* el concierto, con su hermano y una amiga
+9. *(momento)* el concierto de **FKA TWIGS**, con su hermano y una amiga
 10. **MAYBE ITS A RIDE...**
-11. *(momento)* la alberca en Acapulco — **EW**
+11. *(momento)* la alberca — **EW** / **LAS ALBERCAS**
 12. **OR COMMITMENT?**
-13. *(momento)* las torres grises: **Y ME LLEVASTE A CASA...**
-14. *(la misma escena)* **UNA Y OTRA VEZ...**
-15. *(y otra vez)* **Y OTRA VEZ.**
+13. *(momento)* las torres grises: **TE LLEVO A TU CASA**
+14. *(la misma escena)* **TE LLEVO A TU CASA** / **OTRA VEZ**
+15. *(y otra vez)* **OTRA VEZ**
 16. **TBH IDK**
 17. **BUT I'M HAPPY TO BE** / **FIGURING OUT WITH YOU**
 18. **TE AMO,** / **FELICES 6 MESES**
