@@ -139,6 +139,15 @@ querría revisitar, y con nombres de capítulo ("EL SHOW DE DRAGS", no "llegaRob
 
 - `keys[k]` = está presionado (para caminar y para acelerar texto manteniendo A);
   `consumed(k)` = flanco de un toque (para confirmar). No mezclarlos.
+- **Toda pantalla interactiva que entra desde un guion necesita su contador de
+  gracia** (`medT`, `numT`, y ~20 cuadros antes de aceptar A). Si no, el mismo
+  toque con el que pasaste el último diálogo se cuenta como respuesta y sale un
+  error antes de que el jugador vea nada.
+- **Nunca dejes al jugador atorado.** Si algo se puede fallar, a la segunda o
+  tercera se explica y se avanza (el medidor pasa solo, el teclado suelta pista).
+- El canvas escucha `pointerdown` y traduce a coordenadas de 160×144
+  (`toqueEnPantalla`): así el teclado del 911 se puede picar con el dedo. Es el
+  patrón a seguir si otra pantalla necesita toque.
 - Mantener A/B acelera el texto ×3; un toque lo completa; otro toque pasa de página.
 
 ## El selector de escenas (herramienta de desarrollo)

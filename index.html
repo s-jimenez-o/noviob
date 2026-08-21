@@ -161,7 +161,7 @@
   /* ---------- Controles ---------- */
   .pad {
     display:flex; align-items:center; justify-content:space-between;
-    width:100%; padding:calc(1*var(--u)) calc(1*var(--u)) 0;
+    width:100%; padding:calc(2*var(--u)) calc(1*var(--u)) 0;
   }
 
   .dpad {
@@ -204,7 +204,7 @@
 
   .bottom {
     width:100%; display:flex; align-items:flex-end; justify-content:space-between;
-    padding:calc(2*var(--u)) calc(3*var(--u)) 0;
+    padding:calc(9*var(--u)) calc(3*var(--u)) calc(3*var(--u));
   }
   .sys { display:flex; gap:calc(13*var(--u)); padding-left:calc(6*var(--u)); }
   .sys button {
@@ -215,8 +215,11 @@
     transform:rotate(-22deg);
     box-shadow:0 calc(1.4*var(--u)) 0 #4e4860, inset 0 calc(.8*var(--u)) 0 rgba(255,255,255,.45);
   }
-  /* área táctil generosa sin agrandar el botón dibujado */
-  .sys button::before { content:""; position:absolute; inset:calc(-8*var(--u)) calc(-5*var(--u)); }
+  /* área táctil generosa, pero sin invadir la cruceta de arriba */
+  .sys button::before {
+    content:""; position:absolute;
+    inset:calc(-2*var(--u)) calc(-5*var(--u)) calc(-9*var(--u));
+  }
   .sys .lbl {
     font-size:calc(3.6*var(--u)); color:rgba(255,255,255,.60); letter-spacing:calc(.5*var(--u));
     text-align:center; margin-top:calc(4*var(--u)); font-weight:700;
@@ -253,8 +256,7 @@
   /* Selector de escenas: quítalo antes de regalarlo si no lo quieres */
   .escenas {
     right:auto;
-    left:calc(env(safe-area-inset-left, 0px) + 10px);
-    top:calc(env(safe-area-inset-top, 0px) + 56px);
+    left:50%; transform:translateX(-50%);
     background:rgba(120,200,255,.14); color:#bfe4ff;
     border-color:rgba(191,228,255,.35);
   }
@@ -635,6 +637,32 @@ const TOR_MESERA = [
   "kCsctttttttttsCk",
   ".kcttttttttttck."
 ];
+/* Las amigas de Santi: melena larga, sin el maquillaje de las drags */
+const CAB_AMIGA = [
+  "...kkkkkkkkkk...",
+  "..k2222222222k..",
+  ".k122222222221k.",
+  "k1122222222211k.",
+  "k1122ssssss221k.",
+  "k112skksskks21k.",
+  "k112seessees21k.",
+  "k112sssSSsss21k.",
+  "k112ssssssss21k.",
+  "k112sslmmlss21k.",
+  "k1122ssssss221k.",
+  ".k12ssssssss2k..",
+  "..k2ssssssss2k..",
+  "...k1ssssss1k..."
+];
+const TOR_AMIGA = [
+  ".kcccccccccccck.",
+  "kcccccccccccccck",
+  "kCcccccttcccccCk",
+  "kCccccttttccccCk",
+  "kCcccccttcccccCk",
+  "kCsccccccccccsCk",
+  ".kcccccccccccck."
+];
 const CAB_DRAG = [
   "....kkkkkkkk....",
   "..kk22222222kk..",
@@ -709,23 +737,23 @@ PERSONAJES.hermano = {
 };
 PERSONAJES.amiga1 = {
   nombre: 'LAS AMIGAS', tinta: '#eafff8',
-  quieto: armar(CAB_DRAG, TOR_MESERA, CUERPO_QUIETO),
-  paso:   armar(CAB_DRAG, TOR_MESERA, CUERPO_PASO),
+  quieto: armar(CAB_AMIGA, TOR_AMIGA, CUERPO_QUIETO),
+  paso:   armar(CAB_AMIGA, TOR_AMIGA, CUERPO_PASO),
   color: {
-    k:'#1b1226', '1':'#5c2f6a', '2':'#a04ec0',
-    s:'#f2c496', S:'#cd8f60', e:'#231624', b:'#f2c496', m:'#a8455a', l:'#d9366a',
+    k:'#1b1226', '1':'#3a2214', '2':'#6b4024',
+    s:'#f2c496', S:'#cd8f60', e:'#231624', b:'#f2c496', m:'#a8455a', l:'#c9556a',
     c:'#0f766a', C:'#0a5a52', t:'#8fe8d8',
     p:'#2a2438', Q:'#1e1a2a', o:'#241d2b', g:'#f2d35a'
   }
 };
 PERSONAJES.amiga2 = {
   nombre: 'LAS AMIGAS', tinta: '#2a2438',
-  quieto: armar(CAB_DRAG, TOR_MESERA, CUERPO_QUIETO),
-  paso:   armar(CAB_DRAG, TOR_MESERA, CUERPO_PASO),
+  quieto: armar(CAB_AMIGA, TOR_AMIGA, CUERPO_QUIETO),
+  paso:   armar(CAB_AMIGA, TOR_AMIGA, CUERPO_PASO),
   color: {
-    k:'#1b1226', '1':'#8a5a20', '2':'#e8b84c',
-    s:'#e8b088', S:'#c08a5c', e:'#231624', b:'#e8b088', m:'#a8455a', l:'#c9436a',
-    c:'#f2c14e', C:'#d9a52f', t:'#fff0c0',
+    k:'#1b1226', '1':'#1e1a20', '2':'#403a44',
+    s:'#c98f60', S:'#a87048', e:'#231624', b:'#c98f60', m:'#a8455a', l:'#b8455c',
+    c:'#c9436a', C:'#a02f52', t:'#f6c2d4',
     p:'#4a5a8a', Q:'#37456b', o:'#2b2320', g:'#e8e0f0'
   }
 };
@@ -820,7 +848,7 @@ let maleta = false;
 let medX = 13, medMsg = 0;
 let ingr = 0, llevando = false, muerdeT = 0;
 let numSel = 0, numTexto = [], numMsg = 0, numFallos = 0;
-let despIdx = 0, despT = 0, apagT = 0;
+let despIdx = 0, despT = 0, apagT = 0, numT = 0;
 function pintaCangurera(x, y, flip) {
   R(x + 1, y + 19, 14, 4, '#5cff3a');
   R(x + 1, y + 19, 14, 1, '#b6ff9e');
@@ -2260,6 +2288,15 @@ function ingrediente(k, x, y) {
     R(x + 1, y + 4, 8, 3, '#f2e8cc'); R(x + 3, y, 4, 2, '#8a2f28');
   }
 }
+/* Flechota apuntando a la izquierda, para señalar la cocina */
+function flechaCocina(x, y) {
+  for (let i = 0; i < 8; i++) R(x + i, y + 8 - i, 1, 1 + i * 2, '#e8a94c');
+  R(x + 8, y + 4, 14, 9, '#e8a94c');
+  for (let i = 0; i < 8; i++) R(x + i, y + 8 - i, 1, 1, '#fff6d0');
+  R(x + 8, y + 4, 14, 1, '#fff6d0');
+  for (let i = 0; i < 8; i++) R(x + i, y + 8 + i, 1, 1, '#a8702a');
+  R(x + 8, y + 12, 14, 1, '#a8702a');
+}
 function flechaEntrada(x, y) {
   for (let i = 0; i < 6; i++) R(x + 3 + i, y + i, 6 - i, 1, '#fff3ae');
   R(x, y + 6, 9, 1, '#fff3ae');
@@ -3630,7 +3667,6 @@ const PUERTO2 = [
   { e:'casaRoja', a:{swap:true}, q:'santiago', t:'NADA. UN FACESWAP.' },
   { e:'tiraPez', a:{}, dur:74 },
   /* superestrella */
-  { e:'mesaBaile', a:{}, q:'roberto', t:'PONLE SUPERESTRELLA.' },
   { e:'mesaBaile', a:{}, dur:124 },
   /* y el medidor se rompe */
   { e:'anuncioAmor', a:{}, dur:140 },
@@ -3853,6 +3889,27 @@ addEventListener('gesturestart', e => e.preventDefault());
 addEventListener('dblclick', e => e.preventDefault());
 function consumed(k) { if (pressed[k]) { pressed[k] = false; return true; } return false; }
 
+/* Tocar la pantalla: por ahora sólo sirve para el teclado del número */
+function toqueEnPantalla(clientX, clientY) {
+  const r = cv.getBoundingClientRect();
+  const x = (clientX - r.left) / r.width * 160;
+  const y = (clientY - r.top) / r.height * 144;
+  if (estado === 'numeros' && numMsg === 0 && numT > 20) {
+    for (let i = 0; i < 12; i++) {
+      if (!TECLAS[i]) continue;
+      const tx = TEC_X[i % 3], ty = TEC_Y[i / 3 | 0];
+      if (x >= tx - 2 && x <= tx + 34 && y >= ty - 2 && y <= ty + 17) {
+        numSel = i; marcarTecla(TECLAS[i]); return true;
+      }
+    }
+  }
+  return false;
+}
+cv.addEventListener('pointerdown', e => {
+  ensureAudio();
+  if (toqueEnPantalla(e.clientX, e.clientY)) e.preventDefault();
+}, { passive: false });
+
 
 /* ---------- Estado ---------- */
 let estado = 'boot';
@@ -3916,8 +3973,9 @@ function reiniciar() {
   saltoSel = 0; saltoTop = 0; saltoVuelve = 'titulo'; repite = 0;
   mes = 0; jug.x = 6; jug.mirando = 1;
   corazonTomado = false; cangurera = false; maleta = false; cuartoNoche = false;
-  medX = 13; medMsg = 0; ingr = 0; llevando = false; muerdeT = 0;
-  numSel = 0; numTexto = []; numMsg = 0; numFallos = 0;
+  medX = 13; medMsg = 0; medT = 0; medFallos = 0; medPasa = 0;
+  ingr = 0; llevando = false; muerdeT = 0;
+  numSel = 0; numTexto = []; numMsg = 0; numFallos = 0; numT = 0;
   despIdx = 0; despT = 0; apagT = 0;
   charla = []; charlaIdx = 0; pages = []; page = 0; revealed = 0; textTimer = 0;
   fade = 0; fadeDir = 0; pendiente = null;
@@ -4149,6 +4207,7 @@ function pantallaMenu(t) {
 }
 /* "¿Y TÚ CÓMO ESTABAS?": la respuesta sólo vale si se sale de la barra */
 const MED_MIN = 13, MED_MAX = 132, MED_OK = 118;
+let medT = 0, medFallos = 0, medPasa = 0;
 function flechita(x, y, dir, c) {
   for (let i = 0; i < 4; i++) R(dir > 0 ? x + i : x + 3 - i, y + i, 1, 7 - i * 2, c);
 }
@@ -4170,20 +4229,40 @@ function pantallaMedidor(t) {
   corazon(mx, 38, (t / 10 | 0) % 2);
   if (fuera) for (let i = 0; i < 3; i++)
     if (((t / 5 | 0) + i) % 3) destello(mx - 4 + i * 6, 32 + (i % 2) * 5, i % 2 ? '#ffe9a8' : '#ffffff');
-  if (medMsg > 0) {
+  if (medPasa > 0) {
+    R(10, 70, 140, 30, '#f6efdc');
+    centerText(72, 'SE SUPONE QUE TENÍAS', '#8a2f78', null);
+    centerText(82, 'QUE PONERLO MÁS DE', '#8a2f78', null);
+    centerText(92, 'LO QUE SE PUEDE.', '#8a2f78', null);
+  } else if (medMsg > 0) {
     centerText(74, 'MENTIROSO.', '#c9382f', null);
     centerText(85, 'OTRA VEZ.', '#8a7a68', null);
-  } else if ((t / 22 | 0) % 2) {
+  } else if (medT > 20 && (t / 22 | 0) % 2) {
     const txt = 'A = ESCOGER', x0 = Math.round((160 - (textW(txt) + 16)) / 2);
     flechita(x0, 79, -1, '#8a7a68'); flechita(x0 + 6, 79, 1, '#8a7a68');
     drawText(x0 + 16, 79, txt, '#8a7a68');
   }
 }
-function empezarMedidor() { medX = MED_MIN; medMsg = 0; estado = 'medidor'; }
+function empezarMedidor() {
+  medX = MED_MIN; medMsg = 0; medT = 0; medFallos = 0; medPasa = 0;
+  estado = 'medidor';
+}
 /* El teclado del número de la suerte */
 function empezarNumeros() {
-  numSel = 0; numTexto = []; numMsg = 0; numFallos = 0;
+  numSel = 0; numTexto = []; numMsg = 0; numFallos = 0; numT = 0;
   estado = 'numeros';
+}
+/* Marcar una tecla: lo usan el botón A y también el dedo en la pantalla */
+function marcarTecla(k) {
+  if (numMsg > 0 || !k) return;
+  if (k === 'C') { numTexto = []; blip(500); return; }
+  if (numTexto.length >= 3) return;
+  numTexto.push(k); blip(820);
+  if (numTexto.length < 3) return;
+  if (numTexto.join('') === '911') {
+    chime();
+    transicionar(() => correrGuion(TORRES, seguirNoche, true));
+  } else { buzz(); numFallos++; numMsg = numFallos >= 3 ? 38 : 78; }
 }
 function seguirNoche() { correrGuion(NOCHE2, () => correrGuion(ANTRO, menuBaile, true), true); }
 /* Dos semanas después: Roberto llega a la casa y hay que llevarlo a la cocina */
@@ -4626,7 +4705,8 @@ function loop() {
     persona('santiago', jug.x - 24, GROUND - 30, jug.mirando < 0, anda, t + 9);
     persona('roberto', jug.x, GROUND - 30, jug.mirando < 0, anda, t);
     frCuarto(t);
-    if ((t / 20 | 0) % 2) flechaEntrada(8, GROUND - 44);
+    /* la flechota que señala la cocina, con su vaivén */
+    flechaCocina(10 - ((t / 9 | 0) % 3) * 2, 64);
     avisoArriba('LA COCINA ESTÁ ALLÁ', 102);
     if (keys.left)  { jug.x -= 0.9; jug.mirando = -1; }
     if (keys.right) { jug.x += 0.9; jug.mirando = 1; }
@@ -4646,12 +4726,12 @@ function loop() {
 
     const enRefri  = jug.x < 34;
     const enEstufa = jug.x > 96;
-    if (ingr < INGREDIENTES.length)
-      avisoArriba(llevando ? 'LLÉVASELO PORFA' : 'PÁSAME ' + INGREDIENTES[ingr] + ' PORFA', 102);
-    if ((t / 18 | 0) % 2) {
-      if (!llevando && enRefri)  avisoArriba('A = ABRIR EL REFRI', 118);
-      if (llevando && enEstufa)  avisoArriba('A = DÁRSELO', 118);
+    if (ingr < INGREDIENTES.length) {
+      avisoArriba(llevando ? 'LLÉVASELO PORFA' : 'PÁSAME ' + INGREDIENTES[ingr] + ' PORFA', 100);
+      avisoArriba(llevando ? '(DÁSELO)' : '(ABRE EL REFRI)', 114);
     }
+    if ((t / 18 | 0) % 2 && ((!llevando && enRefri) || (llevando && enEstufa)))
+      avisoArriba('A', 128);
 
     if (keys.left)  { jug.x -= 0.9; jug.mirando = -1; }
     if (keys.right) { jug.x += 0.9; jug.mirando = 1; }
@@ -4669,9 +4749,10 @@ function loop() {
 
   /* --- El teclado: hay que atinarle al número de la suerte --- */
   if (estado === 'numeros') {
+    numT++;
     pantallaNumeros(t);
     if (numMsg > 0) { numMsg--; if (numMsg === 0) numTexto = []; }
-    else {
+    else if (numT > 20) {
       let f = numSel / 3 | 0, c = numSel % 3;
       if (consumed('up'))    f = (f + 3) % 4;
       if (consumed('down'))  f = (f + 1) % 4;
@@ -4679,19 +4760,7 @@ function loop() {
       if (consumed('right')) c = (c + 1) % 3;
       const nuevo = f * 3 + c;
       if (nuevo !== numSel && TECLAS[nuevo]) { numSel = nuevo; blip(660); }
-      if (consumed('a') || consumed('start')) {
-        const k = TECLAS[numSel];
-        if (k === 'C') { numTexto = []; blip(500); }
-        else if (k && numTexto.length < 3) {
-          numTexto.push(k); blip(820);
-          if (numTexto.length === 3) {
-            if (numTexto.join('') === '911') {
-              chime();
-              transicionar(() => correrGuion(TORRES, seguirNoche, true));
-            } else { buzz(); numFallos++; numMsg = numFallos >= 3 ? 38 : 78; }
-          }
-        }
-      }
+      if (consumed('a') || consumed('start')) marcarTecla(TECLAS[numSel]);
     }
     pasoFade();
     requestAnimationFrame(loop); return;
@@ -4699,15 +4768,23 @@ function loop() {
 
   /* --- El medidor: la respuesta sólo vale fuera de la barra --- */
   if (estado === 'medidor') {
+    medT++;
     pantallaMedidor(t);
-    if (medMsg > 0) { medMsg--; if (medMsg === 0) medX = MED_MIN; }
-    else {
+    if (medPasa > 0) {
+      medPasa--;
+      if (medPasa === 0) { chime(); transicionar(() => correrGuion(CIERRE, empezarCocina)); }
+    } else if (medMsg > 0) { medMsg--; if (medMsg === 0) medX = MED_MIN; }
+    else if (medT > 20) {
       if (keys.left)  medX -= 1.1;
       if (keys.right) medX += 1.1;
       medX = Math.max(MED_MIN, Math.min(MED_MAX, medX));
       if (consumed('a') || consumed('start')) {
         if (medX > MED_OK) { chime(); transicionar(() => correrGuion(CIERRE, empezarCocina)); }
-        else { buzz(); medMsg = 76; }
+        else {
+          buzz(); medFallos++;
+          /* a la segunda ya no lo dejamos sufrir: se lo explicamos y pasa */
+          if (medFallos >= 2) medPasa = 130; else medMsg = 76;
+        }
       }
     }
     pasoFade();

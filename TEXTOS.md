@@ -113,7 +113,7 @@ Cartel: **MÁS TARDE...** / **Y NINGUNA HACHA LANZADA.** — se queda hasta que 
 6. **SANTIAGO:** BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH...
 7. **SANTIAGO:** ¿A QUE NO ADIVINAS MI NÚMERO DE LA SUERTE?
 
-### El número de la suerte (jugable: teclado)
+### El número de la suerte (jugable: teclado, se puede picar con el dedo)
 
 - Título: **¿CUÁL ES MI NÚMERO** / **DE LA SUERTE?** · teclas **1-9**, **C** (borrar) y **0**
 - La respuesta es **911**. Si le pica a otra cosa: **ESE NO ES.** / **OTRA VEZ.**
@@ -234,8 +234,7 @@ La casa es abierta: pilares rojos en vez de pared, con la playa detrás.
 
 ### Superestrella
 
-1. **ROBERTO:** PONLE SUPERESTRELLA.
-2. (los dos bailando encima de la mesa) · Cartel: **SUPERESTRELLA**
+(los dos bailando encima de la mesa, sin diálogo) · Cartel: **SUPERESTRELLA**
 
 ### El love meter
 
@@ -247,6 +246,8 @@ La casa es abierta: pilares rojos en vez de pared, con la playa detrás.
 
 - **¿Y PARA TI?** · pista: **A = ESCOGER**
 - Si contesta dentro de la barra: **MENTIROSO.** / **OTRA VEZ.**
+- A la segunda ya no lo deja atorado: **SE SUPONE QUE TENÍAS** / **QUE PONERLO MÁS DE**
+  / **LO QUE SE PUEDE.** y pasa solo.
 - Sólo vale si saca el corazón fuera de la barra.
 
 ### El aeropuerto de Puerto Escondido
@@ -272,8 +273,8 @@ Avisos: **LA COCINA ESTÁ ALLÁ**
 
 ### La cocina (jugable: hay que sacar dos cosas del refri)
 
-Avisos: **PÁSAME EL QUESO PORFA** / **PÁSAME LA SALSA PORFA** ·
-**LLÉVASELO PORFA** · **A = ABRIR EL REFRI** · **A = DÁRSELO**
+Avisos: **PÁSAME EL QUESO PORFA** / **PÁSAME LA SALSA PORFA**, con **(ABRE EL REFRI)**
+abajo · al cargarlo: **LLÉVASELO PORFA** / **(DÁSELO)**
 
 ### Mientras se cocina
 
