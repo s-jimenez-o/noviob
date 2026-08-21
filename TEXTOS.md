@@ -309,7 +309,7 @@ ni pantalla de créditos: de esta línea pasa directo a la despedida.
 
 - **SANTIAGO:** SEIS MESES. NADA MAL PARA ALGUIEN CUYO PLAN IDEAL ERA GOING OUT AND BLACKING OUT.
 
-### La despedida (pantallas verdes y momentos, una A por pantalla)
+### La despedida (corre sola, como una secuencia de cine: ~45 segundos)
 
 1. **SOOO...** / **WHAT IS LOVE?**
 2. *(momento)* la cuadra de Luis Barragán: el muro rosa y la foto con flash

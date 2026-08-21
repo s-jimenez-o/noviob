@@ -122,7 +122,9 @@ No hay pantalla de créditos: la última línea de la historia pasa directo a la
 despedida. El juego abre con la pantalla verde preguntando **WHAT IS LOVE?** y cierra con la
 misma pantalla respondiéndola. `DESPEDIDA` es una lista de pasos que alternan
 pantallas verdes (`{t:[líneas]}`) con **momentos** reales de ellos dos
-(`{e:funcion, txt, veloz}`), a una A por paso. Los momentos son escenas de una sola
+(`{e:funcion, txt, veloz}`). **Corre sola**: cada paso tiene su `dur` y se funde a
+negro al entrar y al salir. Aquí no se pica nada — es cine, no diálogo; si agregas
+un paso, dale su `dur` (~130 para una frase, ~150-190 para un momento con animación). Los momentos son escenas de una sola
 función (`momBarragan`, `momTectonic`, `momYale`, `momCeramica`, `momConcierto`,
 `momAlberca`, `momCasa`) que pisan en `MOM_PIE = 116` en vez de `GROUND`, porque
 ahí no hay caja de diálogo y conviene usar toda la pantalla. Para agregar un

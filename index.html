@@ -4077,50 +4077,46 @@ function pantallaTitulo(t) {
 }
 
 /* Cierra como abrió: la pantalla verde de Game Boy, respondiendo la pregunta */
+/* Corre sola, como una secuencia de cine: cada paso dura lo suyo y se funde
+   con el siguiente. Aquí no se pica nada. */
 const DESPEDIDA = [
-  { t:['SOOO...', 'WHAT IS LOVE?'] },
-  { e:momBarragan },
-  { t:['...'] },
-  { e:momTectonic },
-  { e:momYale },
-  { t:['MAYBE ITS A FEELING...'] },
-  { e:momCeramica },
-  { t:['MAYBE ITS A CHOICE...'] },
-  { e:momConcierto },
-  { t:['MAYBE ITS A RIDE...'] },
-  { e:momAlberca },
-  { t:['OR COMMITMENT?'] },
-  { e:momCasa, txt:'Y ME LLEVASTE A CASA...' },
-  { e:momCasa, txt:'UNA Y OTRA VEZ...', veloz:true },
-  { e:momCasa, txt:'Y OTRA VEZ.', veloz:true },
-  { t:['TBH IDK'] },
-  { t:["BUT I'M HAPPY TO BE", 'FIGURING OUT WITH YOU'] },
-  { t:['TE AMO,', 'FELICES 6 MESES'] }
+  { t:['SOOO...', 'WHAT IS LOVE?'], dur:150 },
+  { e:momBarragan, dur:150 },
+  { t:['...'], dur:80 },
+  { e:momTectonic, dur:190 },
+  { e:momYale, dur:170 },
+  { t:['MAYBE ITS A FEELING...'], dur:130 },
+  { e:momCeramica, dur:150 },
+  { t:['MAYBE ITS A CHOICE...'], dur:130 },
+  { e:momConcierto, dur:150 },
+  { t:['MAYBE ITS A RIDE...'], dur:130 },
+  { e:momAlberca, dur:150 },
+  { t:['OR COMMITMENT?'], dur:130 },
+  { e:momCasa, txt:'Y ME LLEVASTE A CASA...', dur:165 },
+  { e:momCasa, txt:'UNA Y OTRA VEZ...', veloz:true, dur:110 },
+  { e:momCasa, txt:'Y OTRA VEZ.', veloz:true, dur:110 },
+  { t:['TBH IDK'], dur:120 },
+  { t:["BUT I'M HAPPY TO BE", 'FIGURING OUT WITH YOU'], dur:190 },
+  { t:['TE AMO,', 'FELICES 6 MESES'], dur:210 }
 ];
 function pantallaDespedida() {
-  const paso = DESPEDIDA[despIdx];
+  const paso = DESPEDIDA[despIdx], dur = paso.dur || 130;
   /* los momentos van a color; las preguntas, en la pantalla verde */
-  if (paso.e) {
-    paso.e(despT, paso.txt, paso.veloz);
-    if (despT > 34 && (despT / 22 | 0) % 2) {
-      R(139, 126, 15, 13, 'rgba(18,10,30,.75)');
-      R(139, 126, 15, 1, 'rgba(255,255,255,.25)');
-      drawText(144, 129, 'A', '#ffe9a8');
-    }
-    return;
+  if (paso.e) paso.e(despT, paso.txt, paso.veloz);
+  else {
+    R(0, 0, 160, 144, '#9bbc0f');
+    for (let y = 0; y < 144; y += 2) dith(0, y, 160, '#8fb00d', (y >> 1) & 1);
+    const ls = paso.t;
+    const y0 = 58 - (ls.length - 1) * 7;
+    for (let i = 0; i < ls.length; i++)
+      if (despT > 14 || i === 0) centerText(y0 + i * 13, ls[i], '#0f380f');
+    if (despT > 24) drawSprite(CORAZON, 76, y0 + ls.length * 13 + 10, false, PAL_COR_DMG);
   }
-  R(0, 0, 160, 144, '#9bbc0f');
-  for (let y = 0; y < 144; y += 2) dith(0, y, 160, '#8fb00d', (y >> 1) & 1);
-  const ls = paso.t;
-  const y0 = 58 - (ls.length - 1) * 7;
-  const listo = despT > 10;
-  for (let i = 0; i < ls.length; i++)
-    if (listo || i === 0) centerText(y0 + i * 13, ls[i], '#0f380f');
-  if (despT > 18) drawSprite(CORAZON, 76, y0 + ls.length * 13 + 10, false, PAL_COR_DMG);
-  if (despT > 30 && (despT / 22 | 0) % 2) {
-    R(139, 126, 15, 13, 'rgba(15,56,15,.72)');
-    drawText(144, 129, 'A', '#9bbc0f');
-  }
+  /* fundido de entrada y de salida, para que se sienta montaje */
+  if (despT < 9)
+    R(0, 0, 160, 144, 'rgba(8,4,16,' + ((9 - despT) / 11).toFixed(2) + ')');
+  else if (despT > dur - 9)
+    R(0, 0, 160, 144, 'rgba(8,4,16,' + ((despT - dur + 9) / 11).toFixed(2) + ')');
 }
 /* El apagón de una Game Boy de verdad: se cierra a una raya y luego a un punto */
 function pantallaApagado() {
@@ -4851,8 +4847,8 @@ function loop() {
   if (estado === 'despedida') {
     despT++;
     pantallaDespedida();
-    if (despT > 14 && (consumed('a') || consumed('start'))) {
-      if (despIdx < DESPEDIDA.length - 1) { despIdx++; despT = 0; blip(720); }
+    if (despT >= (DESPEDIDA[despIdx].dur || 130)) {
+      if (despIdx < DESPEDIDA.length - 1) { despIdx++; despT = 0; }
       else {
         apagT = 0; estado = 'apagando';
         if (musicOn) {
