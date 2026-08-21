@@ -121,7 +121,7 @@
   canvas {
     display:block; image-rendering:pixelated; image-rendering:crisp-edges;
     background:#101a2c;
-    width:calc(160*var(--u)); height:calc(144*var(--u));
+    width:calc(160*var(--u)); height:calc(168*var(--u));
     filter:saturate(1.07) contrast(1.02);
   }
   /* rejilla de píxeles del LCD */
@@ -288,7 +288,7 @@
   <div class="bezel">
     <div class="lamp"></div>
     <div class="lamplbl">POWER</div>
-    <div class="screen"><canvas id="lcd" width="160" height="144"></canvas></div>
+    <div class="screen"><canvas id="lcd" width="160" height="168"></canvas></div>
   </div>
 
   <div class="logo">
@@ -364,6 +364,7 @@ const HISTORIA = {
 
 
 /* ---------- Pantalla ---------- */
+const ALTO = 168;
 const cv = document.getElementById('lcd');
 const ctx = cv.getContext('2d');
 ctx.imageSmoothingEnabled = false;
@@ -967,6 +968,7 @@ const PERFILES = [
    del decorado en vez de quedar pegados encima.
    ========================================================================= */
 const GROUND = 92;
+/* Alto real de la pantalla. La Game Boy son 144, pero le dimos aire abajo. */
 
 function nube(x, y, e, c1, c2) {
   elipse(x,          y,           Math.round(6*e), Math.round(3*e), c1);
@@ -1001,7 +1003,7 @@ function bgParque(t) {
   R(94, GROUND - 16, 36, 4, '#b87c46'); R(94, GROUND - 16, 36, 1, '#d9a56d');
   R(96, GROUND - 26, 2, 14, '#5d5b66'); R(126, GROUND - 26, 2, 14, '#5d5b66');
   R(97, GROUND - 12, 3, 12, '#4d4b56'); R(124, GROUND - 12, 3, 12, '#4d4b56');
-  vgrad(0, GROUND, 160, 144 - GROUND, ['#77c667','#5faf55','#4a9247','#3b7a3c']);
+  vgrad(0, GROUND, 160, ALTO - GROUND, ['#77c667','#5faf55','#4a9247','#3b7a3c']);
   R(0, GROUND, 160, 1, '#a8e79c');
   elipse(80, GROUND + 15, 86, 7, '#c9ab6e');
   elipse(80, GROUND + 14, 80, 5, '#dcc189');
@@ -1018,7 +1020,7 @@ function frParque(t) {
 
 /* ---- 2. CINE ---- */
 function bgCine(t) {
-  vgrad(0, 0, 160, 144, ['#2c1c4e','#221540','#191030','#120b24']);
+  vgrad(0, 0, 160, ALTO, ['#2c1c4e','#221540','#191030','#120b24']);
   R(16, 6, 128, 58, '#0b0716');
   R(19, 9, 122, 52, '#e9e4ff');
   const f = (t / 46 | 0) % 3;
@@ -1030,7 +1032,7 @@ function bgCine(t) {
     const y = 62 + i * 2;
     R(19 - i * 2, y, 122 + i * 4, 2, 'rgba(232,224,255,' + (0.055 - i * 0.002).toFixed(3) + ')');
   }
-  vgrad(0, GROUND, 160, 144 - GROUND, ['#3a2450','#2b1a3d','#1e1230']);
+  vgrad(0, GROUND, 160, ALTO - GROUND, ['#3a2450','#2b1a3d','#1e1230']);
   R(0, GROUND, 160, 1, '#5a3a72');
 }
 function frCine(t) {
@@ -1058,7 +1060,7 @@ function bgLluvia(t) {
       for (let wx = bx + 3; wx < bx + 16; wx += 6)
         P(wx, wy, ((wx * wy + i) % 3) ? '#3f4864' : '#ffcf8a');
   }
-  vgrad(0, GROUND, 160, 144 - GROUND, ['#4a5470','#3e4762','#333b53']);
+  vgrad(0, GROUND, 160, ALTO - GROUND, ['#4a5470','#3e4762','#333b53']);
   R(0, GROUND, 160, 1, '#6b769a');
   for (let i = 0; i < 5; i++) {
     const px0 = 6 + i * 33, py0 = GROUND + 16 + (i % 2) * 18, w = 18 + (i % 3) * 7;
@@ -1074,7 +1076,7 @@ function bgLluvia(t) {
 }
 function frLluvia(t) {
   for (let i = 0; i < 26; i++) {
-    const rx = ((i * 53 + t * 5) % 190) - 15, ry = (i * 41 + t * 9) % 144;
+    const rx = ((i * 53 + t * 5) % 190) - 15, ry = (i * 41 + t * 9) % ALTO;
     R(rx, ry, 1, 6, 'rgba(226,240,255,.75)');
     P(rx - 1, ry + 6, 'rgba(226,240,255,.45)');
   }
@@ -1099,7 +1101,7 @@ function bgNoche(t) {
       for (let wx = i * 18 - 1; wx < i * 18 - 4 + bw - 2; wx += 5)
         if ((wx * wy + i * 7) % 3) P(wx, wy, ((wx + wy) % 5) ? '#ffcf7a' : '#8fe0ff');
   }
-  vgrad(0, GROUND, 160, 144 - GROUND, ['#2b1d4c','#221740','#191032']);
+  vgrad(0, GROUND, 160, ALTO - GROUND, ['#2b1d4c','#221740','#191032']);
   R(0, GROUND, 160, 1, '#5b3d80');
   for (let x = 0; x < 160; x += 16) R(x, GROUND + 8, 15, 1, '#3a2860');
 }
@@ -1160,10 +1162,10 @@ function bgCasa(t) {
   elipse(146, GROUND - 31, 7, 5, '#3f8f4f');
   elipse(143, GROUND - 34, 4, 3, '#6cbd6b');
 
-  vgrad(0, GROUND, 160, 144 - GROUND, ['#b0803f','#9c7038','#875f31','#74502a']);
+  vgrad(0, GROUND, 160, ALTO - GROUND, ['#b0803f','#9c7038','#875f31','#74502a']);
   R(0, GROUND, 160, 1, '#d4a86a');
-  for (let y = GROUND + 10; y < 144; y += 13) R(0, y, 160, 1, 'rgba(88,56,28,.35)');
-  for (let i = 0; i < 9; i++) R(i * 19 + 6, GROUND + 1, 1, 52, 'rgba(88,56,28,.40)');
+  for (let y = GROUND + 10; y < ALTO; y += 13) R(0, y, 160, 1, 'rgba(88,56,28,.35)');
+  for (let i = 0; i < 9; i++) R(i * 19 + 6, GROUND + 1, 1, ALTO - GROUND, 'rgba(88,56,28,.40)');
 }
 function frCasa(t) {
   elipse(80, 137, 68, 11, '#8a2f4b');
@@ -1199,17 +1201,17 @@ function bgCabana(t) {
   R(62, GROUND - 20, 46, 4, '#7a5230'); R(62, GROUND - 20, 46, 1, '#a3714a');
   R(66, GROUND - 16, 3, 16, '#5b3b20'); R(101, GROUND - 16, 3, 16, '#5b3b20');
   R(62, GROUND - 1, 46, 2, 'rgba(70,42,18,.30)');
-  vgrad(0, GROUND, 160, 144 - GROUND, ['#b0834c','#9c7241','#886036']);
+  vgrad(0, GROUND, 160, ALTO - GROUND, ['#b0834c','#9c7241','#886036']);
   R(0, GROUND, 160, 1, '#d4a56a');
-  for (let y = GROUND + 8; y < 144; y += 12) R(0, y, 160, 1, 'rgba(92,58,28,.45)');
-  for (let x = 0; x < 160; x += 26) R(x, GROUND, 1, 52, 'rgba(92,58,28,.35)');
+  for (let y = GROUND + 8; y < ALTO; y += 12) R(0, y, 160, 1, 'rgba(92,58,28,.45)');
+  for (let x = 0; x < 160; x += 26) R(x, GROUND, 1, ALTO - GROUND, 'rgba(92,58,28,.35)');
 }
 function frCabana(t) {
   R(94, 114, 56, 5, '#f2ead8'); R(94, 114, 56, 1, '#ffffff');
   R(99, 119, 3, 15, '#c9b89a'); R(141, 119, 3, 15, '#c9b89a');
   R(104, 110, 13, 4, '#d9c9a8'); R(104, 110, 13, 1, '#f2ead8');
   R(122, 109, 9, 5, '#3f8a58'); R(124, 106, 5, 3, '#69b96a');
-  R(0, 134, 160, 10, '#7a5230'); R(0, 134, 160, 1, '#a3714a');
+  R(0, 134, 160, ALTO - 134, '#7a5230'); R(0, 134, 160, 1, '#a3714a');
   R(0, 138, 160, 1, 'rgba(70,42,18,.35)');
 }
 
@@ -1250,7 +1252,7 @@ function bgCiudad(t) {
       for (let wx = i * 18 + 1; wx < i * 18 - 2 + bw - 2; wx += 5)
         if ((wx * wy + (t / 40 | 0)) % 3) P(wx, wy, ((wx + wy) % 4) ? '#ffd07a' : '#9ae8ff');
   }
-  vgrad(0, GROUND, 160, 144 - GROUND, ['#2a1b4e','#211540','#180f30']);
+  vgrad(0, GROUND, 160, ALTO - GROUND, ['#2a1b4e','#211540','#180f30']);
   R(0, GROUND, 160, 1, '#63428f');
   for (let x = 0; x < 160; x += 20) R(x, GROUND + 10, 12, 1, '#3d2a63');
 }
@@ -1322,10 +1324,10 @@ function bgCuarto(t) {
   R(78, 84, 9, 8, '#b06a44'); R(77, 82, 11, 3, '#c9825a');
   elipse(82, 78, 7, 5, '#3f8f4f'); elipse(80, 76, 3, 2, '#6cbd6b');
 
-  vgrad(0, GROUND, 160, 144 - GROUND, ['#8a6038','#7a5330','#6a4728','#5c3d22']);
+  vgrad(0, GROUND, 160, ALTO - GROUND, ['#8a6038','#7a5330','#6a4728','#5c3d22']);
   R(0, GROUND, 160, 1, '#ac7c4c');
-  for (let y = GROUND + 10; y < 144; y += 12) R(0, y, 160, 1, 'rgba(60,36,16,.40)');
-  for (let i = 0; i < 8; i++) R(i * 21 + 8, GROUND + 1, 1, 52, 'rgba(60,36,16,.35)');
+  for (let y = GROUND + 10; y < ALTO; y += 12) R(0, y, 160, 1, 'rgba(60,36,16,.40)');
+  for (let i = 0; i < 8; i++) R(i * 21 + 8, GROUND + 1, 1, ALTO - GROUND, 'rgba(60,36,16,.35)');
 }
 function frCuarto(t) {
   elipse(70, 132, 56, 10, '#2f5f8a');
@@ -1397,7 +1399,7 @@ function bgPatio(t) {
   for (let y = 55; y < 66; y += 2) R(51, y, 58, 1, 'rgba(255,255,255,.09)');
 
   /* piso de concreto con la luz que sale del túnel */
-  vgrad(0, GROUND, 160, 144 - GROUND, ['#8c8c95','#7a7a83','#696971','#5a5a62']);
+  vgrad(0, GROUND, 160, ALTO - GROUND, ['#8c8c95','#7a7a83','#696971','#5a5a62']);
   R(0, GROUND, 160, 1, '#adadb6');
   for (let i = 0; i < 14; i++)
     R(50 - i, GROUND + i * 2, 60 + i * 2, 2, 'rgba(255,196,110,' + (0.16 - i * 0.011).toFixed(3) + ')');
@@ -1465,12 +1467,12 @@ function bgInterior(t) {
   R(146, GROUND - 22, 12, 22, '#a8583a'); R(145, GROUND - 25, 14, 3, '#c47a54');
   elipse(152, GROUND - 32, 11, 9, '#2f7b45'); elipse(148, GROUND - 36, 5, 4, '#54ad60');
   /* piso */
-  vgrad(0, GROUND, 160, 144 - GROUND, n ? ['#2f2632','#28202a','#221b24'] : ['#8c7c6c','#7a6c5e','#685c50']);
+  vgrad(0, GROUND, 160, ALTO - GROUND, n ? ['#2f2632','#28202a','#221b24'] : ['#8c7c6c','#7a6c5e','#685c50']);
   R(0, GROUND, 160, 1, n ? '#4d4150' : '#a89684');
-  for (let y = GROUND + 9; y < 144; y += 12) R(0, y, 160, 1, 'rgba(28,18,22,.35)');
-  for (let x = 0; x < 160; x += 20) R(x, GROUND, 1, 52, 'rgba(28,18,22,.30)');
+  for (let y = GROUND + 9; y < ALTO; y += 12) R(0, y, 160, 1, 'rgba(28,18,22,.35)');
+  for (let x = 0; x < 160; x += 20) R(x, GROUND, 1, ALTO - GROUND, 'rgba(28,18,22,.30)');
   for (let i = 0; i < MESAS.length; i++) mesaFondo(MESAS[i]);
-  if (n) R(0, 0, 160, 144, 'rgba(20,8,30,.20)');
+  if (n) R(0, 0, 160, ALTO, 'rgba(20,8,30,.20)');
 }
 function frInterior(t) {}
 
@@ -1526,7 +1528,7 @@ function bgDrags(t) {
     P(bx - 5 + (i * 3) % 11, by - 4 + ((i * 5) % 9), ((i + (t / 5 | 0)) % 3) ? '#ccd8f0' : '#ffffff');
   /* pista */
   vgrad(0, 58, 160, GROUND - 58, ['#2b1042','#33144c']);
-  vgrad(0, GROUND, 160, 144 - GROUND, ['#3c1758','#301348','#251039']);
+  vgrad(0, GROUND, 160, ALTO - GROUND, ['#3c1758','#301348','#251039']);
   R(0, GROUND, 160, 1, '#7a2f96');
   for (let i = 0; i < 9; i++) {
     const lx = ((i * 23 + (t * 0.7 | 0)) % 190) - 15;
@@ -1541,7 +1543,7 @@ function frDrags(t) {
     const cx = -4 + i * 32, bob = ((t / 11 + i * 2) | 0) % 2;
     const top = 96 + (i % 2) * 4 + bob;
     elipse(cx, top, 6, 7, '#1e0f30');
-    R(cx - 10, top + 6, 20, 144 - top, '#1e0f30');
+    R(cx - 10, top + 6, 20, ALTO - top, '#1e0f30');
   }
   /* fila de enfrente */
   const pos = [-10, 22, 52, 108, 138, 162];
@@ -1549,7 +1551,7 @@ function frDrags(t) {
     const cx = pos[i], bob = ((t / 9 + i * 3) | 0) % 2;
     const top = 108 + (i % 2) * 7 + bob;
     elipse(cx, top, 8, 9, '#190b28');
-    R(cx - 13, top + 7, 26, 144 - top, '#190b28');
+    R(cx - 13, top + 7, 26, ALTO - top, '#190b28');
   }
 }
 
@@ -1603,9 +1605,9 @@ function bgAmigo(t) {
     elipse(cx, GROUND - 34 + bob, 5, 6, '#2a1f34');
     R(cx - 7, GROUND - 29 + bob, 14, 29, '#2a1f34');
   }
-  vgrad(0, GROUND, 160, 144 - GROUND, ['#7a5a3a','#6b4e32','#5c422a']);
+  vgrad(0, GROUND, 160, ALTO - GROUND, ['#7a5a3a','#6b4e32','#5c422a']);
   R(0, GROUND, 160, 1, '#9c7550');
-  for (let y = GROUND + 10; y < 144; y += 12) R(0, y, 160, 1, 'rgba(50,32,18,.40)');
+  for (let y = GROUND + 10; y < ALTO; y += 12) R(0, y, 160, 1, 'rgba(50,32,18,.40)');
 }
 function frAmigo(t) {}
 
@@ -1643,10 +1645,10 @@ function bgAero(t, trop) {
     R(sx, GROUND - 15, 20, 4, '#3a4a60');
     R(sx + 2, GROUND - 11, 2, 11, '#8a97a8'); R(sx + 16, GROUND - 11, 2, 11, '#8a97a8');
   }
-  vgrad(0, GROUND, 160, 144 - GROUND, ['#c2c9d2','#b0b8c2','#9ea6b1']);
+  vgrad(0, GROUND, 160, ALTO - GROUND, ['#c2c9d2','#b0b8c2','#9ea6b1']);
   R(0, GROUND, 160, 1, '#dbe1e8');
-  for (let y = GROUND + 10; y < 144; y += 13) R(0, y, 160, 1, 'rgba(70,80,95,.22)');
-  for (let x = 0; x < 160; x += 26) R(x, GROUND, 1, 52, 'rgba(70,80,95,.20)');
+  for (let y = GROUND + 10; y < ALTO; y += 13) R(0, y, 160, 1, 'rgba(70,80,95,.22)');
+  for (let x = 0; x < 160; x += 26) R(x, GROUND, 1, ALTO - GROUND, 'rgba(70,80,95,.20)');
 }
 function frAero(t) {}
 
@@ -1664,7 +1666,7 @@ function avion(x, y, roto) {
   if (roto) { R(x + 16, y + 1, 8, 10, '#2a1f28'); R(x + 20, y - 2, 4, 4, '#2a1f28'); }
 }
 function bgCielo(t) {
-  vgrad(0, 0, 160, 144, ['#4aa8e8','#74c2ef','#a2d8f5','#cfeaf8','#e8f4d8']);
+  vgrad(0, 0, 160, ALTO, ['#4aa8e8','#74c2ef','#a2d8f5','#cfeaf8','#e8f4d8']);
   for (let i = 0; i < 7; i++) {
     const cx = ((i * 41 - (t * 1.1 | 0)) % 220) - 30, cy = 14 + (i % 4) * 26;
     elipse(cx, cy, 12, 5, '#ffffff'); elipse(cx + 11, cy - 3, 9, 4, '#ffffff');
@@ -1712,7 +1714,7 @@ function bgPlaya(t) {
   R(96, 58, 26, 1, 'rgba(255,236,180,.7)');
   for (let i = 0; i < 8; i++) P(100 + i * 3, 60 + ((i + (t / 6 | 0)) % 3), '#ffeeb8');
   /* espuma y arena */
-  vgrad(0, 88, 160, 56, ['#e8d39a','#dcc287','#cfb277','#c2a468']);
+  vgrad(0, 88, 160, ALTO - 88, ['#e8d39a','#dcc287','#cfb277','#c2a468']);
   for (let i = 0; i < 3; i++) {
     const off = ((t * 0.6 | 0) % 20);
     dith(0, 88 + i, 160, '#ffffff', (i + off) & 1);
@@ -1755,7 +1757,7 @@ function cerro(cx, base, w, h, c, nieve) {
   }
 }
 function pista(cols, marca, s) {
-  vgrad(0, VIA_H, 160, 144 - VIA_H, cols);
+  vgrad(0, VIA_H, 160, ALTO - VIA_H, cols);
   R(0, VIA_H, 160, 1, 'rgba(255,255,255,.20)');
   for (let i = 0; i < 9; i++) {
     const x = (((i * 30 - (s * 2.6 | 0)) % 270) + 270) % 270 - 44;
@@ -2005,7 +2007,7 @@ function bgCasaR(t) {
   /* banqueta y calle */
   R(0, GROUND - 12, 160, 12, '#c8b89c'); R(0, GROUND - 12, 160, 1, '#e2d4b8');
   for (let x = 0; x < 160; x += 20) R(x, GROUND - 12, 1, 12, '#a89a80');
-  vgrad(0, GROUND, 160, 144 - GROUND, ['#6a6474','#5e5866','#514c5a']);
+  vgrad(0, GROUND, 160, ALTO - GROUND, ['#6a6474','#5e5866','#514c5a']);
   R(0, GROUND, 160, 1, '#8a8296');
   for (let x = 6; x < 160; x += 34) R(x, 136, 18, 2, 'rgba(255,255,255,.35)');
 }
@@ -2013,9 +2015,9 @@ function bgCasaR(t) {
 /* La "A" parpadeando: avisa que la pantalla espera a que le piquen */
 function botonA() {
   if ((t / 22 | 0) % 2 === 0) return;
-  R(139, 126, 15, 13, 'rgba(18,10,30,.75)');
-  R(139, 126, 15, 1, 'rgba(255,255,255,.25)');
-  drawText(144, 129, 'A', '#ffe9a8');
+  R(139, 150, 15, 13, 'rgba(18,10,30,.75)');
+  R(139, 150, 15, 1, 'rgba(255,255,255,.25)');
+  drawText(144, 153, 'A', '#ffe9a8');
 }
 /* Cartel de narrador: sin nombre y sin caja de diálogo */
 function cartelEscena(lineas, y0) {
@@ -2036,14 +2038,14 @@ function tarjetaTiki(t2, lineas) {
   for (let i = 0; i < n; i++)
     centerTextG(y0 + i * sep + (i % 2 ? 0 : w), lineas[i], '#12234c', 'rgba(255,255,255,.30)', 3);
   if (t2 > 40 && (t2 / 22 | 0) % 2) {
-    R(139, 126, 15, 13, 'rgba(18,35,76,.75)');
-    drawText(144, 129, 'A', '#f6e6c0');
+    R(139, 150, 15, 13, 'rgba(18,35,76,.75)');
+    drawText(144, 153, 'A', '#f6e6c0');
   }
 }
 
 function fondoTiki(t) {
   const cols = ['#e8a648','#d9c07a','#8fae3c','#f2d89a','#c98f3a','#a8c45a','#e0b45c','#7fa235'];
-  R(0, 0, 160, 144, '#f6e6c0');
+  R(0, 0, 160, ALTO, '#f6e6c0');
   for (let gy = 0; gy < 5; gy++) for (let gx = 0; gx < 6; gx++) {
     const i = gx * 5 + gy * 3;
     const x = gx * 27 + 1, y = gy * 29 + 1, w = 25, h = 27;
@@ -2065,7 +2067,7 @@ function fondoTiki(t) {
         P(x + px, y + 3 + k * 5 + (px % 6 < 3 ? px % 3 : 2 - (px % 3)), '#faf0d4');
     }
   }
-  for (let i = 0; i < 40; i++) P((i * 53) % 160, (i * 37) % 144, 'rgba(255,255,255,.12)');
+  for (let i = 0; i < 40; i++) P((i * 53) % 160, (i * 37) % ALTO, 'rgba(255,255,255,.12)');
 }
 
 /* ---- 17. PUERTO ESCONDIDO: LOS AMIGOS, LA CASA ROJA Y EL MEDIDOR ---- */
@@ -2118,7 +2120,7 @@ function bgJapon(t) {
   R(14, 48, 36, 4, '#d0342a'); R(12, 44, 40, 4, '#e8503a');
   R(18, 58, 28, 3, '#d0342a');
   /* piso */
-  vgrad(0, 88, 160, 56, ['#f2d8c0','#e8c6ac','#dcb69a']);
+  vgrad(0, 88, 160, ALTO - 88, ['#f2d8c0','#e8c6ac','#dcb69a']);
   R(0, 88, 160, 1, '#fff0e0');
   /* pétalos */
   for (let i = 0; i < 26; i++) {
@@ -2148,9 +2150,9 @@ function bgCasaRoja(t) {
              6, 2, a % 2 ? '#2f7b45' : '#3f9a52');
   }
   /* piso de barro */
-  vgrad(0, 84, 160, 60, ['#c96a4a','#b85c40','#a85038']);
+  vgrad(0, 84, 160, ALTO - 84, ['#c96a4a','#b85c40','#a85038']);
   R(0, 84, 160, 1, '#e08a64');
-  for (let y = 84; y < 144; y += 13) R(0, y, 160, 1, 'rgba(90,30,20,.32)');
+  for (let y = 84; y < ALTO; y += 13) R(0, y, 160, 1, 'rgba(90,30,20,.32)');
   for (let x = 0; x < 160; x += 16) R(x, 84, 1, 60, 'rgba(90,30,20,.24)');
   /* la viga y los pilares, rojos */
   R(0, 0, 160, 13, '#c9382f'); R(0, 0, 160, 2, '#e8604c'); R(0, 11, 160, 2, '#8f221c');
@@ -2282,10 +2284,10 @@ function bgCocina(t, olla) {
   /* trapo colgado */
   R(80, 62, 8, 12, '#e8506a'); R(80, 62, 8, 1, '#ff8fa3');
   /* el piso, igual que el del cuarto */
-  vgrad(0, GROUND, 160, 144 - GROUND, ['#8a6038','#7a5330','#6a4728','#5c3d22']);
+  vgrad(0, GROUND, 160, ALTO - GROUND, ['#8a6038','#7a5330','#6a4728','#5c3d22']);
   R(0, GROUND, 160, 1, '#ac7c4c');
-  for (let y = GROUND + 10; y < 144; y += 13) R(0, y, 160, 1, 'rgba(60,34,14,.38)');
-  for (let x = 0; x < 160; x += 22) R(x, GROUND, 1, 52, 'rgba(60,34,14,.26)');
+  for (let y = GROUND + 10; y < ALTO; y += 13) R(0, y, 160, 1, 'rgba(60,34,14,.38)');
+  for (let x = 0; x < 160; x += 22) R(x, GROUND, 1, ALTO - GROUND, 'rgba(60,34,14,.26)');
 }
 function frCocina(t) {
   /* tapetito de cocina, al frente */
@@ -2350,9 +2352,9 @@ function bgSala(t) {
   R(0, GROUND - 12, 160, 3, '#4d6a94'); R(0, GROUND - 12, 160, 1, '#b5cee8');
   R(0, GROUND - 9, 160, 9, '#5f80a8');
   /* el piso, igual que el del cuarto */
-  vgrad(0, GROUND, 160, 144 - GROUND, ['#8a6038','#7a5330','#6a4728','#5c3d22']);
+  vgrad(0, GROUND, 160, ALTO - GROUND, ['#8a6038','#7a5330','#6a4728','#5c3d22']);
   R(0, GROUND, 160, 1, '#ac7c4c');
-  for (let y = GROUND + 10; y < 144; y += 13) R(0, y, 160, 1, 'rgba(60,34,14,.38)');
+  for (let y = GROUND + 10; y < ALTO; y += 13) R(0, y, 160, 1, 'rgba(60,34,14,.38)');
   /* el sillón largo, donde se sientan todos */
   R(2, 56, 156, 8, '#8a2f4b');
   R(2, 62, 156, 30, '#a8405f'); R(2, 62, 156, 2, '#c9607e');
@@ -2390,9 +2392,9 @@ function mesaPizza(t, rebanadas) {
 }
 /* Se la comió: la pantalla de que ahí acabó todo */
 function pantallaEnvenenado(t) {
-  vgrad(0, 0, 160, 144, ['#12200f','#1a2e14','#24401b','#2e5222']);
+  vgrad(0, 0, 160, ALTO, ['#12200f','#1a2e14','#24401b','#2e5222']);
   for (let i = 0; i < 22; i++) {
-    const sx = (i * 53) % 158, sy = (i * 37) % 144;
+    const sx = (i * 53) % 158, sy = (i * 37) % ALTO;
     if ((t / 16 + i) % 6 > 3) P(sx, sy, i % 3 ? 'rgba(160,255,150,.40)' : 'rgba(255,255,255,.30)');
   }
   centerText(26, 'SE LA COMIÓ.', '#c8f2a8', 'rgba(6,16,6,.85)');
@@ -2405,7 +2407,7 @@ function pantallaEnvenenado(t) {
     elipse(70 + i * 6, 62 - h, 3, 2, 'rgba(150,240,140,' + Math.max(0, 0.38 - h / 92).toFixed(2) + ')');
   }
   centerText(104, 'FINAL MALO', '#8fe86a', 'rgba(6,16,6,.85)');
-  if ((t / 30 | 0) % 2) centerText(124, 'A = OTRA VEZ', '#ffffff', 'rgba(6,16,6,.85)');
+  if ((t / 30 | 0) % 2) centerText(148, 'A = OTRA VEZ', '#ffffff', 'rgba(6,16,6,.85)');
 }
 
 /* ---- 20. EL NÚMERO DE LA SUERTE ---- */
@@ -2468,7 +2470,7 @@ function pantallaNumeros(t) {
 
 /* Las torres, el avión y las dos explosiones */
 function torres(tt, conCorazones) {
-  vgrad(0, 0, 160, 144, ['#4aa8e8','#74c2ef','#a2d8f5','#cfeaf8']);
+  vgrad(0, 0, 160, ALTO, ['#4aa8e8','#74c2ef','#a2d8f5','#cfeaf8']);
   for (let i = 0; i < 4; i++) {
     const cx = ((i * 47 - (tt * 0.4 | 0)) % 200) - 20;
     elipse(cx, 16 + (i % 3) * 8, 11, 4, '#ffffff');
@@ -2476,9 +2478,9 @@ function torres(tt, conCorazones) {
   /* la ciudad de atrás */
   for (let i = 0; i < 11; i++) {
     const x = i * 15, h = 24 + ((i * 13) % 5) * 8;
-    R(x, 144 - h, 14, h, '#6f8399');
-    R(x, 144 - h, 14, 1, '#8fa2b6');
-    for (let wy = 144 - h + 4; wy < 140; wy += 7)
+    R(x, ALTO - h, 14, h, '#6f8399');
+    R(x, ALTO - h, 14, 1, '#8fa2b6');
+    for (let wy = ALTO - h + 4; wy < 140; wy += 7)
       for (let wx = x + 2; wx < x + 12; wx += 4)
         R(wx, wy, 2, 3, ((wx + wy + i) % 3) ? '#57697d' : '#c8dced');
   }
@@ -2546,7 +2548,7 @@ function momBarragan(tt) {
   R(132, 30, 28, 88, '#e8b93c'); R(132, 30, 2, 88, '#ffd769');
   R(132, 30, 28, 2, '#ffd769');
   /* banqueta */
-  vgrad(0, 118, 160, 26, ['#b8b0a8','#a49c94','#908880']);
+  vgrad(0, 118, 160, ALTO - 118, ['#b8b0a8','#a49c94','#908880']);
   R(0, 118, 160, 1, '#d4ccc4');
   for (let x = 0; x < 160; x += 30) R(x, 118, 1, 26, 'rgba(90,84,78,.35)');
   /* posando */
@@ -2554,7 +2556,7 @@ function momBarragan(tt) {
   persona('santiago', 78, MOM_Y, true, false, tt);
   /* el flash de la foto */
   const f = tt % 78;
-  if (f < 4) R(0, 0, 160, 144, 'rgba(255,255,255,' + (0.7 - f * .16).toFixed(2) + ')');
+  if (f < 4) R(0, 0, 160, ALTO, 'rgba(255,255,255,' + (0.7 - f * .16).toFixed(2) + ')');
   else if (f < 12) for (let i = 0; i < 4; i++)
     destello(48 + i * 22, 40 + (i % 2) * 8, i % 2 ? '#ffffff' : '#ffe9a8');
 }
@@ -2574,9 +2576,9 @@ function momTectonic(tt) {
   disco(139, 72, 8, '#3a2f48'); disco(139, 72, 4, '#1a1424');
   disco(139, 90, 5, '#3a2f48');
   /* piso */
-  vgrad(0, 100, 160, 44, ['#3f2a56','#33224a','#291b3d']);
+  vgrad(0, 100, 160, ALTO - 100, ['#3f2a56','#33224a','#291b3d']);
   R(0, 100, 160, 1, '#6a4a86');
-  for (let y = 112; y < 144; y += 12) R(0, y, 160, 1, 'rgba(20,10,34,.4)');
+  for (let y = 112; y < ALTO; y += 12) R(0, y, 160, 1, 'rgba(20,10,34,.4)');
   /* la secuencia: baila, resbala, cae, sangra */
   const s = PERSONAJES.santiago;
   if (tt < 64) {
@@ -2630,7 +2632,7 @@ function momCeramica(tt) {
   R(74, 22, 32, 26, '#8a6a4a'); R(76, 24, 28, 22, '#a8d8f0');
   R(89, 24, 2, 22, '#8a6a4a'); R(76, 34, 28, 2, '#8a6a4a');
   /* piso */
-  vgrad(0, 104, 160, 40, ['#a8825c','#96714e','#836142']);
+  vgrad(0, 104, 160, ALTO - 104, ['#a8825c','#96714e','#836142']);
   R(0, 104, 160, 1, '#c49a70');
   /* los dos en sus tornos */
   for (let i = 0; i < 2; i++) {
@@ -2687,7 +2689,7 @@ function momConcierto(tt) {
     elipse(bx, 34 + bob, 4, 5, '#0d0818');
     R(bx - 6, 38 + bob, 12, 10, '#0d0818');
   }
-  R(0, 96, 160, 48, '#120a22');
+  R(0, 96, 160, ALTO - 96, '#120a22');
   /* el público de enfrente */
   for (let i = 0; i < 9; i++) {
     const bx = -4 + i * 19, bob = ((tt / 7 + i) | 0) % 2;
@@ -2739,8 +2741,8 @@ function momAlberca(tt) {
   R(0, 74, 160, 6, '#f6f2e8'); R(0, 74, 160, 2, '#ffffff');
   R(0, 80, 160, 2, '#9fd4e4');
   /* el agua: turquesa de alberca, con su cuadrícula de mosaico */
-  vgrad(0, 82, 160, 62, ['#5fd0e8','#4bc0dc','#38aacd','#2a95bd']);
-  for (let y = 88; y < 144; y += 11) R(0, y, 160, 1, 'rgba(255,255,255,.16)');
+  vgrad(0, 82, 160, ALTO - 82, ['#5fd0e8','#4bc0dc','#38aacd','#2a95bd']);
+  for (let y = 88; y < ALTO; y += 11) R(0, y, 160, 1, 'rgba(255,255,255,.16)');
   for (let x = 0; x < 160; x += 16) R(x, 82, 1, 62, 'rgba(255,255,255,.13)');
   for (let i = 0; i < 8; i++) {
     const y = 90 + i * 7, off = ((tt * (0.5 + (i % 3) * 0.2) | 0) % 32);
@@ -2793,7 +2795,7 @@ function momCasa(tt, txt, veloz) {
     R(x + 7, 88, 10, 12, '#3a3f4a'); R(x + 7, 88, 10, 1, '#c0c6d2');
   }
   /* la calle */
-  vgrad(0, 100, 160, 44, ['#3a3648','#312e3e','#282634']);
+  vgrad(0, 100, 160, ALTO - 100, ['#3a3648','#312e3e','#282634']);
   R(0, 100, 160, 1, '#5a5568');
   for (let x = 6; x < 160; x += 34) R(x, 128, 18, 2, 'rgba(255,255,255,.28)');
   /* la banqueta y un poste */
@@ -2827,9 +2829,9 @@ function momYale(tt) {
   R(16, 34, 128, 15, '#241a3c'); R(16, 34, 128, 1, '#6a5490');
   centerText(38, 'YALENDER REVEAL', '#ffe9a8', 'rgba(0,0,0,.5)');
   /* la sala */
-  R(0, 100, 160, 44, '#4a3a2c');
+  R(0, 100, 160, ALTO - 100, '#4a3a2c');
   R(0, 100, 160, 1, '#6b5540');
-  for (let y = 112; y < 144; y += 12) R(0, y, 160, 1, 'rgba(30,20,12,.4)');
+  for (let y = 112; y < ALTO; y += 12) R(0, y, 160, 1, 'rgba(30,20,12,.4)');
   /* la mesa con la laptop */
   R(50, 96, 60, 4, '#a3714a'); R(50, 96, 60, 1, '#c99163');
   R(56, 100, 4, 16, '#7a5230'); R(100, 100, 4, 16, '#7a5230');
@@ -2847,7 +2849,7 @@ function momYale(tt) {
   if (rojo) {
     /* se pone todo rojo */
     const a = Math.min(.62, (tt - 58) / 40);
-    R(0, 0, 160, 144, 'rgba(200,20,26,' + a.toFixed(2) + ')');
+    R(0, 0, 160, ALTO, 'rgba(200,20,26,' + a.toFixed(2) + ')');
     if (tt > 78 && (tt / 12 | 0) % 2) bocadillo(6, 52, 'NO ENTRÉ.');
   }
 }
@@ -2868,7 +2870,7 @@ const FRENTES = { patio:frPatio, cuarto:frCuarto, interior:frInterior, drags:frD
    y encima se dibuja el teléfono. La "foto" de cada perfil es el mismo
    sprite del personaje pintado a doble tamaño.
    ========================================================================= */
-function velo(a) { R(0, 0, 160, 144, 'rgba(10,6,24,' + (a === undefined ? .5 : a) + ')'); }
+function velo(a) { R(0, 0, 160, ALTO, 'rgba(10,6,24,' + (a === undefined ? .5 : a) + ')'); }
 function centrarEn(x, w, y, s, c, som) { drawTextS(x + Math.round((w - textW(s)) / 2), y, s, c, som); }
 
 function cortar(str, n) {
@@ -3215,7 +3217,7 @@ const CUADROS_NOCHE = {
     sentadosEn(tt, cx);
     mesaFrente(cx);
     const p = Math.min(1, tt / 40);
-    R(0, 0, 160, 144, 'rgba(14,6,26,' + (p * 0.55).toFixed(2) + ')');
+    R(0, 0, 160, ALTO, 'rgba(14,6,26,' + (p * 0.55).toFixed(2) + ')');
     if (tt > 40) interiorNoche = true;
     if (tt > 46) centerText(16, 'MÁS TARDE...', '#ffe9a8', 'rgba(10,4,20,.9)');
     if (tt > 56) centerText(28, 'Y NINGUNA HACHA', '#ffe9a8', 'rgba(10,4,20,.9)');
@@ -3379,11 +3381,11 @@ Object.assign(CUADROS, {
     bgCielo(tt);
     if (tt < 8) avion(62, 62, tt > 3);
     else explosion(80, 68, tt - 8);
-    if (tt > 10 && tt < 22) R(0, 0, 160, 144, 'rgba(255,240,190,' + ((22 - tt) / 26).toFixed(2) + ')');
+    if (tt > 10 && tt < 22) R(0, 0, 160, ALTO, 'rgba(255,240,190,' + ((22 - tt) / 26).toFixed(2) + ')');
   },
   /* ---- si lo invita: la semana que viene y el viaje ---- */
   semana: (tt) => {
-    R(0, 0, 160, 144, '#141026');
+    R(0, 0, 160, ALTO, '#141026');
     for (let i = 0; i < 24; i++) {
       const x = (((i * 43 - tt * 7) % 210) + 210) % 210 - 26;
       R(x, 6 + ((i * 29) % 132), 12, 1, 'rgba(255,233,168,' + (0.08 + (i % 3) * 0.07).toFixed(2) + ')');
@@ -3510,8 +3512,8 @@ Object.assign(CUADROS, {
     }
   },
   anuncioAmor: (tt) => {
-    vgrad(0, 0, 160, 144, ['#2a1140','#3a1a55','#4a2168']);
-    for (let i = 0; i < 22; i++) P((i * 53) % 160, (i * 37 + (tt / 3 | 0)) % 144, 'rgba(255,255,255,.10)');
+    vgrad(0, 0, 160, ALTO, ['#2a1140','#3a1a55','#4a2168']);
+    for (let i = 0; i < 22; i++) P((i * 53) % 160, (i * 37 + (tt / 3 | 0)) % ALTO, 'rgba(255,255,255,.10)');
     R(10, 40, 142, 64, 'rgba(10,4,24,.45)');
     R(8, 38, 142, 64, '#f6efdc');
     R(8, 38, 142, 1, '#241a3c'); R(8, 101, 142, 1, '#241a3c');
@@ -3524,8 +3526,8 @@ Object.assign(CUADROS, {
     if (tt > 74 && (tt / 8 | 0) % 2) corazon(58, 87, true);
   },
   lovemeter: (tt) => {
-    vgrad(0, 0, 160, 144, ['#2a1140','#3a1a55','#4a2168']);
-    for (let i = 0; i < 22; i++) P((i * 53) % 160, (i * 37 + (tt / 3 | 0)) % 144, 'rgba(255,255,255,.10)');
+    vgrad(0, 0, 160, ALTO, ['#2a1140','#3a1a55','#4a2168']);
+    for (let i = 0; i < 22; i++) P((i * 53) % 160, (i * 37 + (tt / 3 | 0)) % ALTO, 'rgba(255,255,255,.10)');
     cajaAmor();
     barraAmor(52, 'SANTIAGO', tt / 62, tt > 68 ? Math.min((tt - 68) * 0.9, 16) : 0);
     if (tt > 96) explosion(148, 66, (tt - 96) * 0.7);
@@ -3620,7 +3622,7 @@ Object.assign(CUADROS, {
     else if (tt < 60) {
       R(86, 58, 16, 14, 'rgba(110,200,90,' + Math.min(.55, (tt - 26) / 60).toFixed(2) + ')');
       if ((tt / 4 | 0) % 2) drawTextS(104, 52, '...', '#c8f2a8', 'rgba(6,16,6,.7)');
-    } else R(0, 0, 160, 144, 'rgba(20,40,16,' + Math.min(1, (tt - 60) / 24).toFixed(2) + ')');
+    } else R(0, 0, 160, ALTO, 'rgba(20,40,16,' + Math.min(1, (tt - 60) / 24).toFixed(2) + ')');
   },
   besoCocina: (tt, a) => {
     bgCocina(tt, true);
@@ -3765,7 +3767,7 @@ const CIERRE = [
 
 
 /* ---------- Caja de diálogo ---------- */
-const BOX_Y = 96, BOX_H = 46, MAXCH = 23;
+const BOX_Y = 120, BOX_H = 46, MAXCH = 23;
 
 function wrap(str) {
   const words = str.toUpperCase().split(/\s+/);
@@ -3933,11 +3935,11 @@ addEventListener('dblclick', e => e.preventDefault());
 function consumed(k) { if (pressed[k]) { pressed[k] = false; return true; } return false; }
 
 /* Tocar la pantalla: por ahora sólo sirve para el teclado del número */
-/* Pasa de píxeles de pantalla a los 160x144 del juego */
+/* Pasa de píxeles de pantalla a los 160xALTO del juego */
 function aLCD(clientX, clientY) {
   const r = cv.getBoundingClientRect();
   return { x: (clientX - r.left) / r.width * 160,
-           y: (clientY - r.top)  / r.height * 144 };
+           y: (clientY - r.top)  / r.height * ALTO };
 }
 /* La lista de escenas se arrastra con el dedo */
 const LIS_Y0 = 15, LIS_ALTO = 10;
@@ -3954,7 +3956,7 @@ function toqueEnPantalla(clientX, clientY) {
       }
     }
   }
-  if (estado === 'saltos' && y > LIS_Y0 - 3 && y < 130) {
+  if (estado === 'saltos' && y > LIS_Y0 - 3 && y < 154) {
     arrastra = true; arrY = y; arrTop = saltoTop; arrMovido = 0;
     return true;
   }
@@ -4085,22 +4087,22 @@ function pasoFade() {
     fade = 0; fadeDir = 0; return;
   }
   const x = (fadeDir === 1) ? 0 : 160 - fade;
-  R(x, 0, fade, 144, '#120b24');
-  R(fadeDir === 1 ? fade - 2 : x, 0, 2, 144, '#5f34a0');
+  R(x, 0, fade, ALTO, '#120b24');
+  R(fadeDir === 1 ? fade - 2 : x, 0, 2, ALTO, '#5f34a0');
 }
 
 
 /* ---------- Pantallas fijas ---------- */
 function fondoMenu(t) {
-  vgrad(0, 0, 160, 144, ['#2e1560','#431c74','#5c2380','#7a2b7c','#a03a76','#c04a72','#dc6272','#f07a72']);
+  vgrad(0, 0, 160, ALTO, ['#2e1560','#431c74','#5c2380','#7a2b7c','#a03a76','#c04a72','#dc6272','#f07a72']);
   for (let i = 0; i < 40; i++) {
-    const sx = (i * 53) % 158, sy = (i * 31) % 144;
+    const sx = (i * 53) % 158, sy = (i * 31) % ALTO;
     if ((t / 15 + i) % 5 > 2) P(sx, sy, 'rgba(255,255,255,.55)');
   }
   /* rayos diagonales suaves de fondo */
   for (let i = -20; i < 40; i++) {
     const x = i * 8 + ((t * 0.25) % 16 | 0);
-    if (i % 2) R(x, 0, 3, 144, 'rgba(255,255,255,.045)');
+    if (i % 2) R(x, 0, 3, ALTO, 'rgba(255,255,255,.045)');
   }
 }
 function panel(x, y, w, h) {
@@ -4116,10 +4118,10 @@ function panel(x, y, w, h) {
    desde arriba, suena el "ding" y de ahí el juego ya sale a color. */
 const PAL_COR_DMG = { k:'#0f380f', R:'#306230', H:'#8bac0f' };
 function pantallaBoot() {
-  R(0, 0, 160, 144, '#9bbc0f');
-  for (let y = 0; y < 144; y += 2) dith(0, y, 160, '#8fb00d', (y >> 1) & 1);
+  R(0, 0, 160, ALTO, '#9bbc0f');
+  for (let y = 0; y < ALTO; y += 2) dith(0, y, 160, '#8fb00d', (y >> 1) & 1);
   const p = Math.min(1, bootT / 50);
-  const y = Math.round(-12 + p * 72);
+  const y = Math.round(-12 + p * 84);
   centerText(y, 'WHAT IS LOVE?', '#0f380f');
   if (bootT > 54) {
     drawSprite(CORAZON, 76, y + 18, false, PAL_COR_DMG);
@@ -4147,7 +4149,7 @@ function pantallaTitulo(t) {
   centerText(47, HISTORIA.fecha, '#c9a8e8', 'rgba(30,8,40,.8)');
 
   /* los dos parados en su lomita, ya de atardecer */
-  R(0, 106, 160, 38, 'rgba(16,6,30,.62)');
+  R(0, 106, 160, ALTO - 106, 'rgba(16,6,30,.62)');
   R(0, 106, 160, 1, 'rgba(255,190,140,.45)');
   persona('roberto', 38, 76, false, false, t);
   persona('santiago', 102, 76, true, false, t);
@@ -4155,8 +4157,8 @@ function pantallaTitulo(t) {
   drawTextS(26, 110, 'ROBERTO',  '#ffd9ec', 'rgba(20,6,26,.8)');
   drawTextS(87, 110, 'SANTIAGO', '#ffd9ec', 'rgba(20,6,26,.8)');
 
-  if ((t / 30 | 0) % 2) centerText(122, "PRESIONA A", '#ffe9a8', 'rgba(60,10,50,.85)');
-  centerText(133, "-- LADO A --", 'rgba(255,255,255,.7)');
+  if ((t / 30 | 0) % 2) centerText(146, "PRESIONA A", '#ffe9a8', 'rgba(60,10,50,.85)');
+  centerText(157, "-- LADO A --", 'rgba(255,255,255,.7)');
 }
 
 /* Cierra como abrió: la pantalla verde de Game Boy, respondiendo la pregunta */
@@ -4187,39 +4189,39 @@ function pantallaDespedida() {
   /* los momentos van a color; las preguntas, en la pantalla verde */
   if (paso.e) paso.e(despT, paso.txt, paso.veloz);
   else {
-    R(0, 0, 160, 144, '#9bbc0f');
-    for (let y = 0; y < 144; y += 2) dith(0, y, 160, '#8fb00d', (y >> 1) & 1);
+    R(0, 0, 160, ALTO, '#9bbc0f');
+    for (let y = 0; y < ALTO; y += 2) dith(0, y, 160, '#8fb00d', (y >> 1) & 1);
     const ls = paso.t;
-    const y0 = 58 - (ls.length - 1) * 7;
+    const y0 = 70 - (ls.length - 1) * 7;
     for (let i = 0; i < ls.length; i++)
       if (despT > 14 || i === 0) centerText(y0 + i * 13, ls[i], '#0f380f');
     if (despT > 24) drawSprite(CORAZON, 76, y0 + ls.length * 13 + 10, false, PAL_COR_DMG);
   }
   /* fundido de entrada y de salida, para que se sienta montaje */
   if (despT < 9)
-    R(0, 0, 160, 144, 'rgba(8,4,16,' + ((9 - despT) / 11).toFixed(2) + ')');
+    R(0, 0, 160, ALTO, 'rgba(8,4,16,' + ((9 - despT) / 11).toFixed(2) + ')');
   else if (despT > dur - 9)
-    R(0, 0, 160, 144, 'rgba(8,4,16,' + ((despT - dur + 9) / 11).toFixed(2) + ')');
+    R(0, 0, 160, ALTO, 'rgba(8,4,16,' + ((despT - dur + 9) / 11).toFixed(2) + ')');
 }
 /* El apagón de una Game Boy de verdad: se cierra a una raya y luego a un punto */
 function pantallaApagado() {
-  R(0, 0, 160, 144, '#0b0a10');
+  R(0, 0, 160, ALTO, '#0b0a10');
   const p = apagT;
   if (p < 18) {
-    const h = Math.max(2, Math.round(144 * (1 - p / 18)));
-    const y = Math.round(72 - h / 2);
+    const h = Math.max(2, Math.round(ALTO * (1 - p / 18)));
+    const y = Math.round(ALTO / 2 - h / 2);
     R(0, y, 160, h, '#9bbc0f');
     for (let yy = y; yy < y + h; yy += 2) dith(0, yy, 160, '#8fb00d', (yy >> 1) & 1);
     const ls = DESPEDIDA[DESPEDIDA.length - 1].t;
-    if (h > 40) for (let i = 0; i < ls.length; i++) centerText(51 + i * 13, ls[i], '#0f380f');
+    if (h > 40) for (let i = 0; i < ls.length; i++) centerText(63 + i * 13, ls[i], '#0f380f');
   } else if (p < 34) {
     const w = Math.max(3, Math.round(160 * (1 - (p - 18) / 16)));
-    R(Math.round(80 - w / 2), 71, w, 2, '#d8f27a');
+    R(Math.round(80 - w / 2), 83, w, 2, '#d8f27a');
   } else if (p < 42) {
-    R(78, 70, 4, 4, 'rgba(216,242,122,' + ((42 - p) / 8).toFixed(2) + ')');
+    R(78, 82, 4, 4, 'rgba(216,242,122,' + ((42 - p) / 8).toFixed(2) + ')');
   }
   if (p > 76 && (p / 32 | 0) % 2)
-    centerText(126, 'A = OTRA VEZ', 'rgba(180,214,90,.5)', null);
+    centerText(150, 'A = OTRA VEZ', 'rgba(180,214,90,.5)', null);
 }
 
 
@@ -4247,7 +4249,7 @@ function pantallaMenu(t) {
   centerText(BOX_Y + 2, menu.pregunta, p.tinta, 'rgba(0,0,0,.35)');
   for (let i = 0; i < menu.ops.length; i++) {
     const oy = BOX_Y + 14 + i * 10;
-    if (menu.sel === i) { R(8, oy - 2, 144, 10, '#e8d9b8'); corazon(11, oy - 1, (t / 12 | 0) % 2); }
+    if (menu.sel === i) { R(8, oy - 2, ALTO, 10, '#e8d9b8'); corazon(11, oy - 1, (t / 12 | 0) % 2); }
     drawText(23, oy, menu.ops[i], menu.sel === i ? '#8a2f78' : '#9a8a68');
   }
 }
@@ -4258,12 +4260,12 @@ function flechita(x, y, dir, c) {
   for (let i = 0; i < 4; i++) R(dir > 0 ? x + i : x + 3 - i, y + i, 1, 7 - i * 2, c);
 }
 function pantallaMedidor(t) {
-  vgrad(0, 0, 160, 144, ['#2a1140','#3a1a55','#4a2168']);
-  for (let i = 0; i < 24; i++) P((i * 53) % 160, (i * 37 + (t / 3 | 0)) % 144, 'rgba(255,255,255,.10)');
-  R(8, 22, 144, 78, 'rgba(10,4,24,.45)');
-  R(6, 20, 144, 78, '#f6efdc');
-  R(6, 20, 144, 12, '#d9366a'); R(6, 20, 144, 1, '#ff88a8');
-  R(6, 20, 144, 1, '#241a3c'); R(6, 97, 144, 1, '#241a3c');
+  vgrad(0, 0, 160, ALTO, ['#2a1140','#3a1a55','#4a2168']);
+  for (let i = 0; i < 24; i++) P((i * 53) % 160, (i * 37 + (t / 3 | 0)) % ALTO, 'rgba(255,255,255,.10)');
+  R(8, 22, ALTO, 78, 'rgba(10,4,24,.45)');
+  R(6, 20, ALTO, 78, '#f6efdc');
+  R(6, 20, ALTO, 12, '#d9366a'); R(6, 20, ALTO, 1, '#ff88a8');
+  R(6, 20, ALTO, 1, '#241a3c'); R(6, 97, ALTO, 1, '#241a3c');
   R(6, 20, 1, 78, '#241a3c'); R(149, 20, 1, 78, '#241a3c');
   centerText(23, '¿Y PARA TI?', '#ffffff', 'rgba(0,0,0,.4)');
   R(15, 52, 102, 14, '#3a2f48'); R(16, 53, 100, 12, '#2a2035');
@@ -4377,9 +4379,9 @@ function pantallaPiano(t) {
 }
 
 function pantallaExplotado(t) {
-  vgrad(0, 0, 160, 144, ['#1a1020','#2a1424','#3a1a26','#4a2028']);
+  vgrad(0, 0, 160, ALTO, ['#1a1020','#2a1424','#3a1a26','#4a2028']);
   for (let i = 0; i < 26; i++) {
-    const sx = (i * 53) % 158, sy = (i * 37) % 144;
+    const sx = (i * 53) % 158, sy = (i * 37) % ALTO;
     if ((t / 18 + i) % 6 > 3) P(sx, sy, i % 3 ? 'rgba(255,190,120,.45)' : 'rgba(255,255,255,.35)');
   }
   centerText(26, 'NO LE DIJO.', '#ffe9a8', 'rgba(20,6,16,.85)');
@@ -4390,13 +4392,13 @@ function pantallaExplotado(t) {
   R(72, 66, 10, 4, '#8a8f98'); R(84, 62, 5, 6, '#c9553c');
   R(64, 74, 6, 3, '#8a8f98');
   centerText(104, 'FINAL MALO', '#e8433c', 'rgba(20,6,16,.85)');
-  if ((t / 30 | 0) % 2) centerText(124, 'A = OTRA VEZ', '#ffffff', 'rgba(20,6,16,.85)');
+  if ((t / 30 | 0) % 2) centerText(148, 'A = OTRA VEZ', '#ffffff', 'rgba(20,6,16,.85)');
 }
 
 function pantallaGameOver(t) {
-  vgrad(0, 0, 160, 144, ['#150e22','#24122e','#331636','#43193a']);
+  vgrad(0, 0, 160, ALTO, ['#150e22','#24122e','#331636','#43193a']);
   for (let i = 0; i < 20; i++) {
-    const sx = (i * 71) % 158, sy = (i * 43) % 144;
+    const sx = (i * 71) % 158, sy = (i * 43) % ALTO;
     if ((t / 20 + i) % 6 > 3) P(sx, sy, 'rgba(255,255,255,.30)');
   }
   centerText(26, 'SE FUE.', '#ffe9a8', 'rgba(20,6,24,.85)');
@@ -4406,7 +4408,7 @@ function pantallaGameOver(t) {
   R(70, 91, 4, 2, PERSONAJES.roberto.color.o);
   R(80, 91, 4, 2, PERSONAJES.roberto.color.o);
   centerText(104, 'FINAL MALO', '#e8355c', 'rgba(20,6,24,.85)');
-  if ((t / 30 | 0) % 2) centerText(124, 'A = OTRA VEZ', '#ffffff', 'rgba(20,6,24,.85)');
+  if ((t / 30 | 0) % 2) centerText(148, 'A = OTRA VEZ', '#ffffff', 'rgba(20,6,24,.85)');
 }
 
 /* La cangurera tirada en la cama, esperando a que la levanten */
@@ -4490,7 +4492,7 @@ const SALTOS = [
   { n:'LA DESPEDIDA',       f:() => { despIdx = 0; despT = 0; estado = 'despedida'; } }
 ];
 
-const SALTOS_VIS = 11;
+const SALTOS_VIS = 13;
 
 function abrirSaltos() {
   /* durante un barrido no se abre: se perdería lo que quedó pendiente */
@@ -4508,7 +4510,7 @@ function saltarA(i) {
   SALTOS[i].f();
 }
 function pantallaSaltos(t) {
-  vgrad(0, 0, 160, 144, ['#1a0f2e','#22143c','#2a1848','#331d54']);
+  vgrad(0, 0, 160, ALTO, ['#1a0f2e','#22143c','#2a1848','#331d54']);
   R(0, 0, 160, 13, '#5f34a0'); R(0, 0, 160, 1, '#8f63d6'); R(0, 12, 160, 1, '#2a1550');
   drawText(4, 3, 'IR A...', '#ffffff');
   drawText(110, 3, saltoSel + '/' + (SALTOS.length - 1), '#d9c2ff');
@@ -4527,13 +4529,13 @@ function pantallaSaltos(t) {
   }
   /* barra de desplazamiento */
   if (SALTOS.length > SALTOS_VIS) {
-    const alto = Math.max(8, Math.round(114 * SALTOS_VIS / SALTOS.length));
-    const arr = Math.round(114 * saltoTop / SALTOS.length);
-    R(157, 15, 2, 114, '#3a2560');
+    const alto = Math.max(8, Math.round(138 * SALTOS_VIS / SALTOS.length));
+    const arr = Math.round(138 * saltoTop / SALTOS.length);
+    R(157, 15, 2, 138, '#3a2560');
     R(157, 15 + arr, 2, alto, '#a882e8');
   }
-  R(0, 131, 160, 13, '#2a1550'); R(0, 131, 160, 1, '#5f34a0');
-  drawText(4, 134, 'B O SELECT = VOLVER', '#bda6e4');
+  R(0, 155, 160, 13, '#2a1550'); R(0, 155, 160, 1, '#5f34a0');
+  drawText(4, 158, 'B O SELECT = VOLVER', '#bda6e4');
 }
 
 
@@ -4614,7 +4616,7 @@ function charlaEnPantalla() {
 
 function loop() {
   t++;
-  ctx.clearRect(0, 0, 160, 144);
+  ctx.clearRect(0, 0, 160, ALTO);
   const hablando = (estado === 'dialogo' || estado === 'dialogoFinal');
 
   /* SELECT abre y cierra el selector de escenas desde donde sea */
