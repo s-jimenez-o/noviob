@@ -1359,71 +1359,110 @@ function cuniaDer(x2, y, w, h, c, alReves) {
   }
 }
 function bgPatio(t) {
-  vgrad(0, 0, 160, 14, ['#7fb4d8','#a6cfe6','#cde6ee']);
-
-  /* estructura de acero con lámina */
-  R(0, 0, 160, 7, '#1c1c24');
-  for (let x = 0; x < 160; x += 5) R(x, 0, 2, 7, '#2e2e3a');
-  R(0, 7, 160, 3, '#121218');
-
-  /* plantas colgando de la viga */
-  for (let i = 0; i < 9; i++) {
-    const px0 = 4 + i * 18;
-    R(px0, 10, 11, 6, '#5a4530'); R(px0, 10, 11, 1, '#7d6244');
-    elipse(px0 + 5, 17, 8, 5, '#2f7b45');
-    elipse(px0 + 3, 15, 4, 3, '#54ad60');
-    for (let j = 0; j < 3; j++) R(px0 + 2 + j * 4, 20, 1, 4 + ((i + j) % 3) * 4, '#3f8a4b');
+  /* ---- el alero de acero negro, con su lámina ---- */
+  R(0, 0, 160, 11, '#15151c');
+  for (let x = 0; x < 160; x += 6) R(x, -DESP, 3, 23, '#25252f');
+  R(0, 7, 160, 4, '#0c0c11');
+  /* debajo de la viga hay sombra, no cielo: por eso no queda franja blanca */
+  R(0, 11, 160, 12, '#39414f');
+  R(0, 11, 160, 1, '#0c0c11');
+  R(0, 22, 160, 1, '#2b323d');
+  /* las macetas colgadas de la viga */
+  for (let i = 0; i < 8; i++) {
+    const px = 2 + i * 20;
+    R(px + 6, 11, 1, 3, '#2a2a34');
+    R(px, 14, 13, 6, '#8a5a3a'); R(px, 14, 13, 1, '#ad7852'); R(px, 19, 13, 1, '#5f3d26');
+    elipse(px + 6, 21, 9, 5, '#2f7b45'); elipse(px + 3, 19, 5, 3, '#54ad60');
+    for (let j = 0; j < 3; j++)
+      R(px + 2 + j * 4, 23, 1, 3 + ((i + j) % 3) * 5, '#3f8a4b');
   }
 
-  /* muro pintado */
-  R(0, 24, 160, GROUND - 24, '#5f6f86');
-  R(0, 24, 160, 2, '#8598ae');
-  cunia(0, 26, 30, 30, '#e8b81e', false);
-  cunia(0, 52, 22, 26, '#2f7fd0', true);
-  R(0, 74, 14, 18, '#e8b81e');
-  cuniaDer(160, 26, 30, 30, '#2f7fd0', false);
-  cuniaDer(160, 52, 24, 26, '#e8b81e', true);
-  R(148, 74, 12, 18, '#2f7fd0');
-  R(0, 88, 46, 4, '#c93a3a'); R(114, 88, 46, 4, '#c93a3a');
+  /* ---- el muro pintado ---- */
+  R(0, 23, 160, GROUND - 23, '#5d6c82');
+  R(0, 23, 160, 2, '#7f92a8');
+  for (let y = 32; y < GROUND; y += 11) R(0, y, 160, 1, 'rgba(38,48,64,.16)');
+  /* las cuñas amarillas y azules de la fachada */
+  cunia(0, 24, 34, 26, '#f2c31e', false);
+  cunia(0, 50, 26, 24, '#2f7fd0', true);
+  R(0, 72, 15, 20, '#f2c31e');
+  cuniaDer(160, 24, 34, 26, '#2f7fd0', false);
+  cuniaDer(160, 50, 26, 24, '#f2c31e', true);
+  R(145, 72, 15, 20, '#2f7fd0');
+  R(0, 85, 42, 7, '#c93a3a'); R(118, 85, 42, 7, '#c93a3a');
 
-  /* letrero */
-  R(44, 26, 72, 22, '#2a3a54'); R(44, 26, 72, 1, '#6d8199'); R(44, 47, 72, 1, '#16202f');
-  R(46, 28, 68, 18, '#39537c');
-  drawText(56, 29, 'CLUB DEL', '#f2ead8');
+  /* ---- el letrero ---- */
+  R(17, 25, 126, 30, 'rgba(8,6,16,.4)');
+  R(16, 24, 126, 30, '#0d1526');
+  R(16, 24, 126, 1, '#46587a'); R(16, 53, 126, 1, '#060a12');
+  R(18, 26, 122, 26, '#1a2a49'); R(18, 26, 122, 1, '#2e4676');
+  /* la cinta de CLUB DEL */
+  R(52, 27, 56, 9, '#0d1526');
+  drawText(56, 28, 'CLUB DEL', '#f2ead8');
   const neon = (t / 34 | 0) % 2;
-  if (neon) disco(80, 40, 30, 'rgba(245,197,24,.06)');
-  drawText(50, 38, 'PATIO', neon ? '#ffd94a' : '#d9a818');
-  drawText(86, 38, 'ROMA', neon ? '#ff5a4c' : '#c93830');
+  if (neon) disco(80, 44, 38, 'rgba(245,197,24,.05)');
+  drawTextG(23, 39, 'PATIO', '#5c2c0a', 2);
+  drawTextG(22, 38, 'PATIO', neon ? '#ffd94a' : '#efc41f', 2);
+  drawTextG(95, 39, 'ROMA', '#5c1010', 2);
+  drawTextG(94, 38, 'ROMA', neon ? '#ff6a58' : '#e34a38', 2);
+  for (let i = 0; i < 3; i++)
+    if (((t / 9 | 0) + i) % 4) destello(26 + i * 54, 30 + (i % 2) * 20, i % 2 ? '#ffe9a8' : '#ffffff');
 
-  /* túnel de entrada */
-  R(46, 50, 68, GROUND - 50, '#14141c');
-  vgrad(52, 56, 56, GROUND - 56, ['#2a1f18','#4a3524','#7a5636','#a87a48']);
-  for (let i = 0; i < 5; i++) {
-    R(60 + i * 10, GROUND - 22, 6, 22, 'rgba(20,14,10,.55)');
-    elipse(63 + i * 10, GROUND - 26, 4, 5, 'rgba(30,60,30,.5)');
-  }
-  R(46, 50, 68, 4, '#93a1b2'); R(46, 50, 68, 1, '#c2cddb');
-  R(46, 50, 4, GROUND - 50, '#83919f'); R(110, 50, 4, GROUND - 50, '#6d7987');
-  for (let y = 55; y < 66; y += 2) R(51, y, 58, 1, 'rgba(255,255,255,.09)');
+  /* ---- la franja de flechas arriba de la entrada ---- */
+  R(38, 55, 84, 7, '#f2c31e'); R(38, 55, 84, 1, '#ffe27a');
+  for (let i = 0; i < 6; i++) cunia(41 + i * 14, 55, 9, 7, '#2f7fd0', false);
 
-  /* piso de concreto con la luz que sale del túnel */
-  vgrad(0, GROUND, 160, ALTO - GROUND, ['#8c8c95','#7a7a83','#696971','#5a5a62']);
-  R(0, GROUND, 160, 1, '#adadb6');
-  /* adoquines corridos, como banqueta de la Roma */
-  for (let r = 0; r < 8; r++) {
-    const y = GROUND + 8 + r * 8;
-    R(0, y, 160, 1, 'rgba(40,40,48,.30)');
-    for (let x = (r % 2) * 11; x < 160; x += 22) R(x, y - 7, 1, 7, 'rgba(40,40,48,.20)');
+  /* ---- el túnel de entrada ---- */
+  R(38, 61, 84, GROUND - 61, '#101017');
+  R(38, 61, 84, 4, '#9aa6b6'); R(38, 61, 84, 1, '#c6d0dc');
+  R(38, 61, 5, GROUND - 61, '#8894a4'); R(117, 61, 5, GROUND - 61, '#6b7684');
+  /* la cortina enrollable, medio subida */
+  R(43, 65, 74, 6, '#42424f');
+  for (let y = 65; y < 71, y < 71; y += 2) R(43, y, 74, 1, '#565664');
+  /* el pasillo, cada vez más claro hacia el patio del fondo */
+  vgrad(48, 71, 64, GROUND - 71, ['#1c1410','#33241a','#5a3f28','#8a6238']);
+  for (let i = 0; i < 3; i++) {
+    const a = (0.34 - i * 0.09).toFixed(2);
+    R(48 + i * 3, 71 + i * 3, 3, GROUND - 71 - i * 3, 'rgba(10,6,4,' + a + ')');
+    R(109 - i * 3, 71 + i * 3, 3, GROUND - 71 - i * 3, 'rgba(10,6,4,' + a + ')');
   }
+  /* al fondo se alcanza a ver el patio prendido, con su gente */
+  vgrad(60, GROUND - 22, 40, 22, ['#f0c485','#d2a05e','#a8763e']);
+  R(60, GROUND - 22, 40, 1, '#ffe0ac');
+  disco(80, GROUND - 14, 22, 'rgba(255,206,140,.16)');
+  for (let i = 0; i < 3; i++) {
+    const sx = 65 + i * 12;
+    R(sx, GROUND - 14, 5, 14, 'rgba(34,20,10,.5)');
+    elipse(sx + 2, GROUND - 16, 3, 3, 'rgba(34,20,10,.5)');
+  }
+  /* el extintor colgado de la pared del pasillo */
+  R(110, 74, 4, 9, '#c93a3a'); R(110, 74, 4, 1, '#e8706a'); R(111, 71, 2, 3, '#3a3a46');
+
+  /* ---- el piso: banqueta de concreto, con las juntas en fuga ---- */
+  vgrad(0, GROUND, 160, ALTO - GROUND, ['#8e8e97','#7c7c85','#6a6a73','#5b5b64']);
+  R(0, GROUND, 160, 1, '#aeaeb7');
+  for (let i = -2; i <= 8; i++)
+    for (let y = GROUND + 2; y < ALTO; y += 6) {
+      const k = (y - GROUND) / (ALTO - GROUND);
+      const x = Math.round(80 + (i * 22 - 80) * (1 + k * 0.75));
+      if (x < -2 || x > 160) continue;
+      R(x, y, 1, 6, 'rgba(36,36,44,.30)'); R(x + 1, y, 1, 6, 'rgba(255,255,255,.06)');
+    }
+  for (let r = 0; r < 3; r++) R(0, GROUND + 17 + r * 22, 160, 1, 'rgba(36,36,44,.22)');
   /* la luz cálida que sale del túnel */
-  for (let i = 0; i < 14; i++)
-    R(50 - i, GROUND + i * 2, 60 + i * 2, 2, 'rgba(255,196,110,' + (0.16 - i * 0.011).toFixed(3) + ')');
+  for (let i = 0; i < 16; i++)
+    R(Math.round(48 - i * 1.4), GROUND + i * 3, 64 + i * 3, 3,
+      'rgba(255,196,110,' + (0.15 - i * 0.009).toFixed(3) + ')');
 }
 function frPatio(t) {
-  R(-8, 104, 30, 40, '#a8583a'); R(-8, 101, 32, 4, '#c47a54');
-  elipse(8, 96, 15, 11, '#2f7b45'); elipse(3, 91, 7, 5, '#54ad60');
-  R(140, 108, 30, 36, '#a8583a'); R(138, 105, 32, 4, '#c47a54');
-  elipse(154, 100, 15, 11, '#2f7b45'); elipse(148, 95, 7, 5, '#54ad60');
+  /* dos macetones de barro en primer plano, uno de cada lado */
+  R(-10, 106, 32, 50, '#8a4a30'); R(-10, 106, 32, 3, '#b06a48');
+  R(-10, 103, 34, 4, '#c47a54'); R(-10, 103, 34, 1, '#e29a72');
+  elipse(8, 98, 16, 12, '#2f7b45'); elipse(2, 92, 8, 6, '#54ad60');
+  elipse(15, 94, 7, 5, '#3f8a4b');
+  R(138, 110, 32, 46, '#8a4a30'); R(138, 110, 32, 3, '#b06a48');
+  R(136, 107, 34, 4, '#c47a54'); R(136, 107, 34, 1, '#e29a72');
+  elipse(154, 102, 16, 12, '#2f7b45'); elipse(148, 96, 8, 6, '#54ad60');
+  elipse(143, 99, 7, 5, '#3f8a4b');
 }
 
 
@@ -1461,13 +1500,22 @@ function bgInterior(t) {
     for (let x = ((y / 7 | 0) % 2) * 8; x < 160; x += 16)
       R(x, y - 6, 1, 6, n ? 'rgba(18,10,16,.45)' : 'rgba(40,24,16,.32)');
   }
-  R(0, 0, 160, 6, '#1c1c24');
-  for (let x = 0; x < 160; x += 5) R(x, 0, 2, 6, '#2e2e3a');
-  R(0, 4, 160, 2, '#0e0e14');
+  /* techo: armadura de acero negra, como la del lugar */
+  R(0, 0, 160, 11, '#14141b');
+  for (let x = 0; x < 160; x += 5) R(x, -DESP, 2, 23, '#26262f');
+  for (let x = 0; x < 160; x += 16)
+    for (let d = 0; d < 7; d++) {
+      R(x + d, -5 + d, 2, 1, '#33333f'); R(x + 14 - d, -5 + d, 2, 1, '#33333f');
+    }
+  R(0, 3, 160, 2, '#0a0a0f'); R(0, 9, 160, 2, '#0a0a0f');
+  /* el lavado morado de las lámparas de color */
+  for (let i = 0; i < 5; i++)
+    disco(16 + i * 32, 12, 24, i % 2 ? 'rgba(196,64,190,.11)' : 'rgba(122,72,224,.11)');
+  R(0, 11, 160, 9, 'rgba(150,50,180,.10)');
   /* serie de foquitos */
   for (let i = 0; i < 11; i++) {
-    const bx = 5 + i * 15, by = 9 + ((i % 2) ? 4 : 0);
-    R(bx, 6, 1, by - 6, '#2a2a34');
+    const bx = 5 + i * 15, by = 14 + ((i % 2) ? 4 : 0);
+    R(bx, 11, 1, by - 11, '#2a2a34');
     const on = ((t / 22 | 0) + i) % 8 !== 0;
     if (on) { disco(bx, by + 2, 6, 'rgba(255,224,138,.10)'); disco(bx, by + 2, 3, 'rgba(255,224,138,.16)'); }
     disco(bx, by + 2, 2, on ? '#ffe08a' : '#8a7a52');
@@ -1477,9 +1525,18 @@ function bgInterior(t) {
   R(0, 49, 40, GROUND - 49, n ? '#3a2418' : '#4a3020');
   R(0, 28, 40, 2, '#5c3f28');
   for (let i = 0; i < 6; i++) R(3 + i * 6, 30, 3, 14, ['#4a8a5c','#8a4a4a','#c9a44a','#4a6a9a','#7a4a8a','#3f8f6f'][i]);
-  /* planta */
-  R(146, GROUND - 22, 12, 22, '#a8583a'); R(145, GROUND - 25, 14, 3, '#c47a54');
-  elipse(152, GROUND - 32, 11, 9, '#2f7b45'); elipse(148, GROUND - 36, 5, 4, '#54ad60');
+  /* la planta en su tambo negro */
+  R(144, GROUND - 20, 15, 20, '#22222b'); R(144, GROUND - 20, 15, 1, '#3d3d4a');
+  R(144, GROUND - 14, 15, 1, '#3d3d4a'); R(144, GROUND - 7, 15, 1, '#3d3d4a');
+  R(150, GROUND - 34, 2, 14, '#3f6b3a');
+  elipse(152, GROUND - 34, 11, 9, '#2f7b45'); elipse(147, GROUND - 39, 6, 5, '#54ad60');
+  elipse(157, GROUND - 30, 6, 5, '#3f8a4b');
+  /* la columna con el pizarrón de la carta */
+  R(97, 10, 13, GROUND - 10, n ? '#1a141c' : '#241c18');
+  R(97, 10, 3, GROUND - 10, n ? '#2a2230' : '#3a2c24');
+  R(98, 30, 11, 34, '#15181a'); R(98, 30, 11, 1, '#2c3234');
+  for (let i = 0; i < 6; i++)
+    R(100, 34 + i * 5, 7 - (i % 3), 1, 'rgba(240,240,230,' + (i % 2 ? .5 : .32) + ')');
   /* piso: duela que corre hacia el frente, para que no parezca otro muro */
   vgrad(0, GROUND, 160, ALTO - GROUND, n ? ['#3d2c38','#33242d','#2a1c24'] : ['#8c7058','#7b6048','#6a523d']);
   R(0, GROUND, 160, 1, n ? '#5d4a5e' : '#ab8c6e');
@@ -3154,8 +3211,8 @@ const PAL_WA    = { mio:'#c9e8a8', mioL:'#e0f4c9', otro:'#ffffff', otroL:'#eae2d
 const MSG_CHAT = [
   { mio:true,  t:'HOLA. ¿SALIMOS EL SÁBADO?' },
   { mio:true,  t:'TENGO UN PLAN LOQUÍSIMO. ¿QUIERES IR A LANZAR HACHAS?' },
-  { mio:false, t:'SÍ. ¿A QUÉ HORA?' },
-  { mio:false, t:'3 PM' }
+  { mio:false, t:'SÍ. ¿A LAS 3 PM?' },
+  { mio:true,  t:'SÍ' }
 ];
 /* Lo que ve Roberto en su cel: los mensajes de Santiago le llegan del otro lado */
 const MSG_TARDE = [
@@ -3296,7 +3353,8 @@ const INTRO = [
   { e:'chat',    a:{n:1}, q:'santiago', t:'HOLA. ¿SALIMOS EL SÁBADO?' },
   { e:'chat',    a:{n:2}, q:'santiago', t:'TENGO UN PLAN LOQUÍSIMO. ¿QUIERES IR A LANZAR HACHAS?' },
   { e:'chat',    a:{n:2}, q:'santiago', t:'LISTO. ENVIADO.' },
-  { e:'chat',    a:{n:4}, q:'roberto',  t:'SÍ. ¿A QUÉ HORA?' },
+  { e:'chat',    a:{n:3}, q:'roberto',  t:'SÍ. ¿A LAS 3 PM?' },
+  { e:'chat',    a:{n:4}, q:'santiago', t:'SÍ.' },
   { e:'wa',      a:{n:1}, q:'santiago', t:'LE MANDO LA CAPTURA A LAS AMIGAS.' },
   { e:'wa',      a:{n:3}, q:'santiago', t:'MIREN LO QUE TIENE EN LA DESCRIPCIÓN.' },
   { e:'wa',      a:{n:4}, q:'amigas',   t:'SOULMATES.' },
@@ -3876,8 +3934,8 @@ const PASTA = [
     t:'¿SABÍAS QUE CUANDO BESAS A ALGUIEN FORMAS UN INTESTINO CONTINUO DE 18 METROS?' },
   { e:'olla', a:{rie:true}, q:'roberto', t:'JAJAJAJA.' },
   { e:'besoCocina', a:{}, dur:54 },
-  { e:'besoCocina', a:{banner:['* SONIDO DE BESO *']}, espera:true },
-  { e:'besoCocina', a:{banner:['18 METROS...']}, espera:true },
+  { e:'besoCocina', a:{banner:['* SONIDO DE BESO *']}, sigue:true, espera:true },
+  { e:'besoCocina', a:{banner:['18 METROS...']}, sigue:true, espera:true },
   { e:'metros', a:{}, espera:true }
 ];
 
@@ -4328,12 +4386,12 @@ const DESPEDIDA = [
   { e:momConcierto, dur:150 },
   { t:['MAYBE ITS A JOKE...'], dur:130 },
   { e:momAlberca, dur:150 },
-  { t:['OR COMMITMENT?'], dur:130 },
+  { t:['OR MAYBE ITS', 'COMMITMENT?'], dur:140 },
   { e:momCasa, txt:['TE LLEVO A TU CASA'], dur:165 },
   { e:momCasa, txt:['TE LLEVO A TU CASA', 'OTRA VEZ'], veloz:true, dur:120 },
   { e:momCasa, txt:['OTRA VEZ'], veloz:true, dur:110 },
   { e:momPlaticas, dur:170 },
-  { t:['TBH IDK'], dur:120 },
+  { t:["TBH I'M NOT SURE", 'WHAT LOVE IS'], dur:150 },
   { t:["BUT I'M HAPPY TO BE", 'FIGURING OUT WITH YOU'], dur:190 },
   { t:['TE AMO,', 'FELICES 6 MESES'], dur:210 }
 ];
@@ -4436,7 +4494,7 @@ function pantallaMedidor(t) {
     centerText(82, 'QUE PONERLO MÁS DE', '#8a2f78', null);
     centerText(92, 'LO QUE SE PUEDE.', '#8a2f78', null);
   } else if (medMsg > 0) {
-    centerText(74, 'MENTIROSO.', '#c9382f', null);
+    centerText(74, medFallos >= 2 ? 'MAAAS.' : 'MENTIROSO.', '#c9382f', null);
     centerText(85, 'OTRA VEZ.', '#8a7a68', null);
   } else if (medT > 20 && (t / 22 | 0) % 2) {
     const txt = 'A = ESCOGER', x0 = Math.round((160 - (textW(txt) + 16)) / 2);
@@ -4956,6 +5014,7 @@ function loop() {
   /* --- El teclado: hay que atinarle al número de la suerte --- */
   if (estado === 'numeros') {
     numT++;
+    if (numT <= 20) { consumed('a'); consumed('start'); }
     pantallaNumeros(t);
     if (numMsg > 0) { numMsg--; if (numMsg === 0) numTexto = []; }
     else if (numT > 20) {
@@ -4980,7 +5039,10 @@ function loop() {
       medPasa--;
       if (medPasa === 0) { chime(); transicionar(() => correrGuion(CIERRE, empezarCocina)); }
     } else if (medMsg > 0) { medMsg--; if (medMsg === 0) medX = MED_MIN; }
-    else if (medT > 20) {
+    /* mientras arranca la pantalla nos tragamos cualquier botonazo que venga
+       de la escena anterior: si no, cuenta como intento sin que nadie pique */
+    else if (medT <= 20) { consumed('a'); consumed('start'); }
+    else {
       if (keys.left)  medX -= 1.1;
       if (keys.right) medX += 1.1;
       medX = Math.max(MED_MIN, Math.min(MED_MAX, medX));
@@ -4988,8 +5050,8 @@ function loop() {
         if (medX > MED_OK) { chime(); transicionar(() => correrGuion(CIERRE, empezarCocina)); }
         else {
           buzz(); medFallos++;
-          /* a la segunda ya no lo dejamos sufrir: se lo explicamos y pasa */
-          if (medFallos >= 2) medPasa = 130; else medMsg = 76;
+          /* al tercer intento ya no lo dejamos sufrir: se lo explicamos y pasa */
+          if (medFallos >= 3) medPasa = 130; else medMsg = 76;
         }
       }
     }

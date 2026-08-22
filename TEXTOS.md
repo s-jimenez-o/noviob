@@ -32,20 +32,21 @@ Edita lo que quieras y mándamelo de vuelta. Reglas de la fuente:
 8. **SANTIAGO:** HOLA. ¿SALIMOS EL SÁBADO?
 9. **SANTIAGO:** TENGO UN PLAN LOQUÍSIMO. ¿QUIERES IR A LANZAR HACHAS?
 10. **SANTIAGO:** LISTO. ENVIADO.
-11. **ROBERTO:** SÍ. ¿A QUÉ HORA?
-12. **SANTIAGO:** LE MANDO LA CAPTURA A LAS AMIGAS.
-13. **SANTIAGO:** MIREN LO QUE TIENE EN LA DESCRIPCIÓN.
-14. **LAS AMIGAS:** SOULMATES.
-15. **SANTIAGO:** TENGO DATE CON ÉL EL SÁBADO.
-16. **SANTIAGO:** ESTÁ RARO: CASI NO HEMOS HABLADO Y NI LO CONOZCO.
-17. **SANTIAGO:** PERO SIENTO QUE ALGO IMPORTANTE VA A PASAR CON ÉL.
+11. **ROBERTO:** SÍ. ¿A LAS 3 PM?
+12. **SANTIAGO:** SÍ.
+13. **SANTIAGO:** LE MANDO LA CAPTURA A LAS AMIGAS.
+14. **SANTIAGO:** MIREN LO QUE TIENE EN LA DESCRIPCIÓN.
+15. **LAS AMIGAS:** SOULMATES.
+16. **SANTIAGO:** TENGO DATE CON ÉL EL SÁBADO.
+17. **SANTIAGO:** ESTÁ RARO: CASI NO HEMOS HABLADO Y NI LO CONOZCO.
+18. **SANTIAGO:** PERO SIENTO QUE ALGO IMPORTANTE VA A PASAR CON ÉL.
 
 ### Mensajes del chat de la app
 
 - **SANTIAGO:** HOLA. ¿SALIMOS EL SÁBADO?
 - **SANTIAGO:** TENGO UN PLAN LOQUÍSIMO. ¿QUIERES IR A LANZAR HACHAS?
-- **ROBERTO:** SÍ. ¿A QUÉ HORA?
-- **ROBERTO:** 3 PM
+- **ROBERTO:** SÍ. ¿A LAS 3 PM?
+- **SANTIAGO:** SÍ
 
 ### Grupo de WhatsApp (**LAS AMIGAS**)
 
@@ -245,8 +246,9 @@ La casa es abierta: pilares rojos en vez de pared, con la playa detrás.
 ### La pregunta
 
 - **¿Y PARA TI?** · pista: **A = ESCOGER**
-- Si contesta dentro de la barra: **MENTIROSO.** / **OTRA VEZ.**
-- A la segunda ya no lo deja atorado: **SE SUPONE QUE TENÍAS** / **QUE PONERLO MÁS DE**
+- Primer intento dentro de la barra: **MENTIROSO.** / **OTRA VEZ.**
+- Segundo intento: **MAAAS.** / **OTRA VEZ.**
+- Al tercero ya no lo deja atorado: **SE SUPONE QUE TENÍAS** / **QUE PONERLO MÁS DE**
   / **LO QUE SE PUEDE.** y pasa solo.
 - Sólo vale si saca el corazón fuera de la barra.
 
@@ -326,12 +328,12 @@ Va una tarjeta verde y un momento, una tarjeta y un momento, hasta el final.
 10. *(momento)* el concierto de **FKA TWIGS**, con su hermano y una amiga
 11. **MAYBE ITS A JOKE...**
 12. *(momento)* la alberca — **EW** / **LAS ALBERCAS**
-13. **OR COMMITMENT?**
+13. **OR MAYBE ITS** / **COMMITMENT?**
 14. *(momento)* las torres grises: **TE LLEVO A TU CASA**
 15. *(la misma escena)* **TE LLEVO A TU CASA** / **OTRA VEZ**
 16. *(y otra vez)* **OTRA VEZ**
 17. *(momento)* los dos frente a frente, el reloj corriendo — **\* PLÁTICAS INCÓMODAS \***
-18. **TBH IDK**
+18. **TBH I'M NOT SURE** / **WHAT LOVE IS**
 19. **BUT I'M HAPPY TO BE** / **FIGURING OUT WITH YOU**
 20. **TE AMO,** / **FELICES 6 MESES**
 

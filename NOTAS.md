@@ -119,6 +119,10 @@ la página con `window.onerror`.
     alguien que camina, la mesera que se acerca). Sin él la animación rebobina y
     se ve como si la escena empezara dos veces. `hacer`/`t` siguen disparándose
     igual: eso lo controla `gArranca`, no `gT`.
+- **Toda pantalla interactiva que entra desde un guion debe tragarse los botonazos
+  de los primeros ~20 cuadros** (`if (medT <= 20) { consumed('a'); consumed('start'); }`).
+  Si no, un A que quedó pendiente de la escena anterior cuenta como intento y el
+  jugador ve el regaño sin haber tocado nada.
 - `correrGuion(lista, fin, sinFade)` — **la regla de oro de las transiciones**:
   el barrido SOLO se usa cuando cambia el lugar físico. Si la escena siguiente
   comparte fondo, pasa `sinFade=true`. El usuario pidió explícitamente quitar
